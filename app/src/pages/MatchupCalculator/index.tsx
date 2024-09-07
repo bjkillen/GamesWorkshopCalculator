@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import NumericalTextInput from './components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
-import { Text } from 'react-native-paper';
+import { Text, ToggleButton } from 'react-native-paper';
+import CustomCheckbox from './components/Checkbox';
 
 function MatchupCalculator() {
     const [attackCount, setAttackCount] = useState(0);
+    const [strength, setStrength] = useState(0);
+    const [damage, setDamage] = useState(0);
+    const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
+    const [sustainedHitsCount, setSustainedHitsCount] = useState(0);
+    const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
+    const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
     const [weaponSkill, setWeaponSkill] = useState("2+");
 
     return (
@@ -14,7 +21,7 @@ function MatchupCalculator() {
                 <Text variant="displayMedium">
                     Tabletop Matchup Calculator
                 </Text>
-                <Text>Attacking Unit</Text>
+                <Text variant="displaySmall">Attacking Unit</Text>
                 <Text>WS/BS</Text>
                 <DiceWeaponSkillValueSegmentedButtons
                     value={weaponSkill}
@@ -27,8 +34,28 @@ function MatchupCalculator() {
                 />
                 <NumericalTextInput
                     label='Strength'
-                    value={attackCount}
-                    setValue={setAttackCount}
+                    value={strength}
+                    setValue={setStrength}
+                />
+                <NumericalTextInput
+                    label='Damage'
+                    value={damage}
+                    setValue={setDamage}
+                />
+                <CustomCheckbox
+                    label='Sustained Hits'
+                    value={sustainedHitsChecked}
+                    setValue={setSustainedHitsChecked}
+                />
+                <CustomCheckbox
+                    label='Lethal Hits'
+                    value={lethalHitsChecked}
+                    setValue={setLethalHitsChecked}
+                />
+                <CustomCheckbox
+                    label='Devastating Wounds'
+                    value={devastatingWoundsChecked}
+                    setValue={setDevastatingWoundsChecked}
                 />
             </SafeAreaView>
         </View>
