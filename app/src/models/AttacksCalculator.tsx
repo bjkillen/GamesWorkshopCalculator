@@ -61,8 +61,6 @@ class AttacksCalculator {
             woundDiceSkill = DiceSkillValue.Five;
         }
 
-        let succcessfulWounds = successfulHits * woundDiceSkill.successPercentage;
-
         successfulWounds +=
             Math.min(
                 successfulHits * woundDiceSkill.successPercentage * input.rerollWoundsModifier.multiplier,
