@@ -1,15 +1,16 @@
 import DiceRerollModifierValue, { DiceRerollModifierValueEnum } from "../utilities/DiceRerollModifierValue";
 import DiceSkillValue from "../utilities/DiceSkillValue";
 
-export class CalculationResult {
+export class AttackerCalculationResult {
     constructor(
         public successfulHits: number,
         public successfulWounds: number,
-        public totalDamage: number
+        public totalDamage: number,
+        public devastatingWounds: number,
     ) {}
 }
 
-export class CalculatorInput {
+export class AttackerCalculatorInput {
     constructor(
         public attackCount: number,
         public strength: number,
@@ -26,8 +27,8 @@ export class CalculatorInput {
     ) {}
 }
 
-class AttacksCalculator {
-    static calculate(input: CalculatorInput): CalculationResult {
+class AttackerCalculator {
+    static calculate(input: AttackerCalculatorInput): AttackerCalculationResult {
         let baseSuccessfulHits = input.attackCount * input.skill.successPercentage;
 
         const hitDiceToReroll = this.additionalDiceFromModifier(
@@ -78,10 +79,11 @@ class AttacksCalculator {
 
         successfulWounds += (successfulHits * woundDiceSkill.successPercentage) + (woundDiceToReroll * woundDiceSkill.successPercentage);
 
-        return new  CalculationResult(
+        return new  AttackerCalculationResult(
             successfulHits,
             successfulWounds,
-            successfulWounds * input.damage
+            successfulWounds * input.damage,
+            successfulWounds * DiceSkillValue.Six.successPercentage
         );
     }
 
@@ -100,4 +102,4 @@ class AttacksCalculator {
     }
 }
 
-export default AttacksCalculator;
+export default AttackerCalculator;

@@ -6,7 +6,7 @@ import { Button, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
-import AttacksCalculator, { CalculationResult, CalculatorInput } from '../../models/AttacksCalculator';
+import AttackCalculator, { AttackerCalculationResult, AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
 import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
@@ -33,10 +33,10 @@ function MatchupCalculator() {
     const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
 
-    const [calculationResult, setCalculationResult] = useState(new CalculationResult(0, 0, 0));
+    const [calculationResult, setCalculationResult] = useState(new AttackerCalculationResult(0, 0, 0, 0));
 
     const calculateButtonPressed = () => {
-        const input = new CalculatorInput(
+        const input = new AttackerCalculatorInput(
             attackCount ?? 0,
             strength ?? 0,
             weaponSkill,
@@ -51,7 +51,7 @@ function MatchupCalculator() {
             toughness ?? 0,
         );
 
-        const computedCalculationResult = AttacksCalculator.calculate(input);
+        const computedCalculationResult = AttackCalculator.calculate(input);
         setCalculationResult(computedCalculationResult);
     }
 
@@ -68,7 +68,7 @@ function MatchupCalculator() {
         setToughness(0);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
-        setCalculationResult(new CalculationResult(0, 0, 0));
+        setCalculationResult(new AttackerCalculationResult(0, 0, 0, 0));
     }
 
     return (
