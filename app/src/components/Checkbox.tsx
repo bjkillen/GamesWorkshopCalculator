@@ -1,5 +1,4 @@
-import { GestureResponderEvent } from 'react-native';
-import { Checkbox, ToggleButton } from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
 
 export interface ToggleButtonProps {
     label: string;

@@ -1,42 +1,54 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import NumericalTextInput from './components/NumericalTextInput';
+import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
 import { Button, Text } from 'react-native-paper';
-import CustomCheckbox from './components/Checkbox';
+import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
 import AttacksCalculator, { CalculationResult, CalculatorInput } from '../../models/AttacksCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 
 function MatchupCalculator() {
-    const [attackCount, setAttackCount] = useState(0);
-    const [strength, setStrength] = useState(0);
-    const [damage, setDamage] = useState(0);
+    const [attackCount, setAttackCount] = useState<number | undefined>(0);
+    const [strength, setStrength] = useState<number | undefined>(0);
+    const [damage, setDamage] = useState<number | undefined>(0);
     const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
     const [sustainedHitsCount, setSustainedHitsCount] = useState(0);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
-    const [toughness, setToughness] = useState(0);
+    const [toughness, setToughness] = useState<number | undefined>(0);
 
     const [calculationResult, setCalculationResult] = useState(new CalculationResult(0, 0, 0));
 
     const calculateButtonPressed = () => {
         const input = new CalculatorInput(
-            attackCount,
-            strength,
+            attackCount ?? 0,
+            strength ?? 0,
             weaponSkill,
-            damage,
+            damage ?? 0,
             sustainedHitsChecked,
             lethalHitsChecked,
             devastatingWoundsChecked,
-            toughness,
+            toughness ?? 0,
         );
 
         const computedCalculationResult = AttacksCalculator.calculate(input);
         setCalculationResult(computedCalculationResult);
+    }
+
+    const clearButtonPressed = () => {
+        setAttackCount(0);
+        setStrength(0);
+        setDamage(0);
+        setSustainedHitsChecked(false);
+        setLethalHitsChecked(false);
+        setDevastatingWoundsChecked(false);
+        setWeaponSkill(DiceSkillValue.Two);
+        setToughness(0);
+        setCalculationResult(new CalculationResult(0, 0, 0));
     }
 
     return (
@@ -55,25 +67,23 @@ function MatchupCalculator() {
                                 setValue={setWeaponSkill}
                             />
                         </View>
-                        <View style={{ marginTop: 25 }}>
-                            <Row style={{ justifyContent: "space-evenly" }}>
-                                <NumericalTextInput
-                                    label='Attack Count'
-                                    value={attackCount}
-                                    setValue={setAttackCount}
-                                />
-                                <NumericalTextInput
-                                    label='Strength'
-                                    value={strength}
-                                    setValue={setStrength}
-                                />
-                                <NumericalTextInput
-                                    label='Damage'
-                                    value={damage}
-                                    setValue={setDamage}
-                                />
-                            </Row>
-                        </View>
+                        <Row style={{ marginTop: 25, justifyContent: "space-evenly" }}>
+                            <NumericalTextInput
+                                label='Attack Count'
+                                value={attackCount}
+                                setValue={setAttackCount}
+                            />
+                            <NumericalTextInput
+                                label='Strength'
+                                value={strength}
+                                setValue={setStrength}
+                            />
+                            <NumericalTextInput
+                                label='Damage'
+                                value={damage}
+                                setValue={setDamage}
+                            />
+                        </Row>
                         <View style={{ marginTop: 20 }}>
                             <Text variant="headlineSmall">Modifiers</Text>
                             <CustomCheckbox
@@ -107,7 +117,13 @@ function MatchupCalculator() {
                         <Text variant="labelLarge">Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult.successfulWounds, 2)}</Text>
                         <Text variant="labelLarge">Total Damage: {StringExtension.toFixedWithoutZeros(calculationResult.totalDamage, 2)}</Text>
                     </View>
-                    <Button mode="contained" style={{ marginTop: 25 }} onPress={calculateButtonPressed}>Calculate!</Button>
+                    <Row style={{ marginTop: 25, justifyContent: "space-evenly" }}>
+                        <Button mode="contained" onPress={calculateButtonPressed}>Calculate!</Button>
+                        <Button
+                            mode="contained"
+                            onPress={clearButtonPressed}
+                            buttonColor='black'>Clear</Button>
+                    </Row>
                 </ScrollView>
             </SafeAreaView>
         </View>
