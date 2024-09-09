@@ -1,4 +1,4 @@
-import DiceSkillValues from "../components/DiceSkillValues";
+import DiceSkillValues from "../utilities/DiceSkillValue";
 
 class CalculationResult {
     successfulHits!: number;
@@ -13,6 +13,6 @@ class CalculatorInput {
 
 class AttacksCalculator {
     static calculate(input: CalculatorInput): CalculationResult {
-        
+
     }
 }

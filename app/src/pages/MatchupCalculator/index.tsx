@@ -5,6 +5,7 @@ import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillVa
 import { Button, Text, ToggleButton } from 'react-native-paper';
 import CustomCheckbox from './components/Checkbox';
 import Row from '../../components/Row';
+import DiceSkillValue from '../../utilities/DiceSkillValue';
 
 function MatchupCalculator() {
     const [attackCount, setAttackCount] = useState(0);
@@ -14,7 +15,7 @@ function MatchupCalculator() {
     const [sustainedHitsCount, setSustainedHitsCount] = useState(0);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
-    const [weaponSkill, setWeaponSkill] = useState("2+");
+    const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
     return (
         <View style={styles.container}>

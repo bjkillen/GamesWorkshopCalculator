@@ -1,10 +1,11 @@
-import DiceSkillValues from "@/app/src/components/DiceSkillValues";
 import React from "react";
 import { SegmentedButtons } from "react-native-paper";
 
+import DiceSkillValue from "@/app/src/utilities/DiceSkillValue";
+
 export interface DiceWeaponSkillValueSegmentedButtonsProps {
-    value: string;
-    setValue: (value: string) => void;
+    value: DiceSkillValue;
+    setValue: (value: DiceSkillValue) => void;
 }
 
 function DiceWeaponSkillValueSegmentedButtons(props: DiceWeaponSkillValueSegmentedButtonsProps) {
@@ -15,10 +16,10 @@ function DiceWeaponSkillValueSegmentedButtons(props: DiceWeaponSkillValueSegment
 
     return (
         <SegmentedButtons
-            value={value}
-            onValueChange={setValue}
+            value={value.value}
+            onValueChange={(v) => setValue(DiceSkillValue.parse(v))}
             buttons={
-                Object.keys(DiceSkillValues).map((dsv) => ({ value: dsv, label: dsv }))
+                DiceSkillValue.AllValues.map((dsv) => ({ value: dsv.value, label: dsv.description }))
             }
         />
     );
