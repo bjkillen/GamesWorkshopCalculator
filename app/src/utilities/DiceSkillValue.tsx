@@ -58,6 +58,21 @@ class DiceSkillValue {
                 return 0.16666667;
         }
     }
+
+    get failurePercentage() {
+        switch (this.value) {
+            case DiceSkillValueEnum.Two:
+                return 0.16666667;
+            case DiceSkillValueEnum.Three:
+                return 0.33333334;
+            case DiceSkillValueEnum.Four:
+                return 0.5;
+            case DiceSkillValueEnum.Five:
+                return 0.6666667;
+            case DiceSkillValueEnum.Six:
+                return 0.8333333;
+        }
+    }
 }
 
 export default DiceSkillValue;

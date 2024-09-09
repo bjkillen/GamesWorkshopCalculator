@@ -1,4 +1,4 @@
-import DiceRerollModifierValue from "../utilities/DiceRerollModifierValue";
+import DiceRerollModifierValue, { DiceRerollModifierValueEnum } from "../utilities/DiceRerollModifierValue";
 import DiceSkillValue from "../utilities/DiceSkillValue";
 
 export class CalculationResult {
@@ -28,7 +28,16 @@ export class CalculatorInput {
 
 class AttacksCalculator {
     static calculate(input: CalculatorInput): CalculationResult {
-        let baseSuccessfulHits = input.attackCount * input.skill.successPercentage * input.rerollHitsModifier.multiplier;
+        let baseSuccessfulHits = input.attackCount * input.skill.successPercentage;
+
+        const hitDiceToReroll = this.additionalDiceFromModifier(
+            input.attackCount,
+            input.skill,
+            input.rerollHitsModifier
+        );
+
+        baseSuccessfulHits += hitDiceToReroll * input.skill.successPercentage;
+
         let successfulHits = baseSuccessfulHits;
 
         if (input.sustainedHits) {
@@ -61,17 +70,33 @@ class AttacksCalculator {
             woundDiceSkill = DiceSkillValue.Five;
         }
 
-        successfulWounds +=
-            Math.min(
-                successfulHits * woundDiceSkill.successPercentage * input.rerollWoundsModifier.multiplier,
-                successfulHits
-            );
+        const woundDiceToReroll = this.additionalDiceFromModifier(
+            successfulHits,
+            woundDiceSkill,
+            input.rerollWoundsModifier
+        );
+
+        successfulWounds += (successfulHits * woundDiceSkill.successPercentage) + (woundDiceToReroll * woundDiceSkill.successPercentage);
 
         return new  CalculationResult(
             successfulHits,
             successfulWounds,
             successfulWounds * input.damage
         );
+    }
+
+    private static additionalDiceFromModifier(
+        diceCount: number,
+        skill: DiceSkillValue,
+        modifier: DiceRerollModifierValue
+    ): number {
+        if (modifier.value == DiceRerollModifierValueEnum.Ones) {
+            return diceCount * DiceSkillValue.Two.failurePercentage;
+        } else if (modifier.value == DiceRerollModifierValueEnum.All) {
+            return diceCount * skill.failurePercentage;
+        }
+
+        return 0;
     }
 }
 

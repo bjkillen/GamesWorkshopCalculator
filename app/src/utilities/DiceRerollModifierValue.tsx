@@ -1,4 +1,4 @@
-enum DiceRerollModifierValueEnum {
+export enum DiceRerollModifierValueEnum {
     None = 'None',
     Ones = 'Ones',
     All = 'All'
@@ -31,17 +31,6 @@ class DiceRerollModifierValue {
                 return '1s';
             case DiceRerollModifierValueEnum.All:
                 return 'All';
-        }
-    }
-
-    get multiplier() {
-        switch (this.value) {
-            case DiceRerollModifierValueEnum.None:
-                return 1;
-            case DiceRerollModifierValueEnum.Ones:
-                return 1.16666667;
-            case DiceRerollModifierValueEnum.All:
-                return 1.5;
         }
     }
 }
