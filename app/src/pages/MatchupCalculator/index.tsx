@@ -12,17 +12,23 @@ import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierS
 import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
 
 function MatchupCalculator() {
+    const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
+
     const [attackCount, setAttackCount] = useState<number | undefined>(0);
     const [strength, setStrength] = useState<number | undefined>(0);
     const [damage, setDamage] = useState<number | undefined>(0);
+    const [armorPenetration, setArmorPenetration] = useState<number | undefined>(0);
+
     const [criticalHitsSkill, setCriticalHitsSkill] = useState(DiceSkillValue.Six);
     const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
     const [sustainedHitsCount, setSustainedHitsCount] = useState<number | undefined>(1);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
-    const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
     const [toughness, setToughness] = useState<number | undefined>(0);
+    const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
+    const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
+    const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState(DiceSkillValue.Two);
 
     const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
@@ -97,6 +103,11 @@ function MatchupCalculator() {
                                 value={damage}
                                 setValue={setDamage}
                             />
+                            <NumericalTextInput
+                                label='Armor Penetration (enter only positive ie. -1 as 1)'
+                                value={armorPenetration}
+                                setValue={setArmorPenetration}
+                            />
                         </Row>
                         <View style={{ marginTop: 20 }}>
                             <Text variant="headlineSmall">Modifiers</Text>
@@ -160,6 +171,27 @@ function MatchupCalculator() {
                             value={toughness}
                             setValue={setToughness}
                         />
+                        <View>
+                            <Text>Armor Save</Text>
+                            <DiceWeaponSkillValueSegmentedButtons
+                                value={armorSaveSkill}
+                                setValue={setArmorSaveSkill}
+                            />
+                        </View>
+                        <View>
+                            <Row style={{ justifyContent: "space-between" }}>
+                                <Text>Invulenerable Save</Text>
+                                <CustomCheckbox
+                                    value={invulnerableSaveChecked}
+                                    setValue={setInvulnerableSaveChecked}
+                                />
+                            </Row>
+                            <DiceWeaponSkillValueSegmentedButtons
+                                disabled={!invulnerableSaveChecked}
+                                value={invulnerableSaveSkill}
+                                setValue={setInvulnerableSaveSkill}
+                            />
+                        </View>
                     </View>
                     <View style={{ marginTop: 15 }}>
                         <Text variant="displaySmall">Results</Text>
