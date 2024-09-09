@@ -1,3 +1,4 @@
+import DiceRerollModifierValue from "../utilities/DiceRerollModifierValue";
 import DiceSkillValue from "../utilities/DiceSkillValue";
 
 export class CalculationResult {
@@ -14,20 +15,33 @@ export class CalculatorInput {
         public strength: number,
         public skill: DiceSkillValue,
         public damage: number,
+        public criticalHitsSkill: DiceSkillValue,
         public sustainedHits: boolean,
+        public sustainedHitsCount: number,
         public lethalHits: boolean,
         public devastatingWounds: boolean,
+        public rerollHitsModifier: DiceRerollModifierValue,
+        public rerollWoundsModifier: DiceRerollModifierValue,
         public toughness: number
     ) {}
 }
 
 class AttacksCalculator {
     static calculate(input: CalculatorInput): CalculationResult {
-        let baseSuccessfulHits = input.attackCount * input.skill.successPercentage;
+        let baseSuccessfulHits = input.attackCount * input.skill.successPercentage * input.rerollHitsModifier.multiplier;
         let successfulHits = baseSuccessfulHits;
 
         if (input.sustainedHits) {
-            successfulHits += successfulHits * DiceSkillValue.Six.successPercentage;
+            successfulHits += successfulHits * input.criticalHitsSkill.successPercentage * input.sustainedHitsCount;
+        }
+
+        let successfulWounds = 0;
+
+        if (input.lethalHits) {
+            const lethalHits = baseSuccessfulHits * input.criticalHitsSkill.successPercentage;
+
+            successfulWounds += lethalHits;
+            successfulHits -= lethalHits;
         }
 
         const strength = input.strength;
@@ -47,16 +61,13 @@ class AttacksCalculator {
             woundDiceSkill = DiceSkillValue.Five;
         }
 
-        let successfulWounds = 0;
+        let succcessfulWounds = successfulHits * woundDiceSkill.successPercentage;
 
-        if (input.lethalHits) {
-            const lethalHits = baseSuccessfulHits * DiceSkillValue.Six.successPercentage;
-            successfulWounds += lethalHits;
-
-            baseSuccessfulHits -= lethalHits;
-        }
-
-        successfulWounds += baseSuccessfulHits * woundDiceSkill.successPercentage;
+        successfulWounds +=
+            Math.min(
+                successfulHits * woundDiceSkill.successPercentage * input.rerollWoundsModifier.multiplier,
+                successfulHits
+            );
 
         return new  CalculationResult(
             successfulHits,

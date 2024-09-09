@@ -8,18 +8,24 @@ import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
 import AttacksCalculator, { CalculationResult, CalculatorInput } from '../../models/AttacksCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
+import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
+import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
 
 function MatchupCalculator() {
     const [attackCount, setAttackCount] = useState<number | undefined>(0);
     const [strength, setStrength] = useState<number | undefined>(0);
     const [damage, setDamage] = useState<number | undefined>(0);
+    const [criticalHitsSkill, setCriticalHitsSkill] = useState(DiceSkillValue.Six);
     const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
-    const [sustainedHitsCount, setSustainedHitsCount] = useState(0);
+    const [sustainedHitsCount, setSustainedHitsCount] = useState<number | undefined>(1);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
     const [toughness, setToughness] = useState<number | undefined>(0);
+
+    const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
+    const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
 
     const [calculationResult, setCalculationResult] = useState(new CalculationResult(0, 0, 0));
 
@@ -29,9 +35,13 @@ function MatchupCalculator() {
             strength ?? 0,
             weaponSkill,
             damage ?? 0,
+            criticalHitsSkill,
             sustainedHitsChecked,
+            sustainedHitsCount ?? 0,
             lethalHitsChecked,
             devastatingWoundsChecked,
+            rerollHitsModifier,
+            rerollWoundsModifier,
             toughness ?? 0,
         );
 
@@ -43,11 +53,15 @@ function MatchupCalculator() {
         setAttackCount(0);
         setStrength(0);
         setDamage(0);
+        setCriticalHitsSkill(DiceSkillValue.Six);
         setSustainedHitsChecked(false);
+        setSustainedHitsCount(1);
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setWeaponSkill(DiceSkillValue.Two);
         setToughness(0);
+        setRerollHitsModifier(DiceRerollModifierValue.None);
+        setRerollWoundsModifier(DiceRerollModifierValue.None);
         setCalculationResult(new CalculationResult(0, 0, 0));
     }
 
@@ -86,11 +100,27 @@ function MatchupCalculator() {
                         </Row>
                         <View style={{ marginTop: 20 }}>
                             <Text variant="headlineSmall">Modifiers</Text>
-                            <CustomCheckbox
-                                label='Sustained Hits'
-                                value={sustainedHitsChecked}
-                                setValue={setSustainedHitsChecked}
-                            />
+                            <View style={{ display: sustainedHitsChecked || lethalHitsChecked ? 'flex' : 'none' }}>
+                                <Text>Critical Hits</Text>
+                                <DiceWeaponSkillValueSegmentedButtons
+                                    value={criticalHitsSkill}
+                                    setValue={setCriticalHitsSkill}
+                                />
+                            </View>
+                            <Row>
+                                <CustomCheckbox
+                                    label='Sustained Hits'
+                                    value={sustainedHitsChecked}
+                                    setValue={setSustainedHitsChecked}
+                                />
+                                <View style={{ display: sustainedHitsChecked || lethalHitsChecked ? 'flex' : 'none' }}>
+                                    <NumericalTextInput
+                                        label='Count'
+                                        value={sustainedHitsCount}
+                                        setValue={setSustainedHitsCount}
+                                    />
+                                </View>
+                            </Row>
                             <CustomCheckbox
                                 label='Lethal Hits'
                                 value={lethalHitsChecked}
@@ -101,6 +131,20 @@ function MatchupCalculator() {
                                 value={devastatingWoundsChecked}
                                 setValue={setDevastatingWoundsChecked}
                             />
+                            <View>
+                                <Text variant="labelLarge">Reroll Hits</Text>
+                                <DiceRerollModifierSegmentedButtons
+                                    value={rerollHitsModifier}
+                                    setValue={setRerollHitsModifier}
+                                />
+                            </View>
+                            <View>
+                                <Text variant="labelLarge">Reroll Wounds</Text>
+                                <DiceRerollModifierSegmentedButtons
+                                    value={rerollWoundsModifier}
+                                    setValue={setRerollWoundsModifier}
+                                />
+                            </View>
                         </View>
                     </View>
                     <View style={{ marginTop: 15 }}>
