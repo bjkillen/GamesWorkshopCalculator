@@ -100,37 +100,43 @@ function MatchupCalculator() {
                         </Row>
                         <View style={{ marginTop: 20 }}>
                             <Text variant="headlineSmall">Modifiers</Text>
-                            <View style={{ display: sustainedHitsChecked || lethalHitsChecked ? 'flex' : 'none' }}>
-                                <Text>Critical Hits</Text>
-                                <DiceWeaponSkillValueSegmentedButtons
-                                    value={criticalHitsSkill}
-                                    setValue={setCriticalHitsSkill}
-                                />
-                            </View>
-                            <Row>
+                            <Row style={{ justifyContent: "space-between" }}>
+                                <Text>Sustained Hits</Text>
                                 <CustomCheckbox
-                                    label='Sustained Hits'
                                     value={sustainedHitsChecked}
                                     setValue={setSustainedHitsChecked}
                                 />
-                                <View style={{ display: sustainedHitsChecked || lethalHitsChecked ? 'flex' : 'none' }}>
-                                    <NumericalTextInput
-                                        label='Count'
-                                        value={sustainedHitsCount}
-                                        setValue={setSustainedHitsCount}
+                            </Row>
+                            <Row style={{ justifyContent: "space-between" }}>
+                                <Text>Lethal Hits</Text>
+                                <CustomCheckbox
+                                    value={lethalHitsChecked}
+                                    setValue={setLethalHitsChecked}
+                                />
+                            </Row>
+                            <View>
+                                <View>
+                                <Text>Critical Hits</Text>
+                                    <DiceWeaponSkillValueSegmentedButtons
+                                        disabled={!(sustainedHitsChecked || lethalHitsChecked)}
+                                        value={criticalHitsSkill}
+                                        setValue={setCriticalHitsSkill}
                                     />
                                 </View>
+                                <NumericalTextInput
+                                    label='Count'
+                                    disabled={!(sustainedHitsChecked || lethalHitsChecked)}
+                                    value={sustainedHitsCount}
+                                    setValue={setSustainedHitsCount}
+                                />
+                            </View>
+                            <Row style={{ justifyContent: "space-between" }}>
+                                <Text>Devastating Wounds</Text>
+                                <CustomCheckbox
+                                    value={devastatingWoundsChecked}
+                                    setValue={setDevastatingWoundsChecked}
+                                />
                             </Row>
-                            <CustomCheckbox
-                                label='Lethal Hits'
-                                value={lethalHitsChecked}
-                                setValue={setLethalHitsChecked}
-                            />
-                            <CustomCheckbox
-                                label='Devastating Wounds'
-                                value={devastatingWoundsChecked}
-                                setValue={setDevastatingWoundsChecked}
-                            />
                             <View>
                                 <Text variant="labelLarge">Reroll Hits</Text>
                                 <DiceRerollModifierSegmentedButtons
