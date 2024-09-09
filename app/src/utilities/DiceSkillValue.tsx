@@ -29,6 +29,38 @@ class DiceSkillValue {
         return new this(DiceSkillValueEnum[key as keyof typeof DiceSkillValueEnum]);
     }
 
+    public static parseNumerical(value: number) {
+        switch (value) {
+            case 2:
+                return DiceSkillValue.Two;
+            case 3:
+                return DiceSkillValue.Three;
+            case 4:
+                return DiceSkillValue.Four;
+            case 5:
+                return DiceSkillValue.Five;
+            case 6:
+                return DiceSkillValue.Six;
+            default:
+                return undefined;
+        }
+    }
+
+    get numericalValue() {
+        switch (this.value) {
+            case DiceSkillValueEnum.Two:
+                return 2;
+            case DiceSkillValueEnum.Three:
+                return 3;
+            case DiceSkillValueEnum.Four:
+                return 4;
+            case DiceSkillValueEnum.Five:
+                return 5;
+            case DiceSkillValueEnum.Six:
+                return 6;
+        }
+    }
+
     get description() {
         switch (this.value) {
             case DiceSkillValueEnum.Two:

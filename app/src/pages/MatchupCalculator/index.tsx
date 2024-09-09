@@ -6,10 +6,12 @@ import { Button, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
-import AttackCalculator, { AttackerCalculationResult, AttackerCalculatorInput } from '../../models/AttackerCalculator';
+import { AttackerCalculationResult, AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
 import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
+import { DefenderStatistics } from '../../models/DefenderCalculator';
+import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDefenderCalculatorResult } from '../../models/MatchupCalculator';
 
 function MatchupCalculator() {
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
@@ -29,29 +31,45 @@ function MatchupCalculator() {
     const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
     const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState(DiceSkillValue.Two);
+    const [feelNoPainChecked, setFeelNoPainChecked] = useState(false);
+    const [feelNoPainSaveSkill, setFeelNoPainSaveSkill] = useState(DiceSkillValue.Two);
 
     const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
 
-    const [calculationResult, setCalculationResult] = useState(new AttackerCalculationResult(0, 0, 0, 0));
+    const [calculationResult, setCalculationResult] = useState<AttackerDefenderCalculatorResult | undefined>(undefined);
 
     const calculateButtonPressed = () => {
-        const input = new AttackerCalculatorInput(
+        const attackerInput = new AttackerCalculatorInput(
             attackCount ?? 0,
             strength ?? 0,
             weaponSkill,
-            damage ?? 0,
             criticalHitsSkill,
             sustainedHitsChecked,
             sustainedHitsCount ?? 0,
             lethalHitsChecked,
-            devastatingWoundsChecked,
             rerollHitsModifier,
             rerollWoundsModifier,
             toughness ?? 0,
         );
 
-        const computedCalculationResult = AttackCalculator.calculate(input);
+        const defenseStatistics = new DefenderStatistics(
+            damage ?? 0,
+            armorPenetration ?? 0,
+            devastatingWoundsChecked,
+            armorSaveSkill,
+            invulnerableSaveChecked,
+            invulnerableSaveSkill,
+            feelNoPainChecked,
+            feelNoPainSaveSkill
+        );
+
+        const attackerDefenderCalculatorInput = new AttackerDefenderCalculatorInput(
+            attackerInput,
+            defenseStatistics
+        );
+
+        const computedCalculationResult = AttackerDefenderCalculator.calculate(attackerDefenderCalculatorInput);
         setCalculationResult(computedCalculationResult);
     }
 
@@ -59,6 +77,7 @@ function MatchupCalculator() {
         setAttackCount(0);
         setStrength(0);
         setDamage(0);
+        setArmorPenetration(0);
         setCriticalHitsSkill(DiceSkillValue.Six);
         setSustainedHitsChecked(false);
         setSustainedHitsCount(1);
@@ -68,7 +87,12 @@ function MatchupCalculator() {
         setToughness(0);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
-        setCalculationResult(new AttackerCalculationResult(0, 0, 0, 0));
+        setArmorSaveSkill(DiceSkillValue.Two);
+        setInvulnerableSaveChecked(false);
+        setInvulnerableSaveSkill(DiceSkillValue.Two);
+        setFeelNoPainChecked(false);
+        setFeelNoPainSaveSkill(DiceSkillValue.Two);
+        setCalculationResult(undefined);
     }
 
     return (
@@ -98,13 +122,15 @@ function MatchupCalculator() {
                                 value={strength}
                                 setValue={setStrength}
                             />
+                        </Row>
+                        <Row style={{ marginTop: 10, justifyContent: "space-evenly" }}>
                             <NumericalTextInput
                                 label='Damage'
                                 value={damage}
                                 setValue={setDamage}
                             />
                             <NumericalTextInput
-                                label='Armor Penetration (enter only positive ie. -1 as 1)'
+                                label='Armour Penetration'
                                 value={armorPenetration}
                                 setValue={setArmorPenetration}
                             />
@@ -192,12 +218,38 @@ function MatchupCalculator() {
                                 setValue={setInvulnerableSaveSkill}
                             />
                         </View>
+                        <View>
+                            <Row style={{ justifyContent: "space-between" }}>
+                                <Text>Feel No Pain</Text>
+                                <CustomCheckbox
+                                    value={feelNoPainChecked}
+                                    setValue={setFeelNoPainChecked}
+                                />
+                            </Row>
+                            <DiceWeaponSkillValueSegmentedButtons
+                                disabled={!feelNoPainChecked}
+                                value={feelNoPainSaveSkill}
+                                setValue={setFeelNoPainSaveSkill}
+                            />
+                        </View>
                     </View>
                     <View style={{ marginTop: 15 }}>
                         <Text variant="displaySmall">Results</Text>
-                        <Text variant="labelLarge">Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult.successfulHits, 2)}</Text>
-                        <Text variant="labelLarge">Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult.successfulWounds, 2)}</Text>
-                        <Text variant="labelLarge">Total Damage: {StringExtension.toFixedWithoutZeros(calculationResult.totalDamage, 2)}</Text>
+                        <Text variant="labelLarge">
+                            Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
+                        </Text>
                     </View>
                     <Row style={{ marginTop: 25, justifyContent: "space-evenly" }}>
                         <Button mode="contained" onPress={calculateButtonPressed}>Calculate!</Button>

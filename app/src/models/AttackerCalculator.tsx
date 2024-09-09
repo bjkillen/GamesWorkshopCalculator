@@ -5,8 +5,6 @@ export class AttackerCalculationResult {
     constructor(
         public successfulHits: number,
         public successfulWounds: number,
-        public totalDamage: number,
-        public devastatingWounds: number,
     ) {}
 }
 
@@ -15,12 +13,10 @@ export class AttackerCalculatorInput {
         public attackCount: number,
         public strength: number,
         public skill: DiceSkillValue,
-        public damage: number,
         public criticalHitsSkill: DiceSkillValue,
         public sustainedHits: boolean,
         public sustainedHitsCount: number,
         public lethalHits: boolean,
-        public devastatingWounds: boolean,
         public rerollHitsModifier: DiceRerollModifierValue,
         public rerollWoundsModifier: DiceRerollModifierValue,
         public toughness: number
@@ -81,9 +77,7 @@ class AttackerCalculator {
 
         return new  AttackerCalculationResult(
             successfulHits,
-            successfulWounds,
-            successfulWounds * input.damage,
-            successfulWounds * DiceSkillValue.Six.successPercentage
+            successfulWounds
         );
     }
 
