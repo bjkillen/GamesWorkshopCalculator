@@ -259,7 +259,7 @@ function MatchupCalculator() {
             </View>
             <Portal>
                 <Modal visible={resultsModalIsVisible} onDismiss={hideResultsModal} contentContainerStyle={styles.modal}>
-                    <Text variant="displaySmall">Results</Text>
+                    <Text variant="displaySmall" style={{ textAlign: 'center' }}>Results</Text>
                     <Text variant="labelLarge" style={{ marginTop: 5 }}>
                         Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
                     </Text>
@@ -278,7 +278,7 @@ function MatchupCalculator() {
                     <Text variant="labelLarge">
                         Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
                     </Text>
-                    <View style={{ marginTop: 15, justifyContent: 'center' }}>
+                    <View style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center' }}>
                         <Button
                             mode="contained"
                             onPress={hideResultsModal}
