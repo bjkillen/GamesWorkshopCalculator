@@ -157,37 +157,41 @@ function MatchupCalculator() {
                         />
                     </View>
                 </Row>
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop: 15 }}>
                     <Text variant="headlineSmall">Modifiers</Text>
-                    <Row>
+                    <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                         <CustomCheckbox
                             label='Sustained Hits'
                             value={sustainedHitsChecked}
                             setValue={setSustainedHitsChecked}
                         />
-                        <CustomCheckbox
-                            label='Lethal Hits'
-                            value={lethalHitsChecked}
-                            setValue={setLethalHitsChecked}
-                        />
-                        <CustomCheckbox
-                            label='Devastating Wounds'
-                            value={devastatingWoundsChecked}
-                            setValue={setDevastatingWoundsChecked}
-                        />
-                    </Row>
-                    <View style={{ marginTop: 10 }}>
-                        <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                            <View>
-                                <Text>Critical Hits</Text>
-                            </View>
-                            <NumericalTextInput
+                        <NumericalTextInput
                                 label='Count'
-                                disabled={!(sustainedHitsChecked || lethalHitsChecked)}
+                                disabled={!(sustainedHitsChecked)}
                                 value={sustainedHitsCount}
                                 setValue={setSustainedHitsCount}
                             />
-                        </Row>
+                    </Row>
+                    <Row style={{ marginTop: 15, justifyContent: 'space-between' }}>
+                        <View>
+                            <CustomCheckbox
+                                label='Lethal Hits'
+                                value={lethalHitsChecked}
+                                setValue={setLethalHitsChecked}
+                            />
+                        </View>
+                        <View>
+                            <CustomCheckbox
+                                label='Devastating Wounds'
+                                value={devastatingWoundsChecked}
+                                setValue={setDevastatingWoundsChecked}
+                            />
+                        </View>
+                    </Row>
+                    <View style={{ marginTop: 10 }}>
+                        <View>
+                            <Text>Critical Hits</Text>
+                        </View>
                         <View style={{ marginTop: 20 }}>
                             <DiceWeaponSkillValueSegmentedButtons
                                 disabled={!(sustainedHitsChecked || lethalHitsChecked)}
