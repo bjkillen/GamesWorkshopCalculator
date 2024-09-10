@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
 import { Button, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
-import { AttackerCalculationResult, AttackerCalculatorInput } from '../../models/AttackerCalculator';
+import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
 import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
 import { DefenderStatistics } from '../../models/DefenderCalculator';
 import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDefenderCalculatorResult } from '../../models/MatchupCalculator';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
 
 function MatchupCalculator() {
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
@@ -96,171 +97,192 @@ function MatchupCalculator() {
     }
 
     return (
-        <View style={styles.container}>
-            <SafeAreaView style={{ flex: 1 }}>
-                <Text variant="displayMedium">
-                    Tabletop Matchup Calculator
-                </Text>
-                <ScrollView>
-                    <View style={{ marginTop: 15 }}>
-                        <Text variant="displaySmall">Attacking Unit</Text>
-                        <View style={{ marginTop: 10 }}>
-                            <Text>WS/BS</Text>
-                            <DiceWeaponSkillValueSegmentedButtons
-                                value={weaponSkill}
-                                setValue={setWeaponSkill}
-                            />
-                        </View>
-                        <Row style={{ marginTop: 25, justifyContent: "space-evenly" }}>
+        <ParallaxScrollView
+            headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+            headerImage={
+                <Image
+                    source={require('@/assets/images/cracked-earth-texture-small.png')}
+                    style={styles.textureBackground}
+                />
+        }>
+            <Text variant="displayLarge" style={{ textAlign: 'center' }}>
+                Matchup Calculator
+            </Text>
+            <View style={{ marginTop: 5 }}>
+                <Text variant="displaySmall">Attacking Unit</Text>
+                <View style={{ marginTop: 10 }}>
+                    <Text>WS/BS</Text>
+                    <DiceWeaponSkillValueSegmentedButtons
+                        value={weaponSkill}
+                        setValue={setWeaponSkill}
+                    />
+                </View>
+                <Row style={{ marginTop: 25, columnGap: 10 }} >
+                    <View style={{ flex: 3 }}>
+                        <NumericalTextInput
+                            label='Attack Count'
+                            value={attackCount}
+                            setValue={setAttackCount}
+                        />
+                    </View>
+                    <View style={{ flex: 3 }}>
+                        <NumericalTextInput
+                            label='Strength'
+                            value={strength}
+                            setValue={setStrength}
+                        />
+                    </View>
+                </Row>
+                <Row style={{ marginTop: 10, columnGap: 10 }}>
+                    <View style={{ flex: 3 }}>
+                        <NumericalTextInput
+                            label='Damage'
+                            value={damage}
+                            setValue={setDamage}
+                        />
+                    </View>
+                    <View style={{ flex: 3 }}>
+                        <NumericalTextInput
+                            label='Armour Penetration'
+                            value={armorPenetration}
+                            setValue={setArmorPenetration}
+                        />
+                    </View>
+                </Row>
+                <View style={{ marginTop: 20 }}>
+                    <Text variant="headlineSmall">Modifiers</Text>
+                    <Row>
+                        <CustomCheckbox
+                            label='Sustained Hits'
+                            value={sustainedHitsChecked}
+                            setValue={setSustainedHitsChecked}
+                        />
+                        <CustomCheckbox
+                            label='Lethal Hits'
+                            value={lethalHitsChecked}
+                            setValue={setLethalHitsChecked}
+                        />
+                        <CustomCheckbox
+                            label='Devastating Wounds'
+                            value={devastatingWoundsChecked}
+                            setValue={setDevastatingWoundsChecked}
+                        />
+                    </Row>
+                    <View style={{ marginTop: 10 }}>
+                        <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                            <View>
+                                <Text>Critical Hits</Text>
+                            </View>
                             <NumericalTextInput
-                                label='Attack Count'
-                                value={attackCount}
-                                setValue={setAttackCount}
-                            />
-                            <NumericalTextInput
-                                label='Strength'
-                                value={strength}
-                                setValue={setStrength}
-                            />
-                        </Row>
-                        <Row style={{ marginTop: 10, justifyContent: "space-evenly" }}>
-                            <NumericalTextInput
-                                label='Damage'
-                                value={damage}
-                                setValue={setDamage}
-                            />
-                            <NumericalTextInput
-                                label='Armour Penetration'
-                                value={armorPenetration}
-                                setValue={setArmorPenetration}
+                                label='Count'
+                                disabled={!(sustainedHitsChecked || lethalHitsChecked)}
+                                value={sustainedHitsCount}
+                                setValue={setSustainedHitsCount}
                             />
                         </Row>
                         <View style={{ marginTop: 20 }}>
-                            <Text variant="headlineSmall">Modifiers</Text>
-                            <Row style={{ justifyContent: "space-between" }}>
-                                <Text>Sustained Hits</Text>
-                                <CustomCheckbox
-                                    value={sustainedHitsChecked}
-                                    setValue={setSustainedHitsChecked}
-                                />
-                            </Row>
-                            <Row style={{ justifyContent: "space-between" }}>
-                                <Text>Lethal Hits</Text>
-                                <CustomCheckbox
-                                    value={lethalHitsChecked}
-                                    setValue={setLethalHitsChecked}
-                                />
-                            </Row>
-                            <View>
-                                <View>
-                                <Text>Critical Hits</Text>
-                                    <DiceWeaponSkillValueSegmentedButtons
-                                        disabled={!(sustainedHitsChecked || lethalHitsChecked)}
-                                        value={criticalHitsSkill}
-                                        setValue={setCriticalHitsSkill}
-                                    />
-                                </View>
-                                <NumericalTextInput
-                                    label='Count'
-                                    disabled={!(sustainedHitsChecked || lethalHitsChecked)}
-                                    value={sustainedHitsCount}
-                                    setValue={setSustainedHitsCount}
-                                />
-                            </View>
-                            <Row style={{ justifyContent: "space-between" }}>
-                                <Text>Devastating Wounds</Text>
-                                <CustomCheckbox
-                                    value={devastatingWoundsChecked}
-                                    setValue={setDevastatingWoundsChecked}
-                                />
-                            </Row>
-                            <View>
-                                <Text variant="labelLarge">Reroll Hits</Text>
-                                <DiceRerollModifierSegmentedButtons
-                                    value={rerollHitsModifier}
-                                    setValue={setRerollHitsModifier}
-                                />
-                            </View>
-                            <View>
-                                <Text variant="labelLarge">Reroll Wounds</Text>
-                                <DiceRerollModifierSegmentedButtons
-                                    value={rerollWoundsModifier}
-                                    setValue={setRerollWoundsModifier}
-                                />
-                            </View>
+                            <DiceWeaponSkillValueSegmentedButtons
+                                disabled={!(sustainedHitsChecked || lethalHitsChecked)}
+                                value={criticalHitsSkill}
+                                setValue={setCriticalHitsSkill}
+                            />
                         </View>
                     </View>
-                    <View style={{ marginTop: 15 }}>
-                        <Text variant="displaySmall">Defending Unit</Text>
-                        <NumericalTextInput
-                            label='Toughness'
-                            value={toughness}
-                            setValue={setToughness}
+                    <View style={{ marginTop: 15, rowGap: 10 }}>
+                        <View>
+                            <Text variant="labelLarge">Reroll Hits</Text>
+                            <DiceRerollModifierSegmentedButtons
+                                value={rerollHitsModifier}
+                                setValue={setRerollHitsModifier}
+                            />
+                        </View>
+                        <View>
+                            <Text variant="labelLarge">Reroll Wounds</Text>
+                            <DiceRerollModifierSegmentedButtons
+                                value={rerollWoundsModifier}
+                                setValue={setRerollWoundsModifier}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </View>
+            <View style={{ marginTop: 15 }}>
+                <Text variant="displaySmall">Defending Unit</Text>
+                <View style={{ marginTop: 10 }}>
+                    <NumericalTextInput
+                        label='Toughness'
+                        value={toughness}
+                        setValue={setToughness}
+                    />
+                </View>
+                <View style={{ marginTop: 15, rowGap: 10 }}>
+                    <View style={{ rowGap: 5 }}>
+                        <Text>Armor Save</Text>
+                        <DiceWeaponSkillValueSegmentedButtons
+                            value={armorSaveSkill}
+                            setValue={setArmorSaveSkill}
                         />
-                        <View>
-                            <Text>Armor Save</Text>
-                            <DiceWeaponSkillValueSegmentedButtons
-                                value={armorSaveSkill}
-                                setValue={setArmorSaveSkill}
-                            />
-                        </View>
-                        <View>
-                            <Row style={{ justifyContent: "space-between" }}>
-                                <Text>Invulenerable Save</Text>
-                                <CustomCheckbox
-                                    value={invulnerableSaveChecked}
-                                    setValue={setInvulnerableSaveChecked}
-                                />
-                            </Row>
-                            <DiceWeaponSkillValueSegmentedButtons
-                                disabled={!invulnerableSaveChecked}
-                                value={invulnerableSaveSkill}
-                                setValue={setInvulnerableSaveSkill}
-                            />
-                        </View>
-                        <View>
-                            <Row style={{ justifyContent: "space-between" }}>
-                                <Text>Feel No Pain</Text>
-                                <CustomCheckbox
-                                    value={feelNoPainChecked}
-                                    setValue={setFeelNoPainChecked}
-                                />
-                            </Row>
-                            <DiceWeaponSkillValueSegmentedButtons
-                                disabled={!feelNoPainChecked}
-                                value={feelNoPainSaveSkill}
-                                setValue={setFeelNoPainSaveSkill}
-                            />
-                        </View>
                     </View>
-                    <View style={{ marginTop: 15 }}>
-                        <Text variant="displaySmall">Results</Text>
-                        <Text variant="labelLarge">
-                            Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
-                        </Text>
-                        <Text variant="labelLarge">
-                            Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
-                        </Text>
-                        <Text variant="labelLarge">
-                            Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
-                        </Text>
-                        <Text variant="labelLarge">
-                            Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
-                        </Text>
-                        <Text variant="labelLarge">
-                            Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
-                        </Text>
+                    <View style={{ rowGap: 5 }}>
+                        <CustomCheckbox
+                            label='Invulenerable Save'
+                            value={invulnerableSaveChecked}
+                            setValue={setInvulnerableSaveChecked}
+                        />
+                        <DiceWeaponSkillValueSegmentedButtons
+                            disabled={!invulnerableSaveChecked}
+                            value={invulnerableSaveSkill}
+                            setValue={setInvulnerableSaveSkill}
+                        />
                     </View>
-                    <Row style={{ marginTop: 25, justifyContent: "space-evenly" }}>
-                        <Button mode="contained" onPress={calculateButtonPressed}>Calculate!</Button>
-                        <Button
-                            mode="contained"
-                            onPress={clearButtonPressed}
-                            buttonColor='black'>Clear</Button>
-                    </Row>
-                </ScrollView>
-            </SafeAreaView>
-        </View>
+                    <View style={{ rowGap: 5 }}>
+                        <CustomCheckbox
+                            label='Feel No Pain'
+                            value={feelNoPainChecked}
+                            setValue={setFeelNoPainChecked}
+                        />
+                        <DiceWeaponSkillValueSegmentedButtons
+                            disabled={!feelNoPainChecked}
+                            value={feelNoPainSaveSkill}
+                            setValue={setFeelNoPainSaveSkill}
+                        />
+                    </View>
+                </View>
+            </View>
+            <View style={{ marginTop: 15 }}>
+                <Text variant="displaySmall">Results</Text>
+                <Text variant="labelLarge" style={{ marginTop: 5 }}>
+                    Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
+                </Text>
+                <Text variant="labelLarge">
+                    Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
+                </Text>
+                <Text variant="labelLarge">
+                    Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
+                </Text>
+                <Text variant="labelLarge">
+                    Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
+                </Text>
+                <Text variant="labelLarge">
+                    Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
+                </Text>
+            </View>
+            <Row style={{ marginTop: 30, columnGap: 10 }}>
+                <Button
+                    style={{ flex: 3 }}
+                    mode="contained"
+                    onPress={calculateButtonPressed}>
+                        Calculate!
+                </Button>
+                <Button
+                    style={{ flex: 3 }}
+                    mode="contained"
+                    onPress={clearButtonPressed}
+                    buttonColor='black'>
+                        Clear
+                </Button>
+            </Row>
+        </ParallaxScrollView>
     );
 }
 
@@ -268,9 +290,7 @@ export default MatchupCalculator;
 
 // create styles of app
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
-        padding: 16,
+    textureBackground: {
+        resizeMode: 'cover'
     },
 });
