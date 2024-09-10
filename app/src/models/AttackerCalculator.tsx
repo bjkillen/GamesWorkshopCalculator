@@ -4,6 +4,7 @@ import DiceSkillValue from "../utilities/DiceSkillValue";
 export class AttackerCalculationResult {
     constructor(
         public successfulHits: number,
+        public criticalHits: number,
         public successfulWounds: number,
     ) {}
 }
@@ -26,6 +27,7 @@ export class AttackerCalculatorInput {
 class AttackerCalculator {
     static calculate(input: AttackerCalculatorInput): AttackerCalculationResult {
         let baseSuccessfulHits = input.attackCount * input.skill.successPercentage;
+        let criticalHits = input.attackCount * input.criticalHitsSkill.successPercentage;
 
         const hitDiceToReroll = this.additionalDiceFromModifier(
             input.attackCount,
@@ -34,20 +36,19 @@ class AttackerCalculator {
         );
 
         baseSuccessfulHits += hitDiceToReroll * input.skill.successPercentage;
+        criticalHits += hitDiceToReroll * input.criticalHitsSkill.successPercentage;
 
         let successfulHits = baseSuccessfulHits;
 
         if (input.sustainedHits) {
-            successfulHits += successfulHits * input.criticalHitsSkill.successPercentage * input.sustainedHitsCount;
+            successfulHits += criticalHits * input.sustainedHitsCount;
         }
 
         let successfulWounds = 0;
 
         if (input.lethalHits) {
-            const lethalHits = baseSuccessfulHits * input.criticalHitsSkill.successPercentage;
-
-            successfulWounds += lethalHits;
-            successfulHits -= lethalHits;
+            successfulWounds += criticalHits ;
+            successfulHits -= criticalHits ;
         }
 
         const strength = input.strength;
@@ -77,7 +78,8 @@ class AttackerCalculator {
 
         return new  AttackerCalculationResult(
             successfulHits,
-            successfulWounds
+            criticalHits,
+            successfulWounds,
         );
     }
 
