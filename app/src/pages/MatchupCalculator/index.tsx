@@ -192,7 +192,7 @@ function MatchupCalculator() {
                         <View>
                             <Text>Critical Hits</Text>
                         </View>
-                        <View style={{ marginTop: 20 }}>
+                        <View style={{ marginTop: 5 }}>
                             <DiceWeaponSkillValueSegmentedButtons
                                 disabled={!(sustainedHitsChecked || lethalHitsChecked)}
                                 value={criticalHitsSkill}
