@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
-import { Button, Text } from 'react-native-paper';
+import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import DiceSkillValue from '../../utilities/DiceSkillValue';
@@ -17,10 +17,10 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 function MatchupCalculator() {
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
-    const [attackCount, setAttackCount] = useState<number | undefined>(0);
-    const [strength, setStrength] = useState<number | undefined>(0);
-    const [damage, setDamage] = useState<number | undefined>(0);
-    const [armorPenetration, setArmorPenetration] = useState<number | undefined>(0);
+    const [attackCount, setAttackCount] = useState<number | undefined>(undefined);
+    const [strength, setStrength] = useState<number | undefined>(undefined);
+    const [damage, setDamage] = useState<number | undefined>(undefined);
+    const [armorPenetration, setArmorPenetration] = useState<number | undefined>(undefined);
 
     const [criticalHitsSkill, setCriticalHitsSkill] = useState(DiceSkillValue.Six);
     const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
@@ -28,7 +28,7 @@ function MatchupCalculator() {
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
 
-    const [toughness, setToughness] = useState<number | undefined>(0);
+    const [toughness, setToughness] = useState<number | undefined>(undefined);
     const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
     const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState(DiceSkillValue.Two);
@@ -39,6 +39,8 @@ function MatchupCalculator() {
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
 
     const [calculationResult, setCalculationResult] = useState<AttackerDefenderCalculatorResult | undefined>(undefined);
+
+    const [resultsModalIsVisible, setResultsModalIsVisible] = useState(false);
 
     const calculateButtonPressed = () => {
         const attackerInput = new AttackerCalculatorInput(
@@ -72,20 +74,24 @@ function MatchupCalculator() {
 
         const computedCalculationResult = AttackerDefenderCalculator.calculate(attackerDefenderCalculatorInput);
         setCalculationResult(computedCalculationResult);
+        showResultsModal();
     }
 
+    const showResultsModal = () => setResultsModalIsVisible(true);
+    const hideResultsModal = () => setResultsModalIsVisible(false);
+
     const clearButtonPressed = () => {
-        setAttackCount(0);
-        setStrength(0);
-        setDamage(0);
-        setArmorPenetration(0);
+        setAttackCount(undefined);
+        setStrength(undefined);
+        setDamage(undefined);
+        setArmorPenetration(undefined);
         setCriticalHitsSkill(DiceSkillValue.Six);
         setSustainedHitsChecked(false);
         setSustainedHitsCount(1);
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setWeaponSkill(DiceSkillValue.Two);
-        setToughness(0);
+        setToughness(undefined);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
         setArmorSaveSkill(DiceSkillValue.Two);
@@ -94,6 +100,8 @@ function MatchupCalculator() {
         setFeelNoPainChecked(false);
         setFeelNoPainSaveSkill(DiceSkillValue.Two);
         setCalculationResult(undefined);
+
+        hideResultsModal();
     }
 
     return (
@@ -249,27 +257,38 @@ function MatchupCalculator() {
                     </View>
                 </View>
             </View>
-            <View style={{ marginTop: 15 }}>
-                <Text variant="displaySmall">Results</Text>
-                <Text variant="labelLarge" style={{ marginTop: 5 }}>
-                    Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
-                </Text>
-                <Text variant="labelLarge">
-                    Critical Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.criticalHits ?? 0, 5)}
-                </Text>
-                <Text variant="labelLarge">
-                    Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
-                </Text>
-                <Text variant="labelLarge">
-                    Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
-                </Text>
-                <Text variant="labelLarge">
-                    Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
-                </Text>
-                <Text variant="labelLarge">
-                    Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
-                </Text>
-            </View>
+            <Portal>
+                <Modal visible={resultsModalIsVisible} onDismiss={hideResultsModal} contentContainerStyle={styles.modal}>
+                    <Text variant="displaySmall">Results</Text>
+                    <Text variant="labelLarge" style={{ marginTop: 5 }}>
+                        Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
+                    </Text>
+                    <Text variant="labelLarge">
+                        Critical Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.criticalHits ?? 0, 5)}
+                    </Text>
+                    <Text variant="labelLarge">
+                        Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
+                    </Text>
+                    <Text variant="labelLarge">
+                        Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
+                    </Text>
+                    <Text variant="labelLarge">
+                        Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
+                    </Text>
+                    <Text variant="labelLarge">
+                        Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
+                    </Text>
+                    <View style={{ marginTop: 15, justifyContent: 'center' }}>
+                        <Button
+                            mode="contained"
+                            onPress={hideResultsModal}
+                            buttonColor='black'>
+                                Close
+                        </Button>
+                    </View>
+                    
+                </Modal>
+            </Portal>
             <Row style={{ marginTop: 30, columnGap: 10 }}>
                 <Button
                     style={{ flex: 3 }}
@@ -296,4 +315,9 @@ const styles = StyleSheet.create({
     textureBackground: {
         resizeMode: 'cover'
     },
+    modal: {
+        backgroundColor: 'white',
+        padding: 20,
+        margin: 20,
+    }
 });

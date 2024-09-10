@@ -27,7 +27,7 @@ function NumericalTextInput(props: NumericalTextInputProps) {
 
     return (
         <TextInput
-            value={value?.toString() ?? ''}
+            value={value?.toString()}
             label={label}
             disabled={disabled}
             keyboardType='numeric'
