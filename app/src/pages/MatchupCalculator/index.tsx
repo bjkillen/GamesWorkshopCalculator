@@ -108,7 +108,7 @@ function MatchupCalculator() {
         <ParallaxScrollView
             backgroundImageSource={require('@/assets/images/cracked-earth-texture-small.png')}
         >
-            <View style={{ padding:16 }}>
+            <View style={{ padding: 16 }}>
                 <Text variant="displayLarge" style={{ textAlign: 'center' }}>
                     Matchup Calculator
                 </Text>

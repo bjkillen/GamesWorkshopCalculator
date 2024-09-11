@@ -1,7 +1,6 @@
 
 import type { PropsWithChildren } from 'react';
-import { Stack } from 'expo-router';
-import { Dimensions, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -15,7 +14,7 @@ type ParallaxScrollViewProps = PropsWithChildren<{
     backgroundImageSource: ImageSourcePropType
 }>;
 
-const IMG_HEIGHT = 300;
+const IMG_HEIGHT = 200;
 
 function ParallaxScrollView(props: ParallaxScrollViewProps) {
     const { children, backgroundImageSource } = props;
@@ -47,19 +46,15 @@ function ParallaxScrollView(props: ParallaxScrollViewProps) {
 	});
 
     return (
-        <View style={styles.content}>
+        <View style={styles.container}>
             <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-                <Animated.View
-                    style={[
-                        styles.header,
-                        headerAnimatedStyle,
-                    ]}>
-                        <Animated.Image
-                            source={backgroundImageSource}
-                            style={[styles.image, imageAnimatedStyle]}
-                        />
-                </Animated.View>
-                <View>
+				<Animated.View style={[styles.parallaxImageView, imageAnimatedStyle]}>
+					<Image
+						source={backgroundImageSource}
+						style={styles.image}
+					/>
+				</Animated.View>
+                <View style={styles.content}>
                     {children}
                 </View>
             </Animated.ScrollView>
@@ -68,20 +63,22 @@ function ParallaxScrollView(props: ParallaxScrollViewProps) {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	},
 	image: {
 		width: width,
 		height: IMG_HEIGHT
 	},
-    header: {
-		backgroundColor: '#fff',
-		height: 100,
-		borderWidth: StyleSheet.hairlineWidth
+    parallaxImageView: {
+		height: IMG_HEIGHT,
+		overflow: 'hidden',
 	},
     content: {
         flex: 1,
         gap: 16,
         overflow: 'hidden',
-    },
+    }
 });
 
 export default ParallaxScrollView;
