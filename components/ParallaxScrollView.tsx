@@ -9,12 +9,11 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
+const IMG_HEIGHT = 200;
 
 type ParallaxScrollViewProps = PropsWithChildren<{
     backgroundImageSource: ImageSourcePropType
 }>;
-
-const IMG_HEIGHT = 200;
 
 function ParallaxScrollView(props: ParallaxScrollViewProps) {
     const { children, backgroundImageSource } = props;
@@ -29,7 +28,7 @@ function ParallaxScrollView(props: ParallaxScrollViewProps) {
 					translateY: interpolate(
 						scrollOffset.value,
 						[-IMG_HEIGHT, 0, IMG_HEIGHT],
-						[-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
+						[-IMG_HEIGHT / 2, 0, 0]
 					)
 				},
 				{
@@ -39,19 +38,13 @@ function ParallaxScrollView(props: ParallaxScrollViewProps) {
 		};
 	});
 
-    const headerAnimatedStyle = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1])
-		};
-	});
-
     return (
         <View style={styles.container}>
             <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
 				<Animated.View style={[styles.parallaxImageView, imageAnimatedStyle]}>
 					<Image
-						source={backgroundImageSource}
 						style={styles.image}
+						source={backgroundImageSource}
 					/>
 				</Animated.View>
                 <View style={styles.content}>
@@ -67,8 +60,7 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	image: {
-		width: width,
-		height: IMG_HEIGHT
+		height: IMG_HEIGHT,
 	},
     parallaxImageView: {
 		height: IMG_HEIGHT,
@@ -77,7 +69,7 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         gap: 16,
-        overflow: 'hidden',
+		overflow: 'hidden',
     }
 });
 
