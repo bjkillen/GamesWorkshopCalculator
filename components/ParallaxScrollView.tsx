@@ -41,12 +41,10 @@ function ParallaxScrollView(props: ParallaxScrollViewProps) {
     return (
         <View style={styles.container}>
             <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-				<Animated.View style={[styles.parallaxImageView, imageAnimatedStyle]}>
-					<Image
-						style={styles.image}
-						source={backgroundImageSource}
-					/>
-				</Animated.View>
+				<Animated.Image
+					source={backgroundImageSource}
+					style={[styles.image, imageAnimatedStyle]}
+				/>
                 <View style={styles.content}>
                     {children}
                 </View>
@@ -60,9 +58,6 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	image: {
-		height: IMG_HEIGHT,
-	},
-    parallaxImageView: {
 		height: IMG_HEIGHT,
 		overflow: 'hidden',
 	},
