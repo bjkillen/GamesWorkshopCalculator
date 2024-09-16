@@ -5,11 +5,11 @@ import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillVa
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
-import DiceSkillValue from '../../utilities/DiceSkillValue';
+import DiceSkillValue from '../../utilities/enums/DiceSkillValue';
 import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
-import DiceRerollModifierValue from '../../utilities/DiceRerollModifierValue';
+import DiceRerollModifierValue from '../../utilities/enums/DiceRerollModifierValue';
 import { DefenderStatistics } from '../../models/DefenderCalculator';
 import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDefenderCalculatorResult } from '../../models/MatchupCalculator';
 import ParallaxScrollView from '@/components/ParallaxScrollView';

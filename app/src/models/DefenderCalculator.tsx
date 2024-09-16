@@ -1,5 +1,5 @@
 import { AttackerCalculationResult } from "./AttackerCalculator";
-import DiceSkillValue from "../utilities/DiceSkillValue";
+import DiceSkillValue from "../utilities/enums/DiceSkillValue";
 
 export class DefenderStatistics {
     constructor(

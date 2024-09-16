@@ -1,5 +1,5 @@
-import DiceRerollModifierValue, { DiceRerollModifierValueEnum } from "../utilities/DiceRerollModifierValue";
-import DiceSkillValue from "../utilities/DiceSkillValue";
+import DiceRerollModifierValue, { DiceRerollModifierValueEnum } from "../utilities/enums/DiceRerollModifierValue";
+import DiceSkillValue from "../utilities/enums/DiceSkillValue";
 
 export class AttackerCalculationResult {
     constructor(
