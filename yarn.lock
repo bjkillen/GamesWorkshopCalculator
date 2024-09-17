@@ -4550,9 +4550,12 @@ functions-have-names@^1.2.3:
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
 gamesworkshopcalculator.common@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/gamesworkshopcalculator.common/-/gamesworkshopcalculator.common-1.0.0.tgz#b27f1587a2fb61f40a18cb8a66c70c46bd45af02"
-  integrity sha512-Mrl8n8UG2Tm9annQ9cKyX6KAqpTWXMnwKg5lGKbUJ3TLkPt4rYfIieksZLwp/mgZMZTADB8u+pxBWc8OySgNvA==
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/gamesworkshopcalculator.common/-/gamesworkshopcalculator.common-1.0.19.tgz#3f9dcb08c415dca14432bb3cc7ccfc54b39a66a0"
+  integrity sha512-SKEZSslQr3JtQVbOAONiJ+ntVxx/eyJziWlSZMoNY6KRKQUhjWJKu9NB8TkPe5pfeKnpsdyql8O5tnWRCdtCkw==
+  dependencies:
+    reflect-metadata "^0.2.2"
+    typedjson "^1.8.0"
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -7363,6 +7366,11 @@ recast@^0.21.0:
     source-map "~0.6.1"
     tslib "^2.0.1"
 
+reflect-metadata@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.2.2.tgz#400c845b6cba87a21f2c65c4aeb158f4fa4d9c5b"
+  integrity sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==
+
 regenerate-unicode-properties@^10.1.0:
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-10.1.1.tgz#6b0e05489d9076b04c436f318d9b067bba459480"
@@ -8415,6 +8423,13 @@ typedarray.prototype.slice@^1.0.3:
     es-errors "^1.3.0"
     typed-array-buffer "^1.0.2"
     typed-array-byte-offset "^1.0.2"
+
+typedjson@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/typedjson/-/typedjson-1.8.0.tgz#7ed7200f88c1240821c7e69d6d121667988e5d1d"
+  integrity sha512-taVJVGebQDagEmVc3Cu6vVVLkWLnxqPcTrkVgbpAsI02ZDDrnHy5zvt1JVqXv4/yztBgZAX1oR07+bkiusGJLQ==
+  dependencies:
+    tslib "^2.0.1"
 
 typescript@~5.3.3:
   version "5.3.3"

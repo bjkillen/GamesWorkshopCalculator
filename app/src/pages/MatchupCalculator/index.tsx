@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
-import { DiceSkillValue } from 'gamesworkshopcalculator.common';
+import { DiceSkillValue, Faction } from 'gamesworkshopcalculator.common';
 import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
@@ -13,8 +13,16 @@ import DiceRerollModifierValue from '../../utilities/enums/DiceRerollModifierVal
 import { DefenderStatistics } from '../../models/DefenderCalculator';
 import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDefenderCalculatorResult } from '../../models/MatchupCalculator';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import LoadingOverlay from '@/components/LoadingOverlay';
+import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDatasheetsParser';
 
 function MatchupCalculator() {
+    const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+    const [factionsDatasheets, setFactionsDatasheets] = useState(new Map<string, Faction>());
+
+    const [attackingFaction, setAttackingFaction] = useState<Faction | undefined>(undefined);
+    const [defendingFaction, setDefendingFaction] = useState<Faction | undefined>(undefined);
+
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
     const [attackCount, setAttackCount] = useState<number | undefined>(undefined);
@@ -104,10 +112,25 @@ function MatchupCalculator() {
         hideResultsModal();
     }
 
+    async function loadFactionsDatasheets() {
+        const parsedFactionsDatasheets = await FactionDatasheetsParser.Parse();
+        setFactionsDatasheets(parsedFactionsDatasheets)
+    }
+
+    useEffect(() => {
+        setLoadingOverlayOpen(true);
+        loadFactionsDatasheets();
+    }, [])
+
+    useEffect(() => {
+        setLoadingOverlayOpen(false);
+    }, [factionsDatasheets])
+
     return (
         <ParallaxScrollView
             backgroundImageSource={require('@/assets/images/cracked-earth-texture-small.png')}
         >
+            <LoadingOverlay open={loadingOverlayOpen} />
             <View style={{ padding: 16, flex: 1 }}>
                 <Text variant="displayLarge" style={{ textAlign: 'center' }}>
                     Matchup Calculator
