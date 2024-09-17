@@ -1,7 +1,7 @@
 import React from "react";
 import { SegmentedButtons } from "react-native-paper";
 
-import DiceSkillValue from "@/app/src/utilities/DiceSkillValue";
+import { DiceSkillValue } from "gamesworkshopcalculator.common";
 
 export interface DiceWeaponSkillValueSegmentedButtonsProps {
     disabled?: boolean;

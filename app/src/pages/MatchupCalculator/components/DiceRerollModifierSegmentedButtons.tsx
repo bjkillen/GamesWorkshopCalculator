@@ -1,7 +1,7 @@
 import React from "react";
 import { SegmentedButtons } from "react-native-paper";
 
-import DiceRerollModifierValue from "@/app/src/utilities/DiceRerollModifierValue";
+import DiceRerollModifierValue from "@/app/src/utilities/enums/DiceRerollModifierValue";
 
 export interface DiceRerollModifierSegmentedButtonsProps {
     value: DiceRerollModifierValue;

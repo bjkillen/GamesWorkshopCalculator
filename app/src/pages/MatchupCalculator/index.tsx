@@ -5,7 +5,7 @@ import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillVa
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
-import DiceSkillValue from '../../utilities/enums/DiceSkillValue';
+import { DiceSkillValue } from 'gamesworkshopcalculator.common';
 import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
