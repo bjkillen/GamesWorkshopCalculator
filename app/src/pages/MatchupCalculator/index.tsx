@@ -15,6 +15,7 @@ import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDe
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDatasheetsParser';
+import SelectFactionButtonAndPopup from './components/SelectFactionButtonAndPopup';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -135,6 +136,20 @@ function MatchupCalculator() {
                 <Text variant="displayLarge" style={{ textAlign: 'center' }}>
                     Matchup Calculator
                 </Text>
+                <View style={{ marginTop: 5 }}>
+                    <Text variant="displaySmall">Attacking Faction</Text>
+                    <SelectFactionButtonAndPopup
+                        value={attackingFaction}
+                        setValue={setAttackingFaction}
+                        factionData={factionsDatasheets}
+                    />
+                    <Text variant="displaySmall">Defending Faction</Text>
+                    <SelectFactionButtonAndPopup
+                        value={defendingFaction}
+                        setValue={setDefendingFaction}
+                        factionData={factionsDatasheets}
+                    />
+                </View>
                 <View style={{ marginTop: 5 }}>
                     <Text variant="displaySmall">Attacking Unit</Text>
                     <View style={{ marginTop: 10 }}>
