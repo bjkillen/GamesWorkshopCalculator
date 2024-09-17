@@ -5,7 +5,7 @@ import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillVa
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
-import { DiceSkillValue, Faction, ModelDatasheet, UnitDatasheet } from 'gamesworkshopcalculator.common';
+import { DiceSkillValue, Faction, UnitDatasheet, Wargear } from 'gamesworkshopcalculator.common';
 import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
@@ -17,6 +17,7 @@ import LoadingOverlay from '@/components/LoadingOverlay';
 import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDatasheetsParser';
 import SelectFactionButtonAndPopup from './components/faction/SelectFactionButtonAndPopup';
 import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup';
+import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButtonAndPopup';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -24,6 +25,7 @@ function MatchupCalculator() {
 
     const [attackingFaction, setAttackingFaction] = useState<Faction | undefined>(undefined);
     const [attackingUnit, setAttackingUnit] = useState<UnitDatasheet | undefined>(undefined);
+    const [attackingUnitWargear, setAttackingUnitWargear] = useState<Wargear | undefined>(undefined);
 
     const [defendingFaction, setDefendingFaction] = useState<Faction | undefined>(undefined);
     const [defendingUnit, setDefendingUnit] = useState<UnitDatasheet | undefined>(undefined);
@@ -131,6 +133,34 @@ function MatchupCalculator() {
         setLoadingOverlayOpen(false);
     }, [factionsDatasheets])
 
+    useEffect(() => {
+        if (attackingUnitWargear == null) {
+            return;
+        }
+
+        setWeaponSkill(attackingUnitWargear.skill);
+        setStrength(attackingUnitWargear.strength);
+        setAttackCount(attackingUnitWargear.attacks);
+        setDamage(attackingUnitWargear.damage);
+        setArmorPenetration(Math.abs(attackingUnitWargear.armorPenetration));
+    }, [attackingUnitWargear])
+
+    useEffect(() => {
+        if (defendingUnit == null) {
+            return;
+        }
+
+        const firstModelOnDatasheet = defendingUnit.modelDatasheets[0];
+
+        setToughness(firstModelOnDatasheet.toughness);
+        setArmorSaveSkill(firstModelOnDatasheet.armorSaveSkill);
+        setInvulnerableSaveChecked(firstModelOnDatasheet.invulnerableSave);
+
+        if (firstModelOnDatasheet.invulnerableSaveSkill != null) {
+            setInvulnerableSaveSkill(firstModelOnDatasheet.invulnerableSaveSkill);
+        }
+    }, [defendingUnit])
+
     return (
         <ParallaxScrollView
             backgroundImageSource={require('@/assets/images/cracked-earth-texture-small.png')}
@@ -157,6 +187,14 @@ function MatchupCalculator() {
                                     unitDatasheets={attackingFaction?.unitDatasheets ?? []}
                                     value={attackingUnit}
                                     setValue={setAttackingUnit}
+                                />
+                            </View>
+                            <View style={{ flex: 6 }}>
+                                <SelectWargearButtonAndPopup
+                                    disabled={attackingFaction == null}
+                                    wargear={attackingUnit?.wargear ?? []}
+                                    value={attackingUnitWargear}
+                                    setValue={setAttackingUnitWargear}
                                 />
                             </View>
                         </View>

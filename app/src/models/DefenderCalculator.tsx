@@ -59,8 +59,9 @@ class DefenderCalculator {
         } else if (input.defenderStatistics.invulnerableSave) {
             woundsFailed += unsavedWoundsRemaining *
                 input.defenderStatistics.invulnerableSaveSkill.failurePercentage;
+        } else {
+            woundsFailed += unsavedWoundsRemaining;
         }
-
 
         let totalDamage = woundsFailed * input.defenderStatistics.weaponDamage;
         let totalSuccessfulDamage = totalDamage;

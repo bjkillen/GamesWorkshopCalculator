@@ -2,23 +2,23 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Modal, Portal } from "react-native-paper";
 
-import { UnitDatasheet } from "gamesworkshopcalculator.common";
-import UnitDatasheetsList from "./UnitDatasheetsList";
+import { Wargear } from "gamesworkshopcalculator.common";
+import WargearList from "./WargearList";
 
-export interface SelectUnitButtonAndPopupProps {
+export interface SelectWargearButtonAndPopupProps {
     disabled: boolean;
-    unitDatasheets: UnitDatasheet[];
-    value?: UnitDatasheet;
-    setValue: (value: UnitDatasheet) => void;
+    wargear: Wargear[];
+    value?: Wargear;
+    setValue: (value: Wargear) => void;
 }
 
-function SelectUnitButtonAndPopup(props: SelectUnitButtonAndPopupProps) {
+function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
     const {
         disabled,
-        unitDatasheets,
+        wargear,
         value,
         setValue
-    } = props as SelectUnitButtonAndPopupProps;
+    } = props as SelectWargearButtonAndPopupProps;
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -29,11 +29,8 @@ function SelectUnitButtonAndPopup(props: SelectUnitButtonAndPopupProps) {
         showModal();
     }
 
-    const valueSet = (value: UnitDatasheet) => {
-        if (value.modelDatasheets.length >= 1) {
-            setValue(value);
-        }
-
+    const valueSet = (value: Wargear) => {
+        setValue(value);
         hideModal();
     }
 
@@ -43,7 +40,7 @@ function SelectUnitButtonAndPopup(props: SelectUnitButtonAndPopupProps) {
                 <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modal}>
                     <ScrollView>
                         <View>
-                            <UnitDatasheetsList unitDatasheets={unitDatasheets} setValue={valueSet} />
+                            <WargearList wargear={wargear} setValue={valueSet} />
                         </View>
                     </ScrollView>
                 </Modal>
@@ -53,12 +50,12 @@ function SelectUnitButtonAndPopup(props: SelectUnitButtonAndPopupProps) {
                 mode="contained"
                 onPress={buttonPressed}
                 buttonColor='black'
-            >{value?.name ?? "Select Unit"}</Button>
+            >{value?.name ?? "Select Wargear"}</Button>
         </>
     );
 }
 
-export default SelectUnitButtonAndPopup;
+export default SelectWargearButtonAndPopup;
 
 const styles = StyleSheet.create({
     modal: {
