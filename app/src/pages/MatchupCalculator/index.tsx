@@ -5,7 +5,7 @@ import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillVa
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
-import { DiceSkillValue, Faction } from 'gamesworkshopcalculator.common';
+import { DiceSkillValue, Faction, ModelDatasheet, UnitDatasheet } from 'gamesworkshopcalculator.common';
 import { AttackerCalculatorInput } from '../../models/AttackerCalculator';
 import StringExtension from '../../utilities/extensions/StringExtension';
 import DiceRerollModifierSegmentedButtons from './components/DiceRerollModifierSegmentedButtons';
@@ -15,14 +15,18 @@ import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDe
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDatasheetsParser';
-import SelectFactionButtonAndPopup from './components/SelectFactionButtonAndPopup';
+import SelectFactionButtonAndPopup from './components/faction/SelectFactionButtonAndPopup';
+import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
     const [factionsDatasheets, setFactionsDatasheets] = useState(new Map<string, Faction>());
 
     const [attackingFaction, setAttackingFaction] = useState<Faction | undefined>(undefined);
+    const [attackingUnit, setAttackingUnit] = useState<UnitDatasheet | undefined>(undefined);
+
     const [defendingFaction, setDefendingFaction] = useState<Faction | undefined>(undefined);
+    const [defendingUnit, setDefendingUnit] = useState<UnitDatasheet | undefined>(undefined);
 
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
@@ -137,20 +141,48 @@ function MatchupCalculator() {
                     Matchup Calculator
                 </Text>
                 <View style={{ marginTop: 5 }}>
-                    <Text variant="displaySmall">Attacking Faction</Text>
-                    <SelectFactionButtonAndPopup
-                        value={attackingFaction}
-                        setValue={setAttackingFaction}
-                        factionData={factionsDatasheets}
-                    />
-                    <Text variant="displaySmall">Defending Faction</Text>
-                    <SelectFactionButtonAndPopup
-                        value={defendingFaction}
-                        setValue={setDefendingFaction}
-                        factionData={factionsDatasheets}
-                    />
+                    <View>
+                        <Text variant="displaySmall">Attacking Faction</Text>
+                        <View style={{ marginTop: 6, rowGap: 8 }}>
+                            <View style={{ flex: 6 }}>
+                                <SelectFactionButtonAndPopup
+                                    value={attackingFaction}
+                                    setValue={setAttackingFaction}
+                                    factionData={factionsDatasheets}
+                                />
+                            </View>
+                            <View style={{ flex: 6 }}>
+                                <SelectUnitButtonAndPopup
+                                    disabled={attackingFaction == null}
+                                    unitDatasheets={attackingFaction?.unitDatasheets ?? []}
+                                    value={attackingUnit}
+                                    setValue={setAttackingUnit}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ marginTop: 5 }}>
+                        <Text variant="displaySmall">Defending Faction</Text>
+                        <View style={{ marginTop: 6, rowGap: 8 }}>
+                            <View style={{ flex: 6 }}>
+                                <SelectFactionButtonAndPopup
+                                    value={defendingFaction}
+                                    setValue={setDefendingFaction}
+                                    factionData={factionsDatasheets}
+                                />
+                            </View>
+                            <View style={{ flex: 6 }}>
+                                <SelectUnitButtonAndPopup
+                                    disabled={defendingFaction == null}
+                                    unitDatasheets={defendingFaction?.unitDatasheets ?? []}
+                                    value={defendingUnit}
+                                    setValue={setDefendingUnit}
+                                />
+                            </View>
+                        </View>
+                    </View>
                 </View>
-                <View style={{ marginTop: 5 }}>
+                <View style={{ marginTop: 10 }}>
                     <Text variant="displaySmall">Attacking Unit</Text>
                     <View style={{ marginTop: 10 }}>
                         <Text>WS/BS</Text>

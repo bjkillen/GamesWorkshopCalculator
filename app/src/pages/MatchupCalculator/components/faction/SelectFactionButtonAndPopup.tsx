@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Button, Modal, Portal } from "react-native-paper";
 
 import { Faction } from "gamesworkshopcalculator.common";
-import FactionsList from "./faction/FactionsList";
+import FactionsList from "./FactionsList";
 
 export interface SelectFactionButtonAndPopupProps {
     factionData: Map<string, Faction>;
