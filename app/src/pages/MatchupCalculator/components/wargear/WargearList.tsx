@@ -23,7 +23,7 @@ function WargearList(props: WargearListProps) {
 
     return (
         <List.Section>
-            <List.Subheader>Select a faction</List.Subheader>
+            <List.Subheader>Select a wargear option</List.Subheader>
             {sortedWargear.map((w) =>
                 <List.Item
                     key={w.name}

@@ -35,6 +35,7 @@ function MatchupCalculator() {
 
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
+    const [modelCount, setModelCount] = useState<number | undefined>(1);
     const [attackCountVariableNumericalValue, setAttackCountVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
     const [strength, setStrength] = useState<number | undefined>(undefined);
     const [damageVariableNumericalValue, setDamageVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
@@ -62,7 +63,7 @@ function MatchupCalculator() {
 
     const calculateButtonPressed = () => {
         const attackerInput = new AttackerCalculatorInput(
-            attackCountVariableNumericalValue?.numericalVal ?? 0,
+            (modelCount ?? 1) * (attackCountVariableNumericalValue?.numericalVal ?? 0),
             strength ?? 0,
             weaponSkill,
             criticalHitsSkill,
@@ -115,6 +116,7 @@ function MatchupCalculator() {
     }
 
     const clearAttackingStats = () =>  {
+        setModelCount(1);
         setAttackCountVariableNumericalValue(undefined);
         setStrength(undefined);
         setDamageVariableNumericalValue(undefined);
@@ -274,14 +276,21 @@ function MatchupCalculator() {
                         />
                     </View>
                     <Row style={{ marginTop: 25, columnGap: 10 }} >
-                        <View style={{ flex: 3 }}>
+                        <View style={{ flex: 2 }}>
+                            <NumericalTextInput
+                                label='Model Count'
+                                value={modelCount}
+                                setValue={setModelCount}
+                            />
+                        </View>
+                        <View style={{ flex: 2 }}>
                             <VariableNumericalTextInput
                                 label='Attack Count'
                                 value={attackCountVariableNumericalValue}
                                 setValue={setAttackCountVariableNumericalValue}
                             />
                         </View>
-                        <View style={{ flex: 3 }}>
+                        <View style={{ flex: 2 }}>
                             <NumericalTextInput
                                 label='Strength'
                                 value={strength}

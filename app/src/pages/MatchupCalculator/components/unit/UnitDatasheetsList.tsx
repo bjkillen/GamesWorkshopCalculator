@@ -1,7 +1,7 @@
 import sortByName from "@/app/src/hooks/SortByName";
 import { UnitDatasheet } from "gamesworkshopcalculator.common";
 import { useEffect, useState } from "react";
-import { List } from "react-native-paper";
+import { List, Searchbar } from "react-native-paper";
 
 export interface UnitDatasheetsListProps {
     unitDatasheets: UnitDatasheet[];
@@ -15,6 +15,7 @@ function UnitDatasheetsList(props: UnitDatasheetsListProps) {
     } = props as UnitDatasheetsListProps;
 
     const [datasheets, setDatasheets] = useState<UnitDatasheet[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const sortedUnitDatasheets = Array.from(unitDatasheets.values()).sort((a, b) => sortByName(a.name, b.name));
@@ -23,8 +24,13 @@ function UnitDatasheetsList(props: UnitDatasheetsListProps) {
 
     return (
         <List.Section>
-            <List.Subheader>Select a faction</List.Subheader>
-            {datasheets.map((d) =>
+            <Searchbar
+                placeholder="Search unit by name"
+                onChangeText={setSearchQuery}
+                value={searchQuery}
+            />
+            <List.Subheader>Select a unit</List.Subheader>
+            {datasheets.filter(((d) => d.name.includes(searchQuery))).map((d) =>
                 <List.Item
                     key={d.id}
                     title={d.name}
