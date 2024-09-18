@@ -1,8 +1,8 @@
 class SustainedHitsParser {
-    static sustainedHitRegExp = new RegExp('SUSTAINED HITS ([[:alnum:]+]+)');
-
     static Parse(value: string) {
-        let regexResult = SustainedHitsParser.sustainedHitRegExp.exec(value);
+        // let regex = new RegExp(/SUSTAINED HITS \(D\?\[\\d\+\]\+\)/);
+        let regex = new RegExp(/SUSTAINED HITS (D?[\d+]+)/);
+        let regexResult = regex.exec(value.toLocaleUpperCase());
 
         if (regexResult == null) {
             return undefined;
