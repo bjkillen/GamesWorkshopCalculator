@@ -1,3 +1,4 @@
+import NumberExtension from "../utilities/extensions/NumberExtension";
 import { AttackerCalculationResult } from "./AttackerCalculator";
 import { DiceSkillValue } from "gamesworkshopcalculator.common";
 
@@ -75,14 +76,11 @@ class DefenderCalculator {
         let totalSuccessfulWoundDice = totalSuccessfulDamage / input.defenderStatistics.weaponDamage;
         const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / input.defenderStatistics.weaponDamage);
 
-        let modelsDestroyed = totalSuccessfulWoundDice / woundDicePerModel;
-        let remainingModelDamage = (totalSuccessfulWoundDice % woundDicePerModel) * input.defenderStatistics.weaponDamage;
-
         return new DefenderCalculatorResult(
             input.attackerCalculatorResult.successfulWounds - woundsFailed,
             totalDamage - totalSuccessfulDamage,
             totalSuccessfulDamage,
-            Math.floor(modelsDestroyed) + (input.defenderStatistics.wounds / remainingModelDamage)
+            NumberExtension.flooredToNearest(totalSuccessfulWoundDice / woundDicePerModel, 1 / input.defenderStatistics.wounds)
         )
     }
 }

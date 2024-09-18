@@ -3,6 +3,10 @@ class NumberExtension {
         return Math.round(value / nearest) * nearest;
     }
 
+    public static flooredToNearest(value: number, nearest: number) {
+        return Math.floor(value / nearest) * nearest;
+    }
+
     public static clamped(value: number, min: number, max: number) {
         return Math.min(Math.max(value, min), max);
     }
