@@ -11,6 +11,7 @@ export class DefenderStatistics {
         public invulnerableSaveSkill: DiceSkillValue,
         public feelNoPain: boolean,
         public feelNoPainSkill: DiceSkillValue,
+        public wounds: number
     ) {}
 }
 
@@ -25,7 +26,8 @@ export class DefenderCalculatorResult {
     constructor(
         public woundsSaved: number,
         public totalDamageSaved: number,
-        public totalSuccessfulDamage: number
+        public totalSuccessfulDamage: number,
+        public modelsDestroyed: number
     ) {}
 }
 
@@ -70,10 +72,17 @@ class DefenderCalculator {
             totalSuccessfulDamage = totalDamage * input.defenderStatistics.feelNoPainSkill.failurePercentage;
         }
 
+        let totalSuccessfulWoundDice = totalSuccessfulDamage / input.defenderStatistics.weaponDamage;
+        const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / input.defenderStatistics.weaponDamage);
+
+        let modelsDestroyed = totalSuccessfulWoundDice / woundDicePerModel;
+        let remainingModelDamage = (totalSuccessfulWoundDice % woundDicePerModel) * input.defenderStatistics.weaponDamage;
+
         return new DefenderCalculatorResult(
             input.attackerCalculatorResult.successfulWounds - woundsFailed,
             totalDamage - totalSuccessfulDamage,
-            totalSuccessfulDamage
+            totalSuccessfulDamage,
+            Math.floor(modelsDestroyed) + (input.defenderStatistics.wounds / remainingModelDamage)
         )
     }
 }

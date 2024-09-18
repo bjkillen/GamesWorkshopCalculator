@@ -48,6 +48,7 @@ function MatchupCalculator() {
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
 
     const [toughness, setToughness] = useState<number | undefined>(undefined);
+    const [wounds, setWounds] = useState<number | undefined>(undefined);
     const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
     const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState(DiceSkillValue.Two);
@@ -83,7 +84,8 @@ function MatchupCalculator() {
             invulnerableSaveChecked,
             invulnerableSaveSkill,
             feelNoPainChecked,
-            feelNoPainSaveSkill
+            feelNoPainSaveSkill,
+            wounds || 0
         );
 
         const attackerDefenderCalculatorInput = new AttackerDefenderCalculatorInput(
@@ -131,6 +133,7 @@ function MatchupCalculator() {
 
     const clearDefendingStats = () => {
         setToughness(undefined);
+        setWounds(undefined);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
         setArmorSaveSkill(DiceSkillValue.Two);
@@ -199,6 +202,7 @@ function MatchupCalculator() {
         const firstModelOnDatasheet = defendingUnit.modelDatasheets[0];
 
         setToughness(firstModelOnDatasheet.toughness);
+        setWounds(firstModelOnDatasheet.wounds);
         setArmorSaveSkill(firstModelOnDatasheet.armorSaveSkill);
         setInvulnerableSaveChecked(firstModelOnDatasheet.invulnerableSave);
 
@@ -392,6 +396,13 @@ function MatchupCalculator() {
                                 setValue={setArmorSaveSkill}
                             />
                         </View>
+                        <View style={{ marginTop: 10 }}>
+                            <NumericalTextInput
+                                label='Wounds'
+                                value={wounds}
+                                setValue={setWounds}
+                            />
+                        </View>
                         <View style={{ rowGap: 5 }}>
                             <CustomCheckbox
                                 label='Invulenerable Save'
@@ -429,6 +440,9 @@ function MatchupCalculator() {
                         </Text>
                         <Text variant="labelLarge">
                             Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Models Destroyed: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.modelsDestroyed ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
                             Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
