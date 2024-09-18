@@ -4550,9 +4550,9 @@ functions-have-names@^1.2.3:
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
 gamesworkshopcalculator.common@^1.0.0:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/gamesworkshopcalculator.common/-/gamesworkshopcalculator.common-1.0.20.tgz#ffa7eeb30006fe34b48778b0223fa4c391460859"
-  integrity sha512-Y4y9WnF29QJsvH2rnXgbljQPew7Mndl9udLy+kWSL+583d/3BL3OaboArdBN+a0f/WUN5SaHgxsJXwtQCAyPuA==
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/gamesworkshopcalculator.common/-/gamesworkshopcalculator.common-1.0.23.tgz#da6bab13c95fe4363bc0887159d2e9abbfaa9dbe"
+  integrity sha512-DqBOuymllr8jFHa+47SeszdknN4t2L6wz0c6CzKAhZ6jwA4qM8UMYSJqYdLeIcb3bllLPzN38MOMTMj4kNPX1A==
   dependencies:
     reflect-metadata "^0.2.2"
     typedjson "^1.8.0"

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { List } from "react-native-paper";
 
 export interface WargearListProps {
+    subheader: string;
     wargear: Wargear[];
     setValue: (value: Wargear) => void;
 }
 
 function WargearList(props: WargearListProps) {
     const {
+        subheader,
         wargear,
         setValue,
     } = props as WargearListProps;
@@ -23,7 +25,7 @@ function WargearList(props: WargearListProps) {
 
     return (
         <List.Section>
-            <List.Subheader>Select a wargear option</List.Subheader>
+            <List.Subheader>{subheader}</List.Subheader>
             {sortedWargear.map((w) =>
                 <List.Item
                     key={w.name}

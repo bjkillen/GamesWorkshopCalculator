@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Button, Modal, Portal } from "react-native-paper";
+import { Button, Modal, Portal, Text } from "react-native-paper";
 
-import { Wargear } from "gamesworkshopcalculator.common";
+import { Wargear, WargearType } from "gamesworkshopcalculator.common";
 import WargearList from "./WargearList";
+import ArrayExtension from "@/app/src/utilities/extensions/ArrayExtension";
 
 export interface SelectWargearButtonAndPopupProps {
     disabled: boolean;
@@ -20,6 +21,8 @@ function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
         setValue
     } = props as SelectWargearButtonAndPopupProps;
 
+    const [wargearGroupedByType, setWargearGroupedByType] = useState(new Map<string, Wargear[]>());
+
     const [modalVisible, setModalVisible] = useState(false);
 
     const showModal = () => setModalVisible(true);
@@ -34,14 +37,35 @@ function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
         hideModal();
     }
 
+    useEffect(() => {
+        const groupedWargear = ArrayExtension.groupBy(wargear, w => w.type.value.toString());
+        setWargearGroupedByType(groupedWargear);
+    }, [wargear])
+
     return (
         <>
             <Portal>
                 <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modal}>
                     <ScrollView>
-                        <View>
-                            <WargearList wargear={wargear} setValue={valueSet} />
-                        </View>
+                        <Text variant="headlineSmall">Select a wargear option</Text>
+                        {(wargearGroupedByType.get(WargearType.Ranged.value)?.length ?? 0 > 0) && (
+                            <View>
+                                <WargearList
+                                    subheader={WargearType.Ranged.value}
+                                    wargear={wargearGroupedByType.get(WargearType.Ranged.value) ?? []}
+                                    setValue={valueSet}
+                                />
+                            </View>
+                        )}
+                        {(wargearGroupedByType.get(WargearType.Melee.value)?.length ?? 0 > 0) && (
+                            <View>
+                                <WargearList
+                                    subheader={WargearType.Melee.value}
+                                    wargear={wargearGroupedByType.get(WargearType.Melee.value) ?? []} 
+                                    setValue={valueSet}
+                                />
+                            </View>
+                        )}
                     </ScrollView>
                 </Modal>
             </Portal>
