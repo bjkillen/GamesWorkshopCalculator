@@ -20,6 +20,7 @@ import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup
 import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButtonAndPopup';
 import VariableNumericalValueParser, { VariableNumericalValue } from '../../utilities/factionDatasheets/VariableNumericalValueParser';
 import VariableNumericalTextInput from '../../components/VariableNumericalTextInput';
+import SustainedHitsParser from '../../utilities/factionDatasheets/SustainedHitsParser';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -41,7 +42,7 @@ function MatchupCalculator() {
 
     const [criticalHitsSkill, setCriticalHitsSkill] = useState(DiceSkillValue.Six);
     const [sustainedHitsChecked, setSustainedHitsChecked] = useState(false);
-    const [sustainedHitsCount, setSustainedHitsCount] = useState<number | undefined>(1);
+    const [sustainedHitsCountVariableNumericalValue, setSustainedHitsCountVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
 
@@ -66,7 +67,7 @@ function MatchupCalculator() {
             weaponSkill,
             criticalHitsSkill,
             sustainedHitsChecked,
-            sustainedHitsCount ?? 0,
+            sustainedHitsCountVariableNumericalValue?.numericalVal ?? 0,
             lethalHitsChecked,
             rerollHitsModifier,
             rerollWoundsModifier,
@@ -120,7 +121,7 @@ function MatchupCalculator() {
         setArmorPenetration(undefined);
         setCriticalHitsSkill(DiceSkillValue.Six);
         setSustainedHitsChecked(false);
-        setSustainedHitsCount(1);
+        setSustainedHitsCountVariableNumericalValue(undefined);
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setWeaponSkill(DiceSkillValue.Two);
@@ -173,6 +174,17 @@ function MatchupCalculator() {
 
         let wargearDescriptionLower = attackingUnitWargear.description.toLowerCase();
         setLethalHitsChecked(wargearDescriptionLower.includes("lethal hits"));
+
+        const sustainedHitsParsed = SustainedHitsParser.Parse(wargearDescriptionLower);
+
+        setSustainedHitsChecked(sustainedHitsParsed != null)
+
+        if (sustainedHitsParsed != null) {
+            setSustainedHitsCountVariableNumericalValue(VariableNumericalValueParser.Parse(sustainedHitsParsed));
+        } else {
+            setSustainedHitsCountVariableNumericalValue(undefined);
+        }
+
         setDevastatingWoundsChecked(wargearDescriptionLower.includes("devastating wounds"));
     }, [attackingUnitWargear])
 
@@ -301,11 +313,11 @@ function MatchupCalculator() {
                                 value={sustainedHitsChecked}
                                 setValue={setSustainedHitsChecked}
                             />
-                            <NumericalTextInput
+                            <VariableNumericalTextInput
                                     label='Count'
                                     disabled={!(sustainedHitsChecked)}
-                                    value={sustainedHitsCount}
-                                    setValue={setSustainedHitsCount}
+                                    value={sustainedHitsCountVariableNumericalValue}
+                                    setValue={setSustainedHitsCountVariableNumericalValue}
                                 />
                         </Row>
                         <Row style={{ marginTop: 15, justifyContent: 'space-between' }}>
