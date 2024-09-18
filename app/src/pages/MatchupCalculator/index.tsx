@@ -425,7 +425,7 @@ function MatchupCalculator() {
                             Successful Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulHits ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
-                            Critical Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.criticalHits ?? 0, 5)}
+                            Critical Hits: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.criticalHits ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
                             Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
@@ -447,7 +447,6 @@ function MatchupCalculator() {
                                     Close
                             </Button>
                         </View>
-                        
                     </Modal>
                 </Portal>
                 <Row style={{ marginTop: 30, columnGap: 10 }}>
