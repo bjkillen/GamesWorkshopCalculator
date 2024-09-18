@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
 import { Button, Modal, Portal, Text } from 'react-native-paper';
@@ -18,6 +18,8 @@ import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDa
 import SelectFactionButtonAndPopup from './components/faction/SelectFactionButtonAndPopup';
 import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup';
 import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButtonAndPopup';
+import VariableNumericalValueParser, { VariableNumericalValue } from '../../utilities/factionDatasheets/VariableNumericalValueParser';
+import VariableNumericalTextInput from '../../components/VariableNumericalTextInput';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -32,9 +34,9 @@ function MatchupCalculator() {
 
     const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
 
-    const [attackCount, setAttackCount] = useState<number | undefined>(undefined);
+    const [attackCountVariableNumericalValue, setAttackCountVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
     const [strength, setStrength] = useState<number | undefined>(undefined);
-    const [damage, setDamage] = useState<number | undefined>(undefined);
+    const [damageVariableNumericalValue, setDamageVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
     const [armorPenetration, setArmorPenetration] = useState<number | undefined>(undefined);
 
     const [criticalHitsSkill, setCriticalHitsSkill] = useState(DiceSkillValue.Six);
@@ -59,7 +61,7 @@ function MatchupCalculator() {
 
     const calculateButtonPressed = () => {
         const attackerInput = new AttackerCalculatorInput(
-            attackCount ?? 0,
+            attackCountVariableNumericalValue?.numericalVal ?? 0,
             strength ?? 0,
             weaponSkill,
             criticalHitsSkill,
@@ -72,7 +74,7 @@ function MatchupCalculator() {
         );
 
         const defenseStatistics = new DefenderStatistics(
-            damage ?? 0,
+            damageVariableNumericalValue?.numericalVal ?? 0,
             armorPenetration ?? 0,
             devastatingWoundsChecked,
             armorSaveSkill,
@@ -96,9 +98,9 @@ function MatchupCalculator() {
     const hideResultsModal = () => setResultsModalIsVisible(false);
 
     const clearButtonPressed = () => {
-        setAttackCount(undefined);
+        setAttackCountVariableNumericalValue(undefined);
         setStrength(undefined);
-        setDamage(undefined);
+        setDamageVariableNumericalValue(undefined);
         setArmorPenetration(undefined);
         setCriticalHitsSkill(DiceSkillValue.Six);
         setSustainedHitsChecked(false);
@@ -140,9 +142,13 @@ function MatchupCalculator() {
 
         setWeaponSkill(attackingUnitWargear.skill);
         setStrength(attackingUnitWargear.strength);
-        setAttackCount(attackingUnitWargear.attacks);
-        setDamage(attackingUnitWargear.damage);
+        setAttackCountVariableNumericalValue(VariableNumericalValueParser.Parse(attackingUnitWargear.attacks));
+        setDamageVariableNumericalValue(VariableNumericalValueParser.Parse(attackingUnitWargear.damage));
         setArmorPenetration(Math.abs(attackingUnitWargear.armorPenetration));
+
+        let wargearDescriptionLower = attackingUnitWargear.description.toLowerCase();
+        setLethalHitsChecked(wargearDescriptionLower.includes("lethal hits"));
+        setDevastatingWoundsChecked(wargearDescriptionLower.includes("devastating wounds"));
     }, [attackingUnitWargear])
 
     useEffect(() => {
@@ -231,10 +237,10 @@ function MatchupCalculator() {
                     </View>
                     <Row style={{ marginTop: 25, columnGap: 10 }} >
                         <View style={{ flex: 3 }}>
-                            <NumericalTextInput
+                            <VariableNumericalTextInput
                                 label='Attack Count'
-                                value={attackCount}
-                                setValue={setAttackCount}
+                                value={attackCountVariableNumericalValue}
+                                setValue={setAttackCountVariableNumericalValue}
                             />
                         </View>
                         <View style={{ flex: 3 }}>
@@ -247,10 +253,10 @@ function MatchupCalculator() {
                     </Row>
                     <Row style={{ marginTop: 10, columnGap: 10 }}>
                         <View style={{ flex: 3 }}>
-                            <NumericalTextInput
+                            <VariableNumericalTextInput
                                 label='Damage'
-                                value={damage}
-                                setValue={setDamage}
+                                value={damageVariableNumericalValue}
+                                setValue={setDamageVariableNumericalValue}
                             />
                         </View>
                         <View style={{ flex: 3 }}>
