@@ -97,7 +97,23 @@ function MatchupCalculator() {
     const showResultsModal = () => setResultsModalIsVisible(true);
     const hideResultsModal = () => setResultsModalIsVisible(false);
 
-    const clearButtonPressed = () => {
+    const attackingFactionSet = (value: Faction) => {
+        setAttackingFaction(value);
+        setAttackingUnit(undefined);
+        setAttackingUnitWargear(undefined);
+    }
+
+    const attackingUnitSet = (value: UnitDatasheet) => {
+        setAttackingUnit(value);
+        setAttackingUnitWargear(undefined);
+    }
+
+    const defendingFactionSet = (value: Faction) => {
+        setDefendingFaction(value);
+        setDefendingUnit(undefined);
+    }
+
+    const clearAttackingStats = () =>  {
         setAttackCountVariableNumericalValue(undefined);
         setStrength(undefined);
         setDamageVariableNumericalValue(undefined);
@@ -108,6 +124,9 @@ function MatchupCalculator() {
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setWeaponSkill(DiceSkillValue.Two);
+    }
+
+    const clearDefendingStats = () => {
         setToughness(undefined);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
@@ -116,6 +135,11 @@ function MatchupCalculator() {
         setInvulnerableSaveSkill(DiceSkillValue.Two);
         setFeelNoPainChecked(false);
         setFeelNoPainSaveSkill(DiceSkillValue.Two);
+    }
+
+    const clearButtonPressed = () => {
+        clearAttackingStats();
+        clearDefendingStats();
         setCalculationResult(undefined);
 
         hideResultsModal();
@@ -137,6 +161,7 @@ function MatchupCalculator() {
 
     useEffect(() => {
         if (attackingUnitWargear == null) {
+            clearAttackingStats();
             return;
         }
 
@@ -153,6 +178,7 @@ function MatchupCalculator() {
 
     useEffect(() => {
         if (defendingUnit == null) {
+            clearDefendingStats();
             return;
         }
 
@@ -183,7 +209,7 @@ function MatchupCalculator() {
                             <View style={{ flex: 6 }}>
                                 <SelectFactionButtonAndPopup
                                     value={attackingFaction}
-                                    setValue={setAttackingFaction}
+                                    setValue={attackingFactionSet}
                                     factionData={factionsDatasheets}
                                 />
                             </View>
@@ -192,12 +218,12 @@ function MatchupCalculator() {
                                     disabled={attackingFaction == null}
                                     unitDatasheets={attackingFaction?.unitDatasheets ?? []}
                                     value={attackingUnit}
-                                    setValue={setAttackingUnit}
+                                    setValue={attackingUnitSet}
                                 />
                             </View>
                             <View style={{ flex: 6 }}>
                                 <SelectWargearButtonAndPopup
-                                    disabled={attackingFaction == null}
+                                    disabled={attackingUnit == null}
                                     wargear={attackingUnit?.wargear ?? []}
                                     value={attackingUnitWargear}
                                     setValue={setAttackingUnitWargear}
@@ -205,13 +231,13 @@ function MatchupCalculator() {
                             </View>
                         </View>
                     </View>
-                    <View style={{ marginTop: 5 }}>
+                    <View style={{ marginTop: 15 }}>
                         <Text variant="displaySmall">Defending Faction</Text>
                         <View style={{ marginTop: 6, rowGap: 8 }}>
                             <View style={{ flex: 6 }}>
                                 <SelectFactionButtonAndPopup
                                     value={defendingFaction}
-                                    setValue={setDefendingFaction}
+                                    setValue={defendingFactionSet}
                                     factionData={factionsDatasheets}
                                 />
                             </View>
@@ -226,7 +252,7 @@ function MatchupCalculator() {
                         </View>
                     </View>
                 </View>
-                <View style={{ marginTop: 10 }}>
+                <View style={{ marginTop: 20 }}>
                     <Text variant="displaySmall">Attacking Unit</Text>
                     <View style={{ marginTop: 10 }}>
                         <Text>WS/BS</Text>
