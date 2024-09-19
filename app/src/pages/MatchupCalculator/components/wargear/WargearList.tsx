@@ -1,4 +1,5 @@
 import sortByName from "@/app/src/hooks/SortByName";
+import WargearClassifier from "@/app/src/models/WargearClassifier";
 import { Wargear } from "gamesworkshopcalculator.common";
 import { useEffect, useState } from "react";
 import { List } from "react-native-paper";
@@ -26,13 +27,19 @@ function WargearList(props: WargearListProps) {
     return (
         <List.Section>
             <List.Subheader>{subheader}</List.Subheader>
-            {sortedWargear.map((w) =>
-                <List.Item
-                    key={w.name}
-                    title={w.name}
-                    onPress={() => setValue(w)}
-                />
-            )}
+            {sortedWargear.map((w) => {
+                const wargearClasses = WargearClassifier.Classify(w);
+                const wargearDescription = wargearClasses.length > 0 ? `Best against ${wargearClasses.map((c) => c.recommendationText).join(", ")}` : undefined;
+
+                return (
+                    <List.Item
+                        key={w.name}
+                        title={w.name}
+                        description={wargearDescription}
+                        onPress={() => setValue(w)}
+                    />
+                )
+            })}
         </List.Section>
         
     );

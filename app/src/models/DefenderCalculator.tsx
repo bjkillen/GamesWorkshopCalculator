@@ -12,7 +12,7 @@ export class DefenderStatistics {
         public invulnerableSaveSkill: DiceSkillValue,
         public feelNoPain: boolean,
         public feelNoPainSkill: DiceSkillValue,
-        public wounds: number
+        public wounds: number,
     ) {}
 }
 
@@ -28,7 +28,7 @@ export class DefenderCalculatorResult {
         public woundsSaved: number,
         public totalDamageSaved: number,
         public totalSuccessfulDamage: number,
-        public modelsDestroyed: number
+        public modelsDestroyed: number,
     ) {}
 }
 
