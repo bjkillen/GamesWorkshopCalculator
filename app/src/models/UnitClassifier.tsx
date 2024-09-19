@@ -1,7 +1,7 @@
 import { ModelDatasheet, UnitDatasheet } from "gamesworkshopcalculator.common";
 import UnitClassification from "../utilities/enums/UnitClassification";
 
-class Unitlassifier {
+class UnitClassifier {
     static Classify(unit: UnitDatasheet, model: ModelDatasheet) {
         const toughness = model.toughness;
         const invulnScalarValue = model.invulnerableSave ? model?.invulnerableSaveSkill.successPercentage ?? 0 : 0;
@@ -33,4 +33,4 @@ class Unitlassifier {
     }
 }
 
-export default Unitlassifier;
+export default UnitClassifier;

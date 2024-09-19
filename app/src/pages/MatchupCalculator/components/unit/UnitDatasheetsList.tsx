@@ -1,4 +1,5 @@
 import sortByName from "@/app/src/hooks/SortByName";
+import UnitClassifier from "@/app/src/models/UnitClassifier";
 import { UnitDatasheet } from "gamesworkshopcalculator.common";
 import { useEffect, useState } from "react";
 import { List, Searchbar } from "react-native-paper";
@@ -30,13 +31,23 @@ function UnitDatasheetsList(props: UnitDatasheetsListProps) {
                 value={searchQuery}
             />
             <List.Subheader>Select a unit</List.Subheader>
-            {datasheets.filter(((d) => d.name.includes(searchQuery))).map((d) =>
-                <List.Item
-                    key={d.id}
-                    title={d.name}
-                    onPress={() => setValue(d)}
-                />
-            )}
+            {datasheets.filter(((d) => d.name.includes(searchQuery))).map((d) => {
+                let datasheetDescription = undefined;
+
+                if (d.modelDatasheets[0] != null) {
+                    const unitClass = UnitClassifier.Classify(d, d.modelDatasheets[0]);
+                    datasheetDescription = unitClass != null ? `${unitClass.description}` : undefined;
+                }
+
+                return (
+                    <List.Item
+                        key={d.id}
+                        title={d.name}
+                        description={datasheetDescription}
+                        onPress={() => setValue(d)}
+                    />
+                )
+            })}
         </List.Section>
         
     );
