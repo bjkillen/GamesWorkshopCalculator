@@ -222,7 +222,7 @@ function MatchupCalculator() {
                 </Text>
                 <View style={{ marginTop: 5 }}>
                     <View>
-                        <Text variant="displaySmall">Attacking Faction</Text>
+                        <Text variant="displaySmall">Attacker</Text>
                         <View style={{ marginTop: 6, rowGap: 8 }}>
                             <View style={{ flex: 6 }}>
                                 <SelectFactionButtonAndPopup
@@ -250,7 +250,7 @@ function MatchupCalculator() {
                         </View>
                     </View>
                     <View style={{ marginTop: 15 }}>
-                        <Text variant="displaySmall">Defending Faction</Text>
+                        <Text variant="displaySmall">Defender</Text>
                         <View style={{ marginTop: 6, rowGap: 8 }}>
                             <View style={{ flex: 6 }}>
                                 <SelectFactionButtonAndPopup
