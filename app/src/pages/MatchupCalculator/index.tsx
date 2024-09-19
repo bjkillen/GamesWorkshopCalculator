@@ -188,6 +188,7 @@ function MatchupCalculator() {
             setSustainedHitsCountVariableNumericalValue(undefined);
         }
 
+        setLethalHitsChecked(wargearAbilities.lethalHits);
         setDevastatingWoundsChecked(wargearAbilities.devastatingWounds);
     }, [attackingUnitWargear])
 
