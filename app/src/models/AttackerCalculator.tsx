@@ -20,22 +20,31 @@ export class AttackerCalculatorInput {
         public lethalHits: boolean,
         public rerollHitsModifier: DiceRerollModifierValue,
         public rerollWoundsModifier: DiceRerollModifierValue,
-        public toughness: number
+        public toughness: number,
+        public stealth: boolean,
+        public minusToWound: boolean
     ) {}
 }
 
 class AttackerCalculator {
     static calculate(input: AttackerCalculatorInput): AttackerCalculationResult {
-        let baseSuccessfulHits = input.attackCount * input.skill.successPercentage;
+        let hitDiceSkill = input.skill;
+
+        if (input.stealth && hitDiceSkill.numericalValue < 6) {
+            const modifiedHitDiceSkill = hitDiceSkill.numericalValue + 1;
+            hitDiceSkill =  DiceSkillValue.parseNumerical(modifiedHitDiceSkill) ?? input.skill;
+        }
+
+        let baseSuccessfulHits = input.attackCount * hitDiceSkill.successPercentage;
         let criticalHits = input.attackCount * input.criticalHitsSkill.successPercentage;
 
         const hitDiceToReroll = this.additionalDiceFromModifier(
             input.attackCount,
-            input.skill,
+            hitDiceSkill,
             input.rerollHitsModifier
         );
 
-        baseSuccessfulHits += hitDiceToReroll * input.skill.successPercentage;
+        baseSuccessfulHits += hitDiceToReroll * hitDiceSkill.successPercentage;
         criticalHits += hitDiceToReroll * input.criticalHitsSkill.successPercentage;
 
         let successfulHits = baseSuccessfulHits;
@@ -57,9 +66,17 @@ class AttackerCalculator {
         let woundDiceSkill: DiceSkillValue;
 
         if (strength >= toughness * 2) {
-            woundDiceSkill = DiceSkillValue.Two;
+            if (input.minusToWound) {
+                woundDiceSkill = DiceSkillValue.Three;
+            } else {
+                woundDiceSkill = DiceSkillValue.Two;
+            }
         } else if (strength > toughness) {
-            woundDiceSkill = DiceSkillValue.Three;
+            if (input.minusToWound) {
+                woundDiceSkill = DiceSkillValue.Four;
+            } else {
+                woundDiceSkill = DiceSkillValue.Three;
+            }
         } else if (strength === toughness) {
             woundDiceSkill = DiceSkillValue.Four;
         } else if (strength <= toughness / 2) {

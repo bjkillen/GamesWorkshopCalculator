@@ -56,6 +56,9 @@ function MatchupCalculator() {
     const [feelNoPainChecked, setFeelNoPainChecked] = useState(false);
     const [feelNoPainSaveSkill, setFeelNoPainSaveSkill] = useState(DiceSkillValue.Two);
 
+    const [stealthChecked, setStealthChecked] = useState(false);
+    const [minusToWoundChecked, setMinusToWoundChecked] = useState(false);
+
     const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
 
@@ -75,6 +78,8 @@ function MatchupCalculator() {
             rerollHitsModifier,
             rerollWoundsModifier,
             toughness ?? 0,
+            stealthChecked,
+            minusToWoundChecked,
         );
 
         const defenseStatistics = new DefenderStatistics(
@@ -430,6 +435,25 @@ function MatchupCalculator() {
                                 setValue={setFeelNoPainSaveSkill}
                             />
                         </View>
+                    </View>
+                    <View style={{ marginTop: 15 }}>
+                        <Text variant="headlineSmall">Modifiers</Text>
+                        <Row style={{ marginTop: 15, justifyContent: 'space-between' }}>
+                            <View>
+                                <CustomCheckbox
+                                    label='Stealth'
+                                    value={stealthChecked}
+                                    setValue={setStealthChecked}
+                                />
+                            </View>
+                            <View>
+                                <CustomCheckbox
+                                    label='-1 to Wound (S > T)'
+                                    value={minusToWoundChecked}
+                                    setValue={setMinusToWoundChecked}
+                                />
+                            </View>
+                        </Row>
                     </View>
                 </View>
                 <Portal>
