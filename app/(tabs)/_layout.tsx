@@ -28,9 +28,18 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Home',
+            title: 'Matchup Calculator',
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+              <TabBarIcon name={focused ? 'dice' : 'dice-outline'} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="listAnalyzer"
+          options={{
+            title: 'List Analyzer',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
             ),
           }}
         />

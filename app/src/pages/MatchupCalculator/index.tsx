@@ -20,7 +20,6 @@ import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup
 import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButtonAndPopup';
 import VariableNumericalValueParser, { VariableNumericalValue } from '../../utilities/factionDatasheets/VariableNumericalValueParser';
 import VariableNumericalTextInput from '../../components/VariableNumericalTextInput';
-import SustainedHitsParser from '../../utilities/factionDatasheets/WargearAbilityParser';
 import WargearAbilities from '../../models/WargearAbilities';
 
 function MatchupCalculator() {
