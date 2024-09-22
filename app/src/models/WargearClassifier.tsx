@@ -12,11 +12,13 @@ class WargearClassifier {
         let wargearClassifications = [];
 
         if ((wargear.strength >= 9 || (wargearAbilities.anti != null && wargearAbilities.anti[0] === 'VEHICLE')) &&
-            (wargearDamageVariableNumericalValue.numericalVal > VariableNumericalValueParser.Parse("D6").numericalVal ||
+            (wargearDamageVariableNumericalValue.numericalVal >= VariableNumericalValueParser.Parse("D6").numericalVal ||
                 wargearAbilities.melta != null)
         ) {
             wargearClassifications.push(WargearClassification.AntiVehicle);
-        } else if (wargear.strength >= 6 && wargearDamageVariableNumericalValue.numericalVal >= 3) {
+        } else if (wargear.strength >= 6 && 
+            wargearDamageVariableNumericalValue.numericalVal >= 3 && Math.abs(wargear.armorPenetration) >= 2
+        ) {
             wargearClassifications.push(WargearClassification.AntiHeavyInfantry);
         }
 

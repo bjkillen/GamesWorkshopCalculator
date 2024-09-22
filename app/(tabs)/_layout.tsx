@@ -5,6 +5,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { RealmProvider } from '@realm/react';
 
 const theme = {
   ...DefaultTheme,
@@ -20,30 +21,32 @@ export default function TabLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: false,
-        }}>
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Matchup Calculator',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'dice' : 'dice-outline'} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="listAnalyzer"
-          options={{
-            title: 'List Analyzer',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
-            ),
-          }}
-        />
-      </Tabs>
+      <RealmProvider>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+            headerShown: false,
+          }}>
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: 'Matchup Calculator',
+              tabBarIcon: ({ color, focused }) => (
+                <TabBarIcon name={focused ? 'dice' : 'dice-outline'} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="listAnalyzer"
+            options={{
+              title: 'List Analyzer',
+              tabBarIcon: ({ color, focused }) => (
+                <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
+              ),
+            }}
+          />
+        </Tabs>
+      </RealmProvider>
     </PaperProvider>
   );
 }
