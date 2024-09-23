@@ -33,7 +33,7 @@ function MatchupCalculator() {
     const [defendingFaction, setDefendingFaction] = useState<Faction | undefined>(undefined);
     const [defendingUnit, setDefendingUnit] = useState<UnitDatasheet | undefined>(undefined);
 
-    const [weaponSkill, setWeaponSkill] = useState(DiceSkillValue.Two);
+    const [weaponSkill, setWeaponSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
 
     const [modelCount, setModelCount] = useState<number | undefined>(1);
     const [attackCountVariableNumericalValue, setAttackCountVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
@@ -46,12 +46,13 @@ function MatchupCalculator() {
     const [sustainedHitsCountVariableNumericalValue, setSustainedHitsCountVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
+    const [torrentChecked, setTorrentChecked] = useState(false);
 
     const [toughness, setToughness] = useState<number | undefined>(undefined);
     const [wounds, setWounds] = useState<number | undefined>(undefined);
     const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
-    const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState(DiceSkillValue.Two);
+    const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
     const [feelNoPainChecked, setFeelNoPainChecked] = useState(false);
     const [feelNoPainSaveSkill, setFeelNoPainSaveSkill] = useState(DiceSkillValue.Two);
 
@@ -74,6 +75,7 @@ function MatchupCalculator() {
             sustainedHitsChecked,
             sustainedHitsCountVariableNumericalValue?.numericalVal ?? 0,
             lethalHitsChecked,
+            torrentChecked,
             rerollHitsModifier,
             rerollWoundsModifier,
             toughness ?? 0,
@@ -133,6 +135,7 @@ function MatchupCalculator() {
         setSustainedHitsCountVariableNumericalValue(undefined);
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
+        setTorrentChecked(false);
         setWeaponSkill(DiceSkillValue.Two);
     }
 
@@ -146,6 +149,7 @@ function MatchupCalculator() {
         setInvulnerableSaveSkill(DiceSkillValue.Two);
         setFeelNoPainChecked(false);
         setFeelNoPainSaveSkill(DiceSkillValue.Two);
+        setStealthChecked(false);
     }
 
     const clearButtonPressed = () => {
@@ -194,6 +198,7 @@ function MatchupCalculator() {
 
         setLethalHitsChecked(wargearAbilities.lethalHits);
         setDevastatingWoundsChecked(wargearAbilities.devastatingWounds);
+        setTorrentChecked(wargearAbilities.torrent);
     }, [attackingUnitWargear])
 
     useEffect(() => {
@@ -278,6 +283,7 @@ function MatchupCalculator() {
                     <View style={{ marginTop: 10 }}>
                         <Text>WS/BS</Text>
                         <DiceWeaponSkillValueSegmentedButtons
+                            disabled={torrentChecked}
                             value={weaponSkill}
                             setValue={setWeaponSkill}
                         />
@@ -355,6 +361,13 @@ function MatchupCalculator() {
                                     setValue={setDevastatingWoundsChecked}
                                 />
                             </View>
+                            <View>
+                                <CustomCheckbox
+                                    label='Torrent'
+                                    value={torrentChecked}
+                                    setValue={setTorrentChecked}
+                                />
+                            </View>
                         </Row>
                         <View style={{ marginTop: 10 }}>
                             <View>
@@ -417,7 +430,7 @@ function MatchupCalculator() {
                                 setValue={setInvulnerableSaveChecked}
                             />
                             <DiceWeaponSkillValueSegmentedButtons
-                                disabled={!invulnerableSaveChecked}
+                                disabled={!invulnerableSaveChecked || invulnerableSaveSkill == null}
                                 value={invulnerableSaveSkill}
                                 setValue={setInvulnerableSaveSkill}
                             />

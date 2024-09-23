@@ -4,8 +4,8 @@ import UnitClassification from "../utilities/enums/UnitClassification";
 class UnitClassifier {
     static Classify(unit: UnitDatasheet, model: ModelDatasheet) {
         const toughness = model.toughness;
-        const invulnScalarValue = model.invulnerableSave ? model?.invulnerableSaveSkill.successPercentage ?? 0 : 0;
-        const armorSaveScalarValue = model.armorSaveSkill.successPercentage;
+        const invulnScalarValue = model.invulnerableSave ? model.invulnerableSaveSkill?.successPercentage ?? 0 : 0;
+        const armorSaveScalarValue = model?.armorSaveSkill?.successPercentage || 0;
 
         const classificationValue = (.05 * toughness + (invulnScalarValue * 0.66) + (armorSaveScalarValue * 0.33)) * model.wounds;
 

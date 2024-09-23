@@ -9,7 +9,7 @@ export class DefenderStatistics {
         public devastatingWounds: boolean,
         public armorSaveSkill: DiceSkillValue,
         public invulnerableSave: boolean,
-        public invulnerableSaveSkill: DiceSkillValue,
+        public invulnerableSaveSkill: DiceSkillValue | undefined,
         public feelNoPain: boolean,
         public feelNoPainSkill: DiceSkillValue,
         public wounds: number,
@@ -52,14 +52,14 @@ class DefenderCalculator {
         if (modifiedArmorSaveSkill != null) {
             let finalChosenSaveSkill = modifiedArmorSaveSkill;
 
-            if (input.defenderStatistics.invulnerableSave &&
+            if (input.defenderStatistics.invulnerableSave && input.defenderStatistics.invulnerableSaveSkill != null &&
                 input.defenderStatistics.invulnerableSaveSkill.numericalValue < modifiedArmorSaveSkill.numericalValue
             ) {
                 finalChosenSaveSkill = input.defenderStatistics.invulnerableSaveSkill;
             }
 
             woundsFailed += unsavedWoundsRemaining * finalChosenSaveSkill.failurePercentage;
-        } else if (input.defenderStatistics.invulnerableSave) {
+        } else if (input.defenderStatistics.invulnerableSave && input.defenderStatistics.invulnerableSaveSkill != null) {
             woundsFailed += unsavedWoundsRemaining *
                 input.defenderStatistics.invulnerableSaveSkill.failurePercentage;
         } else {

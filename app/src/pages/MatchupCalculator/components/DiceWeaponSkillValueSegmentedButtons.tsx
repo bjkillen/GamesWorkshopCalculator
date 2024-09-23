@@ -5,7 +5,7 @@ import { DiceSkillValue } from "gamesworkshopcalculator.common";
 
 export interface DiceWeaponSkillValueSegmentedButtonsProps {
     disabled?: boolean;
-    value: DiceSkillValue;
+    value: DiceSkillValue | undefined;
     setValue: (value: DiceSkillValue) => void;
 }
 
@@ -25,7 +25,7 @@ function DiceWeaponSkillValueSegmentedButtons(props: DiceWeaponSkillValueSegment
 
     return (
         <SegmentedButtons
-            value={value.value}
+            value={value?.value ?? ''}
             onValueChange={(v) => setValue(DiceSkillValue.parse(v))}
             buttons={
                 DiceSkillValue.AllValues.map((dsv) => ({

@@ -13,11 +13,12 @@ export class AttackerCalculatorInput {
     constructor(
         public attackCount: number,
         public strength: number,
-        public skill: DiceSkillValue,
+        public skill: DiceSkillValue | undefined,
         public criticalHitsSkill: DiceSkillValue,
         public sustainedHits: boolean,
         public sustainedHitsCount: number,
         public lethalHits: boolean,
+        public torrent: boolean,
         public rerollHitsModifier: DiceRerollModifierValue,
         public rerollWoundsModifier: DiceRerollModifierValue,
         public toughness: number,
@@ -30,34 +31,42 @@ class AttackerCalculator {
     static calculate(input: AttackerCalculatorInput): AttackerCalculationResult {
         let hitDiceSkill = input.skill;
 
-        if (input.stealth && hitDiceSkill.numericalValue < 6) {
-            const modifiedHitDiceSkill = hitDiceSkill.numericalValue + 1;
-            hitDiceSkill =  DiceSkillValue.parseNumerical(modifiedHitDiceSkill) ?? input.skill;
-        }
-
-        let baseSuccessfulHits = input.attackCount * hitDiceSkill.successPercentage;
-        let criticalHits = input.attackCount * input.criticalHitsSkill.successPercentage;
-
-        const hitDiceToReroll = this.additionalDiceFromModifier(
-            input.attackCount,
-            hitDiceSkill,
-            input.rerollHitsModifier
-        );
-
-        baseSuccessfulHits += hitDiceToReroll * hitDiceSkill.successPercentage;
-        criticalHits += hitDiceToReroll * input.criticalHitsSkill.successPercentage;
-
-        let successfulHits = baseSuccessfulHits;
-
-        if (input.sustainedHits) {
-            successfulHits += criticalHits * input.sustainedHitsCount;
-        }
-
+        let baseSuccessfulHits = 0;
+        let successfulHits = 0;
         let successfulWounds = 0;
+        let criticalHits = 0;
 
-        if (input.lethalHits) {
-            successfulWounds += criticalHits ;
-            successfulHits -= criticalHits ;
+        if (!input.torrent && hitDiceSkill != null) {
+            if (input.stealth && hitDiceSkill.numericalValue < 6) {
+                const modifiedHitDiceSkill = hitDiceSkill.numericalValue + 1;
+                hitDiceSkill =  DiceSkillValue.parseNumerical(modifiedHitDiceSkill) ?? hitDiceSkill;
+            }
+
+            baseSuccessfulHits = input.attackCount * hitDiceSkill.successPercentage;
+            criticalHits = input.attackCount * input.criticalHitsSkill.successPercentage;
+
+            const hitDiceToReroll = this.additionalDiceFromModifier(
+                input.attackCount,
+                hitDiceSkill,
+                input.rerollHitsModifier
+            );
+
+            baseSuccessfulHits += hitDiceToReroll * hitDiceSkill.successPercentage;
+            criticalHits += hitDiceToReroll * input.criticalHitsSkill.successPercentage;
+
+            successfulHits = baseSuccessfulHits;
+
+            if (input.sustainedHits) {
+                successfulHits += criticalHits * input.sustainedHitsCount;
+            }
+
+            if (input.lethalHits) {
+                successfulWounds += criticalHits ;
+                successfulHits -= criticalHits ;
+            }
+        } else {
+            baseSuccessfulHits = input.attackCount;
+            successfulHits = baseSuccessfulHits;
         }
 
         const strength = input.strength;

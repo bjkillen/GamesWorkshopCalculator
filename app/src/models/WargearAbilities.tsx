@@ -9,6 +9,7 @@ class WargearAbilities {
     public lethalHits: boolean
     public devastatingWounds: boolean
     public blast: boolean
+    public torrent: boolean
 
     constructor(wargear: Wargear) {
         const wargearDescriptionLower = wargear.description.toLowerCase();
@@ -30,6 +31,7 @@ class WargearAbilities {
         this.lethalHits = wargearDescriptionLower.includes("lethal hits");
         this.devastatingWounds = wargearDescriptionLower.includes("devastating wounds");
         this.blast = wargearDescriptionLower.includes("blast");
+        this.torrent = wargearDescriptionLower.includes("torrent");
     }
 }
 
