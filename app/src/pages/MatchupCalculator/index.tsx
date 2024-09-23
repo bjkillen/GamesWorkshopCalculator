@@ -50,7 +50,7 @@ function MatchupCalculator() {
 
     const [toughness, setToughness] = useState<number | undefined>(undefined);
     const [wounds, setWounds] = useState<number | undefined>(undefined);
-    const [armorSaveSkill, setArmorSaveSkill] = useState(DiceSkillValue.Two);
+    const [armorSaveSkill, setArmorSaveSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
     const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
     const [feelNoPainChecked, setFeelNoPainChecked] = useState(false);

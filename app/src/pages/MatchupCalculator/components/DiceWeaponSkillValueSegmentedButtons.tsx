@@ -26,7 +26,7 @@ function DiceWeaponSkillValueSegmentedButtons(props: DiceWeaponSkillValueSegment
     return (
         <SegmentedButtons
             value={value?.value ?? ''}
-            onValueChange={(v) => setValue(DiceSkillValue.parse(v))}
+            onValueChange={(v) => setValue(DiceSkillValue.parse(v) ?? DiceSkillValue.Two)}
             buttons={
                 DiceSkillValue.AllValues.map((dsv) => ({
                     value: dsv.value,

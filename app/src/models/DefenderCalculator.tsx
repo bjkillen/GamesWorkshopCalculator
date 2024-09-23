@@ -7,7 +7,7 @@ export class DefenderStatistics {
         public weaponDamage: number,
         public armorPenetration: number,
         public devastatingWounds: boolean,
-        public armorSaveSkill: DiceSkillValue,
+        public armorSaveSkill: DiceSkillValue | undefined,
         public invulnerableSave: boolean,
         public invulnerableSaveSkill: DiceSkillValue | undefined,
         public feelNoPain: boolean,
@@ -34,7 +34,7 @@ export class DefenderCalculatorResult {
 
 class DefenderCalculator {
     static calculate(input: DefenderCalculatorInput): DefenderCalculatorResult {
-        const modifiedArmorSave = input.defenderStatistics.armorSaveSkill.numericalValue
+        const modifiedArmorSave = (input.defenderStatistics.armorSaveSkill?.numericalValue ?? 7)
             + input.defenderStatistics.armorPenetration;
 
         const modifiedArmorSaveSkill = DiceSkillValue.parseNumerical(modifiedArmorSave);
