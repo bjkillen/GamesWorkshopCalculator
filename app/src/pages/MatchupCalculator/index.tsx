@@ -21,6 +21,7 @@ import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButto
 import VariableNumericalValueParser, { VariableNumericalValue } from '../../utilities/factionDatasheets/VariableNumericalValueParser';
 import VariableNumericalTextInput from '../../components/VariableNumericalTextInput';
 import WargearAbilities from '../../models/WargearAbilities';
+import DatasheetAbilities from '../../models/DatasheetAbilities';
 
 function MatchupCalculator() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -54,7 +55,7 @@ function MatchupCalculator() {
     const [invulnerableSaveChecked, setInvulnerableSaveChecked] = useState(false);
     const [invulnerableSaveSkill, setInvulnerableSaveSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
     const [feelNoPainChecked, setFeelNoPainChecked] = useState(false);
-    const [feelNoPainSaveSkill, setFeelNoPainSaveSkill] = useState(DiceSkillValue.Two);
+    const [feelNoPainSaveSkill, setFeelNoPainSaveSkill] = useState<DiceSkillValue | undefined>(DiceSkillValue.Two);
 
     const [stealthChecked, setStealthChecked] = useState(false);
     const [minusToWoundChecked, setMinusToWoundChecked] = useState(false);
@@ -217,6 +218,18 @@ function MatchupCalculator() {
         if (firstModelOnDatasheet.invulnerableSaveSkill != null) {
             setInvulnerableSaveSkill(firstModelOnDatasheet.invulnerableSaveSkill);
         }
+
+        const datasheetAbilities = new DatasheetAbilities(defendingUnit);
+
+        setFeelNoPainChecked(datasheetAbilities.feelNoPain != null)
+
+        if (datasheetAbilities.feelNoPain != null) {
+            setFeelNoPainSaveSkill(datasheetAbilities.feelNoPain);
+        } else {
+            setFeelNoPainSaveSkill(undefined);
+        }
+
+        setStealthChecked(datasheetAbilities.stealth);
     }, [defendingUnit])
 
     return (
