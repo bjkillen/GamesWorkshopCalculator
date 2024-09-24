@@ -1,30 +1,31 @@
-import { Realm } from '@realm/react'
-import { Wargear, UnitDatasheet, } from 'gamesworkshopcalculator.common';
+import { Realm } from '@realm/react';
+import WargearRealm from './WargearRealm';
 
 export default class Unit extends Realm.Object {
     _id!: Realm.BSON.ObjectId;
-    datasheet!: UnitDatasheet
-    chosenWargear: Wargear | undefined;
+    datasheetName!: string;
+    chosenWargear!: WargearRealm[];
     modelCount!: number;
     createdAt!: Date;
 
-    static generate(datasheet: UnitDatasheet) {
+    static generate(datasheetName: string) {
         return {
             _id: new Realm.BSON.ObjectId(),
-            datasheet,
-            chosenWargear: undefined,
+            datasheetName,
+            chosenWargear: [],
             modelCount: 1,
             createdAt: new Date(),
         };
     }
 
     static schema = {
-        name: 'Wargear',
+        name: 'Unit',
         primaryKey: '_id',
         properties: {
             _id: 'objectId',
-            name: 'string',
-            isComplete: { type: 'bool', default: false },
+            datasheetName: 'string',
+            chosenWargear: 'WargearRealm[]',
+            modelCount: 'number',
             createdAt: 'date'
         },
     };

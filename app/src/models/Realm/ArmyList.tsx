@@ -3,15 +3,17 @@ import Unit from './Unit';
 
 export default class ArmyList extends Realm.Object {
     _id!: Realm.BSON.ObjectId;
+    factionId!: string;
     name!: string;
-    unitDatasheets!: Unit[];
+    units!: Unit[];
     createdAt!: Date;
 
-    static generate(name: string) {
+    static generate(factionId: string, name: string) {
         return {
             _id: new Realm.BSON.ObjectId(),
+            factionId,
             name,
-            unitDatasheets: [],
+            units: [],
             createdAt: new Date()
         };
     }
@@ -21,8 +23,9 @@ export default class ArmyList extends Realm.Object {
         primaryKey: '_id',
         properties: {
             _id: 'objectId',
+            factionId: 'string',
             name: 'string',
-            isComplete: { type: 'bool', default: false },
+            units: 'Unit[]',
             createdAt: 'date'
         },
     };
