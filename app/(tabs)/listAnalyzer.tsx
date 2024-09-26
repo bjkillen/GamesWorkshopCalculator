@@ -1,10 +1,7 @@
 import * as React from 'react';
+import ListAnalyzer from '../src/pages/ListAnalyzer';
 
-import { AppRegistry } from 'react-native';
-import { expo } from '../../app.json';
-import MatchupCalculator from '../src/pages/MatchupCalculator';
-
-export default function ListAnalyzer() {
+export default function ListAnalyzerTab() {
   return (
     <ListAnalyzer />
   );

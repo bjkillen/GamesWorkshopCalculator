@@ -15,7 +15,7 @@ import AttackerDefenderCalculator, { AttackerDefenderCalculatorInput, AttackerDe
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import FactionDatasheetsParser from '../../utilities/factionDatasheets/FactionDatasheetsParser';
-import SelectFactionButtonAndPopup from './components/faction/SelectFactionButtonAndPopup';
+import SelectFactionButtonAndPopup from '../../components/faction/SelectFactionButtonAndPopup';
 import SelectUnitButtonAndPopup from './components/unit/SelectUnitButtonAndPopup';
 import SelectWargearButtonAndPopup from './components/wargear/SelectWargearButtonAndPopup';
 import VariableNumericalValueParser, { VariableNumericalValue } from '../../utilities/factionDatasheets/VariableNumericalValueParser';
