@@ -1,5 +1,5 @@
 import { UnitDatasheet } from "gamesworkshopcalculator.common";
-import ArmyList from "./ArmyList";
+import ArmyList, { ArmyListUnitDatasheet, ArmyListWargear } from "./ArmyList";
 
 class ArmyListParser {
     static Parse(armyListInput: string, unitDatasheet: UnitDatasheet[]): ArmyList {
@@ -12,8 +12,8 @@ class ArmyListParser {
         armyListSplit.forEach((entry) => {
             const entrySplitByLines = entry.split(/\r?\n/);
 
-            let regex = new RegExp(/([\w\s]+)\s+\((\d+)\s+points\)/);
-            let regexResult = regex.exec(entry[0].toLocaleLowerCase());
+            const datasheetHeaderRegex = new RegExp(/([\w\W\s]+)\s+\((\d+)\s+points\)/);
+            const regexResult = datasheetHeaderRegex.exec(entrySplitByLines[0].toLocaleLowerCase());
 
             if (regexResult == null) {
                 return undefined;
@@ -25,9 +25,25 @@ class ArmyListParser {
             const unitDatasheetEntry = unitDatasheetMap.get(datasheetName);
 
             if (unitDatasheetEntry != null && unitDatasheetEntry.modelDatasheets.length > 0) {
-                if (unitDatasheetEntry.modelDatasheets.length == 1) {
+                let newArmyListDatasheet = new ArmyListUnitDatasheet(totalPoints, unitDatasheetEntry.modelDatasheets, []);
 
-                }
+                const datasheetEntryRegex = new RegExp(/(\d+)x\s+([\w\W]+)/);
+                const remainingEntriesToProcess = entrySplitByLines.slice(1);
+
+                remainingEntriesToProcess.forEach((e) => {
+                    const entryRegexResult = datasheetEntryRegex.exec(e.trim());
+
+                    if (entryRegexResult != null) {
+                        const matchingWargear = unitDatasheetEntry.wargear.filter((w) => w.name.toLocaleLowerCase() == entryRegexResult[2])
+
+                        matchingWargear.forEach((w) => {
+                            const matchedArmyListWargear = new ArmyListWargear(w, Number(entryRegexResult[1]));
+                            newArmyListDatasheet.chosenWargear.push(matchedArmyListWargear);
+                        })
+                    }
+                });
+
+                result.unitDatasheets.push(newArmyListDatasheet);
             }
         });
 
