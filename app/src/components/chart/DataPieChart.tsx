@@ -1,13 +1,16 @@
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 
 export interface DataPieChartProps {
-    data: any[]
+    data: Map<string, number>,
+    height: number
 }
 
 function DataPieChart(props: DataPieChartProps) {
-    const { data } = props;
+    const { data, height } = props;
     const screenWidth =  Dimensions.get("window").width;
+
+    const colors = ['#83a7ea', 'red', 'black', 'darkgray', '#00f'];
 
     const chartConfig = {
             backgroundColor: "#e26a00",
@@ -26,18 +29,30 @@ function DataPieChart(props: DataPieChartProps) {
             }
         }
 
+    function convertData(input: Map<string, number>) {
+        return Array.from(input).map((i, index) => {
+            return {
+                name: i[0],
+                value: i[1],
+                legendFontSize: 15,
+                color: colors[index % colors.length]
+            }
+        })
+    }
+
     return (
-        <PieChart
-            data={data}
-            width={screenWidth}
-            height={220}
-            chartConfig={chartConfig}
-            accessor={"population"}
-            backgroundColor={"transparent"}
-            paddingLeft={"15"}
-            center={[10, 50]}
-            absolute
-        />
+        <View>
+            <PieChart
+                data={convertData(data)}
+                width={screenWidth}
+                height={height}
+                chartConfig={chartConfig}
+                accessor={"value"}
+                backgroundColor={"transparent"}
+                paddingLeft={"5"}
+                absolute
+            />
+        </View>
     );
 }
 
