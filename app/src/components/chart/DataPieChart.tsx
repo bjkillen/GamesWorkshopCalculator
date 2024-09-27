@@ -1,15 +1,14 @@
-import { Dimensions, View } from "react-native";
+import { View } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 
 export interface DataPieChartProps {
     data: Map<string, number>,
+    width: number,
     height: number
 }
 
 function DataPieChart(props: DataPieChartProps) {
-    const { data, height } = props;
-    const screenWidth =  Dimensions.get("window").width;
-
+    const { data, width, height } = props;
     const colors = ['#83a7ea', 'red', 'black', 'darkgray', '#00f'];
 
     const chartConfig = {
@@ -44,7 +43,7 @@ function DataPieChart(props: DataPieChartProps) {
         <View>
             <PieChart
                 data={convertData(data)}
-                width={screenWidth}
+                width={width}
                 height={height}
                 chartConfig={chartConfig}
                 accessor={"value"}
