@@ -1,11 +1,18 @@
-import { ModelDatasheet, Wargear } from "gamesworkshopcalculator.common";
+import { ModelDatasheet, UnitDatasheet, Wargear } from "gamesworkshopcalculator.common";
 
 export class ArmyListUnitDatasheet {
     constructor(
-        public datasheedId: string,
+        public datasheet: UnitDatasheet,
         public points: number,
-        public modelDatasheets: ModelDatasheet[],
+        public modelDatasheets: ArmyListModelDatasheet[],
         public chosenWargear: ArmyListWargear[]
+    ) {}
+}
+
+export class ArmyListModelDatasheet {
+    constructor(
+        public modelDatasheet: ModelDatasheet,
+        public count: number
     ) {}
 }
 

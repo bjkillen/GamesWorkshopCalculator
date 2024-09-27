@@ -1,5 +1,5 @@
 import { UnitDatasheet } from "gamesworkshopcalculator.common";
-import ArmyList, { ArmyListUnitDatasheet, ArmyListWargear } from "./ArmyList";
+import ArmyList, { ArmyListModelDatasheet, ArmyListUnitDatasheet, ArmyListWargear } from "./ArmyList";
 
 class ArmyListParser {
     static Parse(armyListInput: string, unitDatasheet: UnitDatasheet[]): ArmyList {
@@ -26,7 +26,7 @@ class ArmyListParser {
 
             if (unitDatasheetEntry != null && unitDatasheetEntry.modelDatasheets.length > 0) {
                 let newArmyListDatasheet = new ArmyListUnitDatasheet(
-                    unitDatasheetEntry.id,
+                    unitDatasheetEntry,
                     totalPoints,
                     [],
                     []);
@@ -44,7 +44,9 @@ class ArmyListParser {
                             return ud.name.toLocaleLowerCase().startsWith(parsedNameLower);
                         })
 
-                        newArmyListDatasheet.modelDatasheets = newArmyListDatasheet.modelDatasheets.concat(matchingModelDatasheets);
+                        newArmyListDatasheet.modelDatasheets = newArmyListDatasheet.modelDatasheets.concat(
+                            matchingModelDatasheets.map((mmd) => new ArmyListModelDatasheet(mmd, Number(entryRegexResult[1])))
+                        );
 
                         const matchingWargear = unitDatasheetEntry.wargear.filter((w) => {
                             return w.name.toLocaleLowerCase() == parsedNameLower
@@ -58,7 +60,8 @@ class ArmyListParser {
                 });
 
                 if (newArmyListDatasheet.modelDatasheets.length == 0) {
-                    newArmyListDatasheet.modelDatasheets = unitDatasheetEntry.modelDatasheets;
+                    newArmyListDatasheet.modelDatasheets = unitDatasheetEntry.modelDatasheets
+                        .map((mmd) => new ArmyListModelDatasheet(mmd, 1))
                 }
 
                 result.unitDatasheets.push(newArmyListDatasheet);
