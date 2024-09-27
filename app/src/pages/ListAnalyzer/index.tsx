@@ -10,15 +10,16 @@ import MultineTextInput from "./components/MultilineTextInput";
 import Row from "../../components/Row";
 import ArmyListParser from "../../utilities/armyList/ArmyListParser";
 import ArmyList from "../../utilities/armyList/ArmyList";
+import { useNavigation } from "@react-navigation/native";
 
 function ListAnalyzer() {
+    const navigation = useNavigation();
+
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
     const [factionsDatasheets, setFactionsDatasheets] = useState(new Map<string, Faction>())
 
     const [selectedFaction, setSelectedFaction] = useState<Faction | undefined>(undefined);
     const [listText, setListText] = useState<string | undefined>(undefined);
-
-    const [armyList, setArmyList] = useState<ArmyList | undefined>(undefined);
 
     const analyzeListButtonPressed = () => {
         if (listText == null || selectedFaction == null) {
@@ -26,13 +27,12 @@ function ListAnalyzer() {
         }
 
         const armyListResult = ArmyListParser.Parse(listText, selectedFaction.unitDatasheets);
-        setArmyList(armyListResult);
+        navigation.navigate("ListAnalysisResults", { armyList: armyListResult });
     }
 
     const clearButtonPressed = () => {
         setSelectedFaction(undefined);
         setListText(undefined);
-        setArmyList(undefined);
     }
 
     async function loadFactionsDatasheets() {
@@ -53,10 +53,10 @@ function ListAnalyzer() {
         <SafeAreaView>
             <LoadingOverlay open={loadingOverlayOpen} />
             <ScrollView style={{ padding: 16 }}>
-                <Text variant="displayLarge" style={{ textAlign: 'center' }}>
-                    Matchup Calculator
+                <Text variant="displaySmall" style={{ textAlign: 'center' }}>
+                    Lets analyze your list!
                 </Text>
-                <View style={{ marginTop: 5 }}>
+                <View style={{ marginTop: 20 }}>
                     <View style={{ flex: 6 }}>
                         <SelectFactionButtonAndPopup
                             value={selectedFaction}
@@ -92,29 +92,6 @@ function ListAnalyzer() {
                             Clear
                     </Button>
                 </Row>
-                <View>
-                    {armyList?.unitDatasheets.map((ud) => {
-
-                        return (
-                            <Text key={ud.datasheedId} variant="bodyMedium">
-                                {ud.points}
-                                {ud.modelDatasheets.map(md => {
-                                    return (
-                                        <Text key={md.name}>{md.name}</Text>
-                                    )
-                                })}
-                                {ud.chosenWargear.map(w=> {
-                                    return (
-                                        <Text key={`${w.wargear.name}${w.wargear.type.value}`}>{w.count} {w.wargear.name}</Text>
-                                    )
-                                })}
-                            </Text>
-                        )
-                    })
-
-                    }
-                    
-                </View>
             </ScrollView>
         </SafeAreaView>
     )
