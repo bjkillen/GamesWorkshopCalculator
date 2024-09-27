@@ -9,7 +9,6 @@ import SelectFactionButtonAndPopup from "../../components/faction/SelectFactionB
 import MultineTextInput from "./components/MultilineTextInput";
 import Row from "../../components/Row";
 import ArmyListParser from "../../utilities/armyList/ArmyListParser";
-import ArmyList from "../../utilities/armyList/ArmyList";
 import { useNavigation } from "@react-navigation/native";
 
 function ListAnalyzer() {
