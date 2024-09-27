@@ -8,6 +8,8 @@ import FactionDatasheetsParser from "../../utilities/factionDatasheets/FactionDa
 import SelectFactionButtonAndPopup from "../../components/faction/SelectFactionButtonAndPopup";
 import MultineTextInput from "./components/MultilineTextInput";
 import Row from "../../components/Row";
+import ArmyListParser from "../../utilities/armyList/ArmyListParser";
+import ArmyList from "../../utilities/armyList/ArmyList";
 
 function ListAnalyzer() {
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -16,14 +18,21 @@ function ListAnalyzer() {
     const [selectedFaction, setSelectedFaction] = useState<Faction | undefined>(undefined);
     const [listText, setListText] = useState<string | undefined>(undefined);
 
+    const [armyList, setArmyList] = useState<ArmyList | undefined>(undefined);
+
     const analyzeListButtonPressed = () => {
-        setSelectedFaction(undefined);
-        setListText(undefined);
+        if (listText == null || selectedFaction == null) {
+            return;
+        }
+
+        const armyListResult = ArmyListParser.Parse(listText, selectedFaction.unitDatasheets);
+        setArmyList(armyListResult);
     }
 
     const clearButtonPressed = () => {
         setSelectedFaction(undefined);
         setListText(undefined);
+        setArmyList(undefined);
     }
 
     async function loadFactionsDatasheets() {
@@ -83,6 +92,29 @@ function ListAnalyzer() {
                             Clear
                     </Button>
                 </Row>
+                <View>
+                    {armyList?.unitDatasheets.map((ud) => {
+
+                        return (
+                            <Text key={ud.datasheedId} variant="bodyMedium">
+                                {ud.points}
+                                {ud.modelDatasheets.map(md => {
+                                    return (
+                                        <Text key={md.name}>{md.name}</Text>
+                                    )
+                                })}
+                                {ud.chosenWargear.map(w=> {
+                                    return (
+                                        <Text key={w.wargear.name}>{w.count} {w.wargear.name}</Text>
+                                    )
+                                })}
+                            </Text>
+                        )
+                    })
+
+                    }
+                    
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

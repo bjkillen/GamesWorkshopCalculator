@@ -2,6 +2,7 @@ import { ModelDatasheet, Wargear } from "gamesworkshopcalculator.common";
 
 export class ArmyListUnitDatasheet {
     constructor(
+        public datasheedId: string,
         public points: number,
         public modelDatasheets: ModelDatasheet[],
         public chosenWargear: ArmyListWargear[]

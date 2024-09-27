@@ -25,7 +25,11 @@ class ArmyListParser {
             const unitDatasheetEntry = unitDatasheetMap.get(datasheetName);
 
             if (unitDatasheetEntry != null && unitDatasheetEntry.modelDatasheets.length > 0) {
-                let newArmyListDatasheet = new ArmyListUnitDatasheet(totalPoints, unitDatasheetEntry.modelDatasheets, []);
+                let newArmyListDatasheet = new ArmyListUnitDatasheet(
+                    unitDatasheetEntry.id,
+                    totalPoints,
+                    unitDatasheetEntry.modelDatasheets,
+                    []);
 
                 const datasheetEntryRegex = new RegExp(/(\d+)x\s+([\w\W]+)/);
                 const remainingEntriesToProcess = entrySplitByLines.slice(1);
@@ -34,7 +38,11 @@ class ArmyListParser {
                     const entryRegexResult = datasheetEntryRegex.exec(e.trim());
 
                     if (entryRegexResult != null) {
-                        const matchingWargear = unitDatasheetEntry.wargear.filter((w) => w.name.toLocaleLowerCase() == entryRegexResult[2])
+                        const matchingWargear = unitDatasheetEntry.wargear.filter((w) => {
+                            return w.name.toLocaleLowerCase() == entryRegexResult[2].toLocaleLowerCase()
+                        })
+
+                        console.log(matchingWargear);
 
                         matchingWargear.forEach((w) => {
                             const matchedArmyListWargear = new ArmyListWargear(w, Number(entryRegexResult[1]));
