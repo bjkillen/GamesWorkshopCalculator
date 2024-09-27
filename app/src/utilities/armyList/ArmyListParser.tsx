@@ -28,7 +28,7 @@ class ArmyListParser {
                 let newArmyListDatasheet = new ArmyListUnitDatasheet(
                     unitDatasheetEntry.id,
                     totalPoints,
-                    unitDatasheetEntry.modelDatasheets,
+                    [],
                     []);
 
                 const datasheetEntryRegex = new RegExp(/(\d+)x\s+([\w\W]+)/);
@@ -38,11 +38,17 @@ class ArmyListParser {
                     const entryRegexResult = datasheetEntryRegex.exec(e.trim());
 
                     if (entryRegexResult != null) {
-                        const matchingWargear = unitDatasheetEntry.wargear.filter((w) => {
-                            return w.name.toLocaleLowerCase() == entryRegexResult[2].toLocaleLowerCase()
+                        const parsedNameLower = entryRegexResult[2].toLocaleLowerCase();
+
+                        const matchingModelDatasheets = unitDatasheetEntry.modelDatasheets.filter((ud) => {
+                            return ud.name.toLocaleLowerCase().startsWith(parsedNameLower);
                         })
 
-                        console.log(matchingWargear);
+                        newArmyListDatasheet.modelDatasheets = newArmyListDatasheet.modelDatasheets.concat(matchingModelDatasheets);
+
+                        const matchingWargear = unitDatasheetEntry.wargear.filter((w) => {
+                            return w.name.toLocaleLowerCase() == parsedNameLower
+                        })
 
                         matchingWargear.forEach((w) => {
                             const matchedArmyListWargear = new ArmyListWargear(w, Number(entryRegexResult[1]));
@@ -50,6 +56,10 @@ class ArmyListParser {
                         })
                     }
                 });
+
+                if (newArmyListDatasheet.modelDatasheets.length == 0) {
+                    newArmyListDatasheet.modelDatasheets = unitDatasheetEntry.modelDatasheets;
+                }
 
                 result.unitDatasheets.push(newArmyListDatasheet);
             }

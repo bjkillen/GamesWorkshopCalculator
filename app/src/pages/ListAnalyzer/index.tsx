@@ -105,7 +105,7 @@ function ListAnalyzer() {
                                 })}
                                 {ud.chosenWargear.map(w=> {
                                     return (
-                                        <Text key={w.wargear.name}>{w.count} {w.wargear.name}</Text>
+                                        <Text key={`${w.wargear.name}${w.wargear.type.value}`}>{w.count} {w.wargear.name}</Text>
                                     )
                                 })}
                             </Text>
