@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import { PieChart } from "react-native-chart-kit";
+import NumberExtension from "../../utilities/extensions/NumberExtension";
 
 export interface DataPieChartProps {
     data: Map<string, number>,
@@ -15,7 +16,7 @@ function DataPieChart(props: DataPieChartProps) {
             backgroundColor: "#e26a00",
             backgroundGradientFrom: "#fb8c00",
             backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
+            decimalPlaces: 0, // optional, defaults to 2dp
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             style: {
@@ -32,7 +33,7 @@ function DataPieChart(props: DataPieChartProps) {
         return Array.from(input).map((i, index) => {
             return {
                 name: i[0],
-                value: i[1],
+                value: NumberExtension.roundedToNearest(i[1], 1),
                 legendFontSize: 15,
                 color: colors[index % colors.length]
             }
