@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 
-import NumberExtension from '../utilities/extensions/NumberExtension';
 import VariableNumericalValueParser, { VariableNumericalValue } from '../utilities/factionDatasheets/VariableNumericalValueParser';
 
 export interface VariableNumericalTextInputProps {
