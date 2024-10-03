@@ -3,7 +3,9 @@ export enum UnitClassificationEnum {
     HeavyInfantry = 'HeavyInfantry',
     LightVehicle = 'LightVehicle',
     MediumVehicle = 'MediumVehicle',
-    HeavyVehicle = 'HeavyVehicle'
+    HeavyVehicle = 'HeavyVehicle',
+    Monster = 'Monster'
+    
 }
 
 class UnitClassification {
@@ -16,6 +18,8 @@ class UnitClassification {
     static readonly MediumVehicle = new  UnitClassification(UnitClassificationEnum.MediumVehicle);
 
     static readonly HeavyVehicle = new  UnitClassification(UnitClassificationEnum.HeavyVehicle);
+
+    static readonly Monster = new  UnitClassification(UnitClassificationEnum.Monster);
 
     private constructor(public readonly value:  UnitClassificationEnum) {}
 
@@ -39,6 +43,8 @@ class UnitClassification {
                 return 'Medium Vehicle';
             case UnitClassificationEnum.HeavyVehicle:
                 return 'Heavy Vehicle';
+            case UnitClassificationEnum.Monster:
+                return 'Monster';
         }
     }
 }

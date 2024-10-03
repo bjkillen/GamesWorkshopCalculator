@@ -12,9 +12,9 @@ class WargearClassifier {
 
         let wargearClassifications = [];
 
-        if ((wargear.strength >= 9 || wargearAbilities.anti?.[0] === 'VEHICLE') &&
+        if (wargearAbilities.anti?.find(a => a[0].startsWith('VEHICLE')) || (wargear.strength >= 9 &&
             (wargearDamageVariableNumericalValue.numericalVal >= VariableNumericalValueParser.Parse("D6").numericalVal ||
-                wargearAbilities.melta != null)
+                wargearAbilities.melta != null))
         ) {
             wargearClassifications.push(WargearClassification.AntiVehicle);
         }
@@ -30,10 +30,14 @@ class WargearClassifier {
         if ((wargear.strength <= 5 && ((wargearAbilities.sustainedHits?.numericalVal ?? 0) >= 2 ||
                 wargearAbilities.blast ||
                 wargearAttacksVariableNumericalValue.numericalVal >= 4 ||
-                wargearAbilities.anti?.[0] === 'INFANTRY')) ||
+                wargearAbilities.anti?.find(a => a[0].startsWith('INFANTRY')))) ||
                 (wargear.strength >= 6 && wargearAttacksVariableNumericalValue.numericalVal >= 10)
             ) {
                 wargearClassifications.push(WargearClassification.AntiInfantry);
+        }
+
+        if (wargearAbilities.anti?.find(a => a[0].startsWith('MONSTER'))) {
+            wargearClassifications.push(WargearClassification.AntiMonster);
         }
 
         return wargearClassifications;

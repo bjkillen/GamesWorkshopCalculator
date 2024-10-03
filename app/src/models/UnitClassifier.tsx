@@ -27,6 +27,8 @@ class UnitClassifier {
             } else {
                 classification = UnitClassification.HeavyVehicle;
             }
+        } else if (mappedKeywords.includes("monster")) {
+            classification = UnitClassification.Monster;
         }
 
         return classification;

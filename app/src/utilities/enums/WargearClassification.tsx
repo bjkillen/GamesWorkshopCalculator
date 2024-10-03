@@ -2,6 +2,7 @@ export enum WargearClassificationEnum {
     AntiInfantry = 'AntiInfantry',
     AntiHeavyInfantry = 'AntiHeavyInfantry',
     AntiVehicle = 'AntiVehicle',
+    AnitMonster = 'AntiMonster',
 }
 
 class WargearClassification {
@@ -10,6 +11,8 @@ class WargearClassification {
     static readonly AntiHeavyInfantry = new WargearClassification(WargearClassificationEnum.AntiHeavyInfantry);
 
     static readonly AntiVehicle = new  WargearClassification(WargearClassificationEnum.AntiVehicle);
+
+    static readonly AntiMonster = new WargearClassification(WargearClassificationEnum.AnitMonster);
 
     private constructor(public readonly value:  WargearClassificationEnum) {}
 
@@ -29,6 +32,8 @@ class WargearClassification {
                 return 'Heavy Infantry';
             case WargearClassificationEnum.AntiVehicle:
                 return 'Vehicles';
+            case WargearClassificationEnum.AnitMonster:
+                return 'Monsters';
         }
     }
 }

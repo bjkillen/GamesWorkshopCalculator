@@ -4,7 +4,7 @@ import { DiceSkillValue, Wargear } from "gamesworkshopcalculator.common";
 
 class WargearAbilities {
     public melta:  VariableNumericalValue | undefined
-    public anti: [string, DiceSkillValue] | undefined
+    public anti: [string, DiceSkillValue][] | undefined
     public sustainedHits: VariableNumericalValue | undefined
     public lethalHits: boolean
     public devastatingWounds: boolean
