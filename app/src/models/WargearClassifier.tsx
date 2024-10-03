@@ -1,10 +1,12 @@
-import { Wargear } from "gamesworkshopcalculator.common";
 import WargearAbilities from "./WargearAbilities";
 import VariableNumericalValueParser from "../utilities/factionDatasheets/VariableNumericalValueParser";
 import WargearClassification from "../utilities/enums/WargearClassification";
+import { ArmyListWargear } from "../utilities/armyList/ArmyList";
 
 class WargearClassifier {
-    static Classify(wargear: Wargear) {
+    static Classify(listWargear: ArmyListWargear) {
+        const wargear = listWargear.wargear;
+
         const wargearAbilities = new WargearAbilities(wargear);
 
         const wargearAttacksVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.attacks);
@@ -12,11 +14,16 @@ class WargearClassifier {
 
         let wargearClassifications = [];
 
-        if (wargearAbilities.anti?.find(a => a[0].startsWith('VEHICLE')) || (wargear.strength >= 9 &&
-            (wargearDamageVariableNumericalValue.numericalVal >= VariableNumericalValueParser.Parse("D6").numericalVal ||
-                wargearAbilities.melta != null))
+        if (wargearAbilities.anti?.find(a => a[0].startsWith('VEHICLE')) || wargearAbilities.anti?.find(a => a[0].startsWith('MONSTER')) ||
+            (wargear.strength >= 9 &&
+                (wargearDamageVariableNumericalValue.numericalVal >= VariableNumericalValueParser.Parse("D6").numericalVal ||
+                    wargearAbilities.melta != null))
         ) {
-            wargearClassifications.push(WargearClassification.AntiVehicle);
+            wargearClassifications.push(WargearClassification.AntiHeavyVehicleMonster);
+        } else if ((wargear.strength >= 8 &&
+            Math.abs(wargear.armorPenetration) >= 2 && wargearDamageVariableNumericalValue.numericalVal >= 2)
+        ) {
+            wargearClassifications.push(WargearClassification.AntiLightVehicleMonster);
         }
 
         if (wargear.strength >= 6 && 
@@ -27,17 +34,17 @@ class WargearClassifier {
             wargearClassifications.push(WargearClassification.AntiHeavyInfantry);
         }
 
-        if ((wargear.strength <= 5 && ((wargearAbilities.sustainedHits?.numericalVal ?? 0) >= 2 ||
+        if (wargearAbilities.anti?.find(a => a[0].startsWith('INFANTRY')) || (wargear.strength <= 5 && ((wargearAbilities.sustainedHits?.numericalVal ?? 0) >= 2 ||
                 wargearAbilities.blast ||
-                wargearAttacksVariableNumericalValue.numericalVal >= 4 ||
-                wargearAbilities.anti?.find(a => a[0].startsWith('INFANTRY')))) ||
+                wargearAttacksVariableNumericalValue.numericalVal >= 4)) ||
                 (wargear.strength >= 6 && wargearAttacksVariableNumericalValue.numericalVal >= 10)
             ) {
                 wargearClassifications.push(WargearClassification.AntiInfantry);
         }
 
-        if (wargearAbilities.anti?.find(a => a[0].startsWith('MONSTER'))) {
-            wargearClassifications.push(WargearClassification.AntiMonster);
+        if (wargearClassifications.length == 0 &&
+            wargearAttacksVariableNumericalValue.numericalVal * listWargear.count>= 14) {
+                wargearClassifications.push(WargearClassification.WeightOfFire);
         }
 
         return wargearClassifications;

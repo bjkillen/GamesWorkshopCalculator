@@ -33,7 +33,7 @@ function DataPieChart(props: DataPieChartProps) {
         return Array.from(input).map((i, index) => {
             return {
                 name: i[0],
-                value: NumberExtension.roundedToNearest(i[1], 1),
+                value: NumberExtension.roundedToNearest(i[1], 5),
                 legendFontSize: 15,
                 color: colors[index % colors.length]
             }

@@ -24,12 +24,12 @@ class ArmyListStatisticsCalculator {
 
         list.unitDatasheets.forEach((ud) => {
             ud.chosenWargear.forEach((w) => {
-                const wargearClasses = WargearClassifier.Classify(w.wargear);
+                const wargearClasses = WargearClassifier.Classify(w);
 
                 if (wargearClasses.length == 0) {
                     results.wargearClassPoints.set(
-                        'None',
-                        (results.wargearClassPoints.get('None') ?? 0) + (ud.points / ud.chosenWargear.length)
+                        'Insignificant',
+                        (results.wargearClassPoints.get('Insignificant') ?? 0) + (ud.points / ud.chosenWargear.length)
                     );
                 } else {
                     wargearClasses.forEach((wc) => {
@@ -58,8 +58,8 @@ class ArmyListStatisticsCalculator {
 
                 if (unitClass  == null) {
                     results.unitClassPoints.set(
-                        'None',
-                        (results.unitClassPoints.get('None') ?? 0) + ud.points
+                        'Other',
+                        (results.unitClassPoints.get('Other') ?? 0) + ud.points
                     );
                 } else {
                     results.unitClassPoints.set(
