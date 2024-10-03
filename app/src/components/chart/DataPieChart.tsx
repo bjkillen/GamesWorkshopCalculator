@@ -3,13 +3,11 @@ import { Pie, PolarChart } from "victory-native";
 import NumberExtension from "../../utilities/extensions/NumberExtension";
 
 export interface DataPieChartProps {
-    data: Map<string, number>,
-    width: number,
-    height: number
+    data: Map<string, number>
 }
 
 function DataPieChart(props: DataPieChartProps) {
-    const { data, width, height } = props;
+    const { data } = props;
     const colors = ['#83a7ea', 'red', 'black', 'darkgray', '#00f'];
 
     function convertData(input: Map<string, number>) {
@@ -24,17 +22,18 @@ function DataPieChart(props: DataPieChartProps) {
     }
 
     return (
-        <View style={{ height, width }}>
-            <PolarChart
-                data={convertData(data)}
-                labelKey={"label"}
-                valueKey={"value"}
-                colorKey={"color"}
-            >
-                <Pie.Chart />
-            </PolarChart>
-            
-        </View>
+        <>
+            {data.size > 0 &&
+                <PolarChart
+                    data={convertData(data)}
+                    labelKey={"label"}
+                    valueKey={"value"}
+                    colorKey={"color"}
+                >
+                    <Pie.Chart />
+                </PolarChart>
+            }
+        </>
     );
 }
 

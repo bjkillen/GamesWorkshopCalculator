@@ -1,15 +1,13 @@
-import { LinearGradient, matchFont, vec } from "@shopify/react-native-skia";
+import { LinearGradient, matchFont, useFont, vec } from "@shopify/react-native-skia";
 import { View } from "react-native";
 import { Bar, CartesianChart } from "victory-native";
 import { DefaultTheme } from "react-native-paper";
 
 export interface DataBarChartProps {
-    data: any[],
-    width: number,
-    height: number
+    data: any[]
 }
 
-export function convertNumberKeyData(input: Map<number, number>): Record<string, unknown>[] {
+export function convertNumberKeyData(input: Map<number, number>) {
     return Array.from(input).sort((a, b) =>
         {
             let aValAbs = Math.abs(a[0]);
@@ -31,7 +29,7 @@ export function convertNumberKeyData(input: Map<number, number>): Record<string,
         });
 }
 
-export function convertStringKeyData(input: Map<string, number>): Record<string, unknown>[] {
+export function convertStringKeyData(input: Map<string, number>) {
     return Array.from(input).map((i) => {
         return {
             label: i[0],
@@ -41,39 +39,48 @@ export function convertStringKeyData(input: Map<string, number>): Record<string,
 }
 
 function DataBarChart(props: DataBarChartProps) {
-    const { data, width, height } = props;
+    const { data } = props;
 
-    const labelFontFromTheme = DefaultTheme.fonts.labelMedium;
-    const font = matchFont(labelFontFromTheme);
+    const font = useFont(require("../../../../assets/fonts/Inter_18pt-Regular.ttf"), 12)
 
     return (
-        <View style={{ height, width }}>
-            <CartesianChart
-                data={data}
-                xKey="label"
-                yKeys={["value"]}
-                domainPadding={{ left: 50, right: 50, top: 30 }}
-                xAxis={{
-                    font
-                }}
-            >
-                {({ points, chartBounds }) => (
-                    <Bar
-                        points={points.value}
-                        chartBounds={chartBounds}
-                    >
-                        <LinearGradient
-                            start={vec(0, 0)}
-                            end={vec(0, 400)}
-                            colors={[
-                                "#a78bfa",
-                                "#a78bfa30"
-                            ]}
-                        />
-                    </Bar>
-                )}
-            </CartesianChart>
-        </View>
+        <>
+            {data.length > 0 && 
+                <CartesianChart
+                    data={data}
+                    xKey="label"
+                    yKeys={["value"]}
+                    domainPadding={{ left: 50, right: 50, top: 30 }}
+                    xAxis={{
+                        font,
+                        tickCount: data.length,
+                        formatXLabel: (val: any) => {
+                            return val?.toString() ?? ""
+                        }
+                    }}
+                    yAxis={[{
+                        font,
+                        domain: [0]
+                    }]}
+                >
+                    {({ points, chartBounds }) => (
+                        <Bar
+                            points={points.value}
+                            chartBounds={chartBounds}
+                        >
+                            <LinearGradient
+                                start={vec(0, 0)}
+                                end={vec(0, 400)}
+                                colors={[
+                                    "#a78bfa",
+                                    "#a78bfa30"
+                                ]}
+                            />
+                        </Bar>
+                    )}
+                </CartesianChart>
+            }
+        </>
     )
 }
 

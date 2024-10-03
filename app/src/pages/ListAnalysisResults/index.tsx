@@ -12,7 +12,7 @@ function ListAnalysisResults() {
     const { armyList } = route.params;
     const [ armyListStatistics, setArmyListStatistics] = useState(new ArmyListStatistics())
 
-    const screenWidth =  Dimensions.get("window").width;
+    const chartHeight = 250;
 
     function computeArmyListStatistics() {
         const computedArmyListStatistics = ArmyListStatisticsCalculator.Calculate(armyList);
@@ -33,61 +33,61 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Points per unit class
                     </Text>
-                    <DataPieChart
-                        data={armyListStatistics.unitClassPoints}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataPieChart
+                            data={armyListStatistics.unitClassPoints}
+                        />
+                    </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Points per wargear class
                     </Text>
-                    <DataPieChart
-                        data={armyListStatistics.wargearClassPoints}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataPieChart
+                            data={armyListStatistics.wargearClassPoints}
+                        />
+                    </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Offensive Breakdown
                     </Text>
-                    <DataBarChart
-                        data={convertStringKeyData(armyListStatistics.wargearTypeWeightings)}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertStringKeyData(armyListStatistics.wargearTypeWeightings)}
+                        />
+                    </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Strength Counts
                     </Text>
-                    <DataBarChart
-                        data={convertNumberKeyData(armyListStatistics.wargearStrengthCounts)}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertNumberKeyData(armyListStatistics.wargearStrengthCounts)}
+                        />
+                    </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear AP Counts
                     </Text>
-                    <DataBarChart
-                        data={convertNumberKeyData(armyListStatistics.wargearArmorPenetrationCounts)}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertNumberKeyData(armyListStatistics.wargearArmorPenetrationCounts)}
+                        />
+                    </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Unit toughness Counts
                     </Text>
-                    <DataBarChart
-                        data={convertNumberKeyData(armyListStatistics.datasheetToughnessCounts)}
-                        width={screenWidth}
-                        height={250}
-                    />
+                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertNumberKeyData(armyListStatistics.datasheetToughnessCounts)}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
