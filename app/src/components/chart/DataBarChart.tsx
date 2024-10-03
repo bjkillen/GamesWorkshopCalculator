@@ -1,18 +1,16 @@
-import { BarChart } from "react-native-chart-kit";
-import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
-import { ChartData } from "react-native-chart-kit/dist/HelperTypes";
+import { LinearGradient, matchFont, vec } from "@shopify/react-native-skia";
+import { View } from "react-native";
+import { Bar, CartesianChart } from "victory-native";
+import { DefaultTheme } from "react-native-paper";
 
 export interface DataBarChartProps {
-    data: ChartData,
+    data: any[],
     width: number,
     height: number
 }
 
-export function convertNumberKeyData(input: Map<number, number>): ChartData {
-    let labels: string[] = [];
-    let data: number[] = [];
-
-    Array.from(input).sort((a, b) =>
+export function convertNumberKeyData(input: Map<number, number>): Record<string, unknown>[] {
+    return Array.from(input).sort((a, b) =>
         {
             let aValAbs = Math.abs(a[0]);
             let bValAbs = Math.abs(b[0]);
@@ -24,74 +22,58 @@ export function convertNumberKeyData(input: Map<number, number>): ChartData {
             }
 
             return 0;
-        }).forEach((i) => {
-        labels.push(i[0].toString());
-        data.push(i[1]);
-    });
-
-    return {
-        labels,
-        datasets: [
-            {
-                data
+        })
+        .map((i) => {
+            return {
+                label: i[0].toString(),
+                value: i[1]
             }
-        ]
-    }
+        });
 }
 
-export function convertStringKeyData(input: Map<string, number>): ChartData {
-    let labels: string[] = [];
-    let data: number[] = [];
-
-    Array.from(input).forEach((i) => {
-        labels.push(i[0]);
-        data.push(i[1]);
+export function convertStringKeyData(input: Map<string, number>): Record<string, unknown>[] {
+    return Array.from(input).map((i) => {
+        return {
+            label: i[0],
+            value: i[1]
+        }
     });
-
-    return {
-        labels,
-        datasets: [
-            {
-                data
-            }
-        ]
-    }
 }
 
 function DataBarChart(props: DataBarChartProps) {
     const { data, width, height } = props;
 
-    const chartConfig: AbstractChartConfig = {
-        backgroundColor: "white",
-        backgroundGradientFromOpacity: 0,
-        backgroundGradientFrom: "white",
-        backgroundGradientTo: "white",
-        backgroundGradientToOpacity: 0,
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-        style: {
-            borderRadius: 8,
-            marginVertical: 8,
-        },
-        propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726"
-        },
-    }
+    const labelFontFromTheme = DefaultTheme.fonts.labelMedium;
+    const font = matchFont(labelFontFromTheme);
 
     return (
-        <BarChart
-            data={data}
-            width={width}
-            height={height}
-            yAxisLabel=""
-            yAxisSuffix=""
-            xAxisLabel=""
-            chartConfig={chartConfig}
-            fromZero
-        />
+        <View style={{ height, width }}>
+            <CartesianChart
+                data={data}
+                xKey="label"
+                yKeys={["value"]}
+                domainPadding={{ left: 50, right: 50, top: 30 }}
+                xAxis={{
+                    font
+                }}
+            >
+                {({ points, chartBounds }) => (
+                    <Bar
+                        points={points.value}
+                        chartBounds={chartBounds}
+                    >
+                        <LinearGradient
+                            start={vec(0, 0)}
+                            end={vec(0, 400)}
+                            colors={[
+                                "#a78bfa",
+                                "#a78bfa30"
+                            ]}
+                        />
+                    </Bar>
+                )}
+            </CartesianChart>
+        </View>
     )
 }
 

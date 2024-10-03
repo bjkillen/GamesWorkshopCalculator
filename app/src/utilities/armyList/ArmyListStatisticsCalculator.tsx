@@ -30,6 +30,8 @@ class ArmyListStatisticsCalculator {
                 return acc + val.count
             }, 0)
 
+            let classedWargearTotalPoints = 0;
+
             ud.chosenWargear.forEach((w) => {
                 const wargearClasses = WargearClassifier.Classify(w);
 
@@ -43,12 +45,9 @@ class ArmyListStatisticsCalculator {
                     Math.abs(wargear.armorPenetration) +
                     wargearDamageVariableNumericalValue.numericalVal) / (ud.points * (w.count / totalModelCount))) * ud.points;
 
-                if (wargearClasses.length == 0) {
-                    results.wargearClassPoints.set(
-                        'Insignificant',
-                        (results.wargearClassPoints.get('Insignificant') ?? 0) + pointsScalarValue
-                    );
-                } else {
+                if (wargearClasses.length > 0) {
+                    classedWargearTotalPoints += pointsScalarValue;
+
                     wargearClasses.forEach((wc) => {
                         results.wargearClassPoints.set(
                             wc.recommendationText,
@@ -74,6 +73,11 @@ class ArmyListStatisticsCalculator {
                     (results.wargearArmorPenetrationCounts.get(wargearAP) ?? 0) + w.count
                 );
             })
+
+            results.wargearClassPoints.set(
+                'Insignificant',
+                (results.wargearClassPoints.get('Insignificant') ?? 0) + Math.max(ud.points - classedWargearTotalPoints, 0)
+            );
 
             ud.modelDatasheets.forEach((md) => {
                 const unitClass = UnitClassifier.Classify(ud.datasheet, md.modelDatasheet);
