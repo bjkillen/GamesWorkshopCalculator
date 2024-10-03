@@ -11,6 +11,7 @@ export interface SelectWargearButtonAndPopupProps {
     wargear: Wargear[];
     value?: Wargear;
     setValue: (value: Wargear) => void;
+    modelCount: number;
 }
 
 function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
@@ -18,7 +19,8 @@ function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
         disabled,
         wargear,
         value,
-        setValue
+        setValue,
+        modelCount
     } = props as SelectWargearButtonAndPopupProps;
 
     const [wargearGroupedByType, setWargearGroupedByType] = useState(new Map<string, Wargear[]>());
@@ -54,6 +56,7 @@ function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
                                     subheader={WargearType.Ranged.value}
                                     wargear={wargearGroupedByType.get(WargearType.Ranged.value) ?? []}
                                     setValue={valueSet}
+                                    modelCount={modelCount}
                                 />
                             </View>
                         )}
@@ -63,6 +66,7 @@ function SelectWargearButtonAndPopup(props: SelectWargearButtonAndPopupProps) {
                                     subheader={WargearType.Melee.value}
                                     wargear={wargearGroupedByType.get(WargearType.Melee.value) ?? []} 
                                     setValue={valueSet}
+                                    modelCount={modelCount}
                                 />
                             </View>
                         )}

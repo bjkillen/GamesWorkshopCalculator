@@ -266,6 +266,7 @@ function MatchupCalculator() {
                                     wargear={attackingUnit?.wargear ?? []}
                                     value={attackingUnitWargear}
                                     setValue={setAttackingUnitWargear}
+                                    modelCount={modelCount ?? 1}
                                 />
                             </View>
                         </View>
