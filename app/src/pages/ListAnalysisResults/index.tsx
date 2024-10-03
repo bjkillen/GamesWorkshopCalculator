@@ -5,7 +5,7 @@ import { Text } from "react-native-paper";
 import DataPieChart from "../../components/chart/DataPieChart";
 import { useEffect, useState } from "react";
 import ArmyListStatisticsCalculator, { ArmyListStatistics } from "../../utilities/armyList/ArmyListStatisticsCalculator";
-import DataBarChart from "../../components/chart/DataBarChart";
+import DataBarChart, {convertStringKeyData, convertNumberKeyData} from "../../components/chart/DataBarChart";
 
 function ListAnalysisResults() {
     const route = useRoute<RouteProp<ListAnalyzerRootStackParamList, "ListAnalysisResults">>();
@@ -51,10 +51,20 @@ function ListAnalysisResults() {
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
+                        Wargear Offensive Breakdown
+                    </Text>
+                    <DataBarChart
+                        data={convertStringKeyData(armyListStatistics.wargearTypeWeightings)}
+                        width={screenWidth}
+                        height={250}
+                    />
+                </View>
+                <View style={{ marginTop: 10 }}>
+                    <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Strength Counts
                     </Text>
                     <DataBarChart
-                        data={armyListStatistics.wargearStrengthCounts}
+                        data={convertNumberKeyData(armyListStatistics.wargearStrengthCounts)}
                         width={screenWidth}
                         height={250}
                     />
@@ -64,7 +74,7 @@ function ListAnalysisResults() {
                         Wargear AP Counts
                     </Text>
                     <DataBarChart
-                        data={armyListStatistics.wargearArmorPenetrationCounts}
+                        data={convertNumberKeyData(armyListStatistics.wargearArmorPenetrationCounts)}
                         width={screenWidth}
                         height={250}
                     />
@@ -74,7 +84,7 @@ function ListAnalysisResults() {
                         Unit toughness Counts
                     </Text>
                     <DataBarChart
-                        data={armyListStatistics.datasheetToughnessCounts}
+                        data={convertNumberKeyData(armyListStatistics.datasheetToughnessCounts)}
                         width={screenWidth}
                         height={250}
                     />

@@ -1,5 +1,6 @@
 import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
+import VariableNumericalValueParser from "../factionDatasheets/VariableNumericalValueParser";
 import ArmyList from "./ArmyList";
 
 export class ArmyListStatistics {
@@ -8,6 +9,7 @@ export class ArmyListStatistics {
     public datasheetToughnessCounts: Map<number, number>;
     public wargearStrengthCounts: Map<number, number>;
     public wargearArmorPenetrationCounts: Map<number, number>;
+    public wargearTypeWeightings: Map<string, number>;
 
     constructor() {
         this.unitClassPoints = new Map<string, number>();
@@ -15,6 +17,7 @@ export class ArmyListStatistics {
         this.datasheetToughnessCounts = new Map<number, number>();
         this.wargearStrengthCounts = new Map<number, number>();
         this.wargearArmorPenetrationCounts = new Map<number, number>();
+        this.wargearTypeWeightings = new Map<string, number>();
     }
 }
 
@@ -23,24 +26,43 @@ class ArmyListStatisticsCalculator {
         let results = new ArmyListStatistics();
 
         list.unitDatasheets.forEach((ud) => {
+            const totalModelCount = ud.modelDatasheets.reduce((acc, val) => {
+                return acc + val.count
+            }, 0)
+
             ud.chosenWargear.forEach((w) => {
                 const wargearClasses = WargearClassifier.Classify(w);
+
+                const wargear = w.wargear;
+                const wargearAttacksVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.attacks);
+                const wargearDamageVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.damage);
+
+                const pointsScalarValue = ((
+                    wargearAttacksVariableNumericalValue.numericalVal +
+                    wargear.strength +
+                    Math.abs(wargear.armorPenetration) +
+                    wargearDamageVariableNumericalValue.numericalVal) / (ud.points * (w.count / totalModelCount))) * ud.points;
 
                 if (wargearClasses.length == 0) {
                     results.wargearClassPoints.set(
                         'Insignificant',
-                        (results.wargearClassPoints.get('Insignificant') ?? 0) + (ud.points / ud.chosenWargear.length)
+                        (results.wargearClassPoints.get('Insignificant') ?? 0) + pointsScalarValue
                     );
                 } else {
                     wargearClasses.forEach((wc) => {
                         results.wargearClassPoints.set(
                             wc.recommendationText,
-                            (results.wargearClassPoints.get(wc.recommendationText) ?? 0) + (ud.points / ud.chosenWargear.length / wargearClasses.length)
+                            (results.wargearClassPoints.get(wc.recommendationText) ?? 0) + pointsScalarValue
                         );
                     });
                 }
 
-                const wargearStrength = w.wargear.strength;
+                results.wargearTypeWeightings.set(
+                    wargear.type.value,
+                    (results.wargearTypeWeightings.get(wargear.type.value) ?? 0) + pointsScalarValue
+                )
+
+                const wargearStrength = wargear.strength;
                 results.wargearStrengthCounts.set(
                     wargearStrength,
                     (results.wargearStrengthCounts.get(wargearStrength) ?? 0) + w.count
