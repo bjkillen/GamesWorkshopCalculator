@@ -1,6 +1,5 @@
 import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
-import UnitClassification from "../enums/UnitClassification";
 import ArmyList from "./ArmyList";
 
 export class ArmyListStatistics {
@@ -30,7 +29,7 @@ class ArmyListStatisticsCalculator {
                 if (wargearClasses.length == 0) {
                     results.wargearClassPoints.set(
                         'None',
-                        (results.wargearClassPoints.get('None') ?? 0) + ud.points / ud.chosenWargear.length
+                        (results.wargearClassPoints.get('None') ?? 0) + (ud.points / ud.chosenWargear.length)
                     );
                 } else {
                     wargearClasses.forEach((wc) => {

@@ -49,7 +49,7 @@ class ArmyListParser {
                         );
 
                         const matchingWargear = unitDatasheetEntry.wargear.filter((w) => {
-                            return w.name.toLocaleLowerCase() == parsedNameLower
+                            return w.name.toLocaleLowerCase().startsWith(parsedNameLower);
                         })
 
                         matchingWargear.forEach((w) => {
