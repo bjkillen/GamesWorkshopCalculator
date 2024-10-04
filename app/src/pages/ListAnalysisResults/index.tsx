@@ -32,7 +32,7 @@ function ListAnalysisResults() {
                 </Text>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
-                        Points per unit class
+                        Unit Classification
                     </Text>
                     <View style={{ height: pieChartHeight, marginHorizontal: 20, marginVertical: 10 }}>
                         <DataPieChart
@@ -42,7 +42,7 @@ function ListAnalysisResults() {
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10, marginVertical: 10 }}>
-                        Points per wargear class
+                        Wargear Target Classification
                     </Text>
                     <View style={{ height: pieChartHeight, marginHorizontal: 20 }}>
                         <DataPieChart
