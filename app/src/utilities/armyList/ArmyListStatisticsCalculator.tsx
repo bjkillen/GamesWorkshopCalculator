@@ -44,7 +44,7 @@ class ArmyListStatisticsCalculator {
                     wargearClasses.forEach((wc) => {
                         results.wargearClassPoints.set(
                             wc.value,
-                            (results.wargearClassPoints.get(wc.recommendationText) ?? 0) + pointsScalarValue
+                            (results.wargearClassPoints.get(wc.value) ?? 0) + pointsScalarValue
                         );
                     });
                 } else {
@@ -83,7 +83,7 @@ class ArmyListStatisticsCalculator {
                 } else {
                     results.unitClassPoints.set(
                         unitClass.value,
-                        (results.unitClassPoints.get(unitClass.description) ?? 0) + ud.points
+                        (results.unitClassPoints.get(unitClass.value) ?? 0) + ud.points
                     );
                 }
 
