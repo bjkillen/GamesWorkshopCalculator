@@ -30,8 +30,8 @@ function ListAnalyzer() {
     }
 
     const clearButtonPressed = () => {
-        setSelectedFaction(undefined);
         setListText(undefined);
+        setSelectedFaction(undefined);
     }
 
     async function loadFactionsDatasheets() {

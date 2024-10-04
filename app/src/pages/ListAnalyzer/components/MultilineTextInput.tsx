@@ -27,7 +27,7 @@ function MultineTextInput(props: MultineTextInputProps) {
 
     return (
         <TextInput
-            value={value}
+            value={value ?? ''}
             label={label}
             disabled={disabled}
             keyboardType='default'
