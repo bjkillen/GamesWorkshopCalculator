@@ -68,7 +68,7 @@ function ListAnalyzer() {
                     <Text variant="labelLarge">Please copy your exported army list from the official 40k app here. We may not be able to correctly analyze your list if there are any unexpected characters or post export edits inserted.</Text>
                     <View style={{ marginTop: 10 }}>
                         <MultineTextInput
-                            label="Copy list here"
+                            label={selectedFaction != null ? "Copy list here" : "Please select a faction"}
                             disabled={selectedFaction == null}
                             value={listText}
                             setValue={setListText}
