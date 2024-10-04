@@ -294,7 +294,7 @@ function MatchupCalculator() {
                 </View>
                 <View style={{ marginTop: 20 }}>
                     <Text variant="displaySmall">Attacking Unit</Text>
-                    <View style={{ marginTop: 10 }}>
+                    <View style={{ marginTop: 10, flex: 1 }}>
                         <Text>WS/BS</Text>
                         <DiceWeaponSkillValueSegmentedButtons
                             disabled={torrentChecked}

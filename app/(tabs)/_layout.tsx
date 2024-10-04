@@ -4,7 +4,6 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 const theme = {
   ...DefaultTheme,
@@ -16,13 +15,11 @@ const theme = {
 };
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <PaperProvider theme={theme}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: Colors['light'].tint,
           headerShown: false,
         }}>
         <Tabs.Screen

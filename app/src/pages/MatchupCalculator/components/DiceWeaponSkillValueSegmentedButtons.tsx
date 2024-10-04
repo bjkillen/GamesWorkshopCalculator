@@ -31,7 +31,7 @@ function DiceWeaponSkillValueSegmentedButtons(props: DiceWeaponSkillValueSegment
                 DiceSkillValue.AllValues.map((dsv) => ({
                     value: dsv.value,
                     label: dsv.description,
-                    disabled: disabled
+                    disabled: disabled,
                 }))
             }
         />
