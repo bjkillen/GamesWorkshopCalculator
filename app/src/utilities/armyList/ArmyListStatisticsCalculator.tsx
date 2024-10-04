@@ -3,6 +3,8 @@ import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
 import VariableNumericalValueParser from "../factionDatasheets/VariableNumericalValueParser";
 import ArmyList from "./ArmyList";
+import UnitClassification from "../enums/UnitClassification";
+import WargearClassification from "../enums/WargearClassification";
 
 export class ArmyListStatistics {
     public unitClassPoints: Map<string, number>;
@@ -41,7 +43,7 @@ class ArmyListStatisticsCalculator {
                 if (wargearClasses.length > 0) {
                     wargearClasses.forEach((wc) => {
                         results.wargearClassPoints.set(
-                            wc.recommendationText,
+                            wc.value,
                             (results.wargearClassPoints.get(wc.recommendationText) ?? 0) + pointsScalarValue
                         );
                     });
@@ -80,7 +82,7 @@ class ArmyListStatisticsCalculator {
                     );
                 } else {
                     results.unitClassPoints.set(
-                        unitClass.description,
+                        unitClass.value,
                         (results.unitClassPoints.get(unitClass.description) ?? 0) + ud.points
                     );
                 }

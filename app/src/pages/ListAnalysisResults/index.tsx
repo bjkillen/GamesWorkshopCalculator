@@ -1,8 +1,8 @@
-import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native"
 import { ListAnalyzerRootStackParamList } from "@/app/(tabs)/listAnalyzer";
 import { Text } from "react-native-paper";
-import DataPieChart from "../../components/chart/DataPieChart";
+import DataPieChart, { convertData, convertWargearClassificationData } from "../../components/chart/DataPieChart";
 import { useEffect, useState } from "react";
 import ArmyListStatisticsCalculator, { ArmyListStatistics } from "../../utilities/armyList/ArmyListStatisticsCalculator";
 import DataBarChart, {convertStringKeyData, convertNumberKeyData} from "../../components/chart/DataBarChart";
@@ -36,7 +36,7 @@ function ListAnalysisResults() {
                     </Text>
                     <View style={{ height: pieChartHeight, marginHorizontal: 20, marginVertical: 10 }}>
                         <DataPieChart
-                            data={armyListStatistics.unitClassPoints}
+                            data={convertData(armyListStatistics.unitClassPoints)}
                         />
                     </View>
                 </View>
@@ -46,7 +46,7 @@ function ListAnalysisResults() {
                     </Text>
                     <View style={{ height: pieChartHeight, marginHorizontal: 20 }}>
                         <DataPieChart
-                            data={armyListStatistics.wargearClassPoints}
+                            data={convertWargearClassificationData(armyListStatistics.wargearClassPoints)}
                         />
                     </View>
                 </View>

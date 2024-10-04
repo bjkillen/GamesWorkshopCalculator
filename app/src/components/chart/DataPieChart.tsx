@@ -5,36 +5,48 @@ import { Canvas, Rect } from "@shopify/react-native-skia";
 import { Text } from "react-native-paper";
 import Row from "../Row";
 import ColorExtension from "../../utilities/extensions/ColorExtension";
+import WargearClassification from "../../utilities/enums/WargearClassification";
 
 export interface DataPieChartProps {
-    data: Map<string, number>
+    data: any[]
+}
+
+const startingPieColorHex = '#0F52BA';
+const endingPieColorHex = '#ADD8E6';
+
+export function convertData(input: Map<string, number>) {
+    return Array.from(input).map((i, index) => {
+        return {
+            name: i[0],
+            value: NumberExtension.roundedToNearest(i[1], 5),
+            color: ColorExtension.lerpColor(startingPieColorHex, endingPieColorHex, index / input.size),
+            label: i[0]
+        }
+    })
+}
+
+export function convertWargearClassificationData(input: Map<string, number>) {
+    return Array.from(input).map((i, index) => {
+        const parsedWargearClass = WargearClassification.parse(i[0]);
+
+        return {
+            name: parsedWargearClass?.recommendationText ?? i[0],
+            value: NumberExtension.roundedToNearest(i[1], 5),
+            color: parsedWargearClass?.color,
+            label: parsedWargearClass?.recommendationText ?? i[0]
+        }
+    })
 }
 
 function DataPieChart(props: DataPieChartProps) {
     const { data } = props;
 
-    const startingPieColorHex = '#0F52BA';
-    const endingPieColorHex = '#ADD8E6';
-
-    function convertData(input: Map<string, number>) {
-        return Array.from(input).map((i, index) => {
-            return {
-                name: i[0],
-                value: NumberExtension.roundedToNearest(i[1], 5),
-                color: ColorExtension.lerpColor(startingPieColorHex, endingPieColorHex, index / input.size),
-                label: i[0]
-            }
-        })
-    }
-
-    const convertedData = convertData(data);
-
     return (
         <>
-            {convertedData.length > 0 &&
+            {data.length > 0 &&
                 <>
                     <PolarChart
-                        data={convertedData}
+                        data={data}
                         labelKey={"label"}
                         valueKey={"value"}
                         colorKey={"color"}
@@ -42,7 +54,7 @@ function DataPieChart(props: DataPieChartProps) {
                         <Pie.Chart innerRadius={"50%"} />
                     </PolarChart>
                     <Row style={{ flexWrap: "wrap", alignSelf: "center", marginTop: 10 }}>
-                        {convertedData.map((d, index) => {
+                        {data.map((d, index) => {
                             return (
                                 <View
                                     key={index}
