@@ -1,3 +1,4 @@
+import { Wargear } from "gamesworkshopcalculator.common";
 import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
 import VariableNumericalValueParser from "../factionDatasheets/VariableNumericalValueParser";
@@ -26,34 +27,29 @@ class ArmyListStatisticsCalculator {
         let results = new ArmyListStatistics();
 
         list.unitDatasheets.forEach((ud) => {
-            const totalModelCount = ud.modelDatasheets.reduce((acc, val) => {
-                return acc + val.count
+            const totalWargearScalar = ud.chosenWargear.reduce((acc, val) => {
+                return acc + this.computeWargearScalar(val.wargear)
             }, 0)
-
-            let classedWargearTotalPoints = 0;
 
             ud.chosenWargear.forEach((w) => {
                 const wargearClasses = WargearClassifier.Classify(w);
 
                 const wargear = w.wargear;
-                const wargearAttacksVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.attacks);
-                const wargearDamageVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.damage);
 
-                const pointsScalarValue = ((
-                    wargearAttacksVariableNumericalValue.numericalVal +
-                    wargear.strength +
-                    Math.abs(wargear.armorPenetration) +
-                    wargearDamageVariableNumericalValue.numericalVal) / (ud.points * (w.count / totalModelCount))) * ud.points;
+                const pointsScalarValue = (this.computeWargearScalar(wargear) / totalWargearScalar) * ud.points;
 
                 if (wargearClasses.length > 0) {
-                    classedWargearTotalPoints += pointsScalarValue;
-
                     wargearClasses.forEach((wc) => {
                         results.wargearClassPoints.set(
                             wc.recommendationText,
                             (results.wargearClassPoints.get(wc.recommendationText) ?? 0) + pointsScalarValue
                         );
                     });
+                } else {
+                    results.wargearClassPoints.set(
+                        'Insignificant',
+                        (results.wargearClassPoints.get('Insignificant') ?? 0) + pointsScalarValue
+                    );
                 }
 
                 results.wargearTypeWeightings.set(
@@ -73,11 +69,6 @@ class ArmyListStatisticsCalculator {
                     (results.wargearArmorPenetrationCounts.get(wargearAP) ?? 0) + w.count
                 );
             })
-
-            results.wargearClassPoints.set(
-                'Insignificant',
-                (results.wargearClassPoints.get('Insignificant') ?? 0) + Math.max(ud.points - classedWargearTotalPoints, 0)
-            );
 
             ud.modelDatasheets.forEach((md) => {
                 const unitClass = UnitClassifier.Classify(ud.datasheet, md.modelDatasheet);
@@ -103,6 +94,16 @@ class ArmyListStatisticsCalculator {
         });
 
         return results;
+    }
+
+    private static computeWargearScalar(wargear: Wargear) {
+        const wargearAttacksVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.attacks);
+        const wargearDamageVariableNumericalValue = VariableNumericalValueParser.Parse(wargear.damage);
+
+        return wargearAttacksVariableNumericalValue.numericalVal +
+            wargear.strength +
+            Math.abs(wargear.armorPenetration) +
+            wargearDamageVariableNumericalValue.numericalVal;
     }
 }
 
