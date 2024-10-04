@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GamesWorkshopCalculator",
-    "slug": "GamesWorkshopCalculator",
+    "name": "TabletopCalculator",
+    "slug": "TabletopCalculator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,8 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.cascadegaming.gamesworkshopcalculator"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.grumpyghostgaming.tabletopcalculator"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,6 +32,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "707ca610-f0b2-486d-b3fb-0a9a5b30c5a7"
+      }
     }
   }
 }
