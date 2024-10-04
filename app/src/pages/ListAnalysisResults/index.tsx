@@ -12,7 +12,8 @@ function ListAnalysisResults() {
     const { armyList } = route.params;
     const [ armyListStatistics, setArmyListStatistics] = useState(new ArmyListStatistics())
 
-    const chartHeight = 250;
+    const pieChartHeight = 275;
+    const barChartHeight = 250;
 
     function computeArmyListStatistics() {
         const computedArmyListStatistics = ArmyListStatisticsCalculator.Calculate(armyList);
@@ -33,17 +34,17 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Points per unit class
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: pieChartHeight, marginHorizontal: 20, marginVertical: 10 }}>
                         <DataPieChart
                             data={armyListStatistics.unitClassPoints}
                         />
                     </View>
                 </View>
                 <View style={{ marginTop: 10 }}>
-                    <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
+                    <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10, marginVertical: 10 }}>
                         Points per wargear class
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: pieChartHeight, marginHorizontal: 20 }}>
                         <DataPieChart
                             data={armyListStatistics.wargearClassPoints}
                         />
@@ -53,7 +54,7 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Offensive Breakdown
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
                         <DataBarChart
                             data={convertStringKeyData(armyListStatistics.wargearTypeWeightings)}
                         />
@@ -63,7 +64,7 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Strength Counts
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
                         <DataBarChart
                             data={convertNumberKeyData(armyListStatistics.wargearStrengthCounts)}
                         />
@@ -73,7 +74,7 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear AP Counts
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
                         <DataBarChart
                             data={convertNumberKeyData(armyListStatistics.wargearArmorPenetrationCounts)}
                         />
@@ -83,7 +84,7 @@ function ListAnalysisResults() {
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Unit toughness Counts
                     </Text>
-                    <View style={{ height: chartHeight, marginHorizontal: 20 }}>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
                         <DataBarChart
                             data={convertNumberKeyData(armyListStatistics.datasheetToughnessCounts)}
                         />
