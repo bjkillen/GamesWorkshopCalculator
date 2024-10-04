@@ -6,6 +6,7 @@ import { Text } from "react-native-paper";
 import Row from "../Row";
 import ColorExtension from "../../utilities/extensions/ColorExtension";
 import WargearClassification from "../../utilities/enums/WargearClassification";
+import UnitClassification from "../../utilities/enums/UnitClassification";
 
 export interface DataPieChartProps {
     data: any[]
@@ -25,8 +26,21 @@ export function convertData(input: Map<string, number>) {
     })
 }
 
+export function convertUnitClassificationData(input: Map<string, number>) {
+    return Array.from(input).map((i) => {
+        const parsedWargearClass = UnitClassification.parse(i[0]);
+
+        return {
+            name: parsedWargearClass?.description ?? i[0],
+            value: NumberExtension.roundedToNearest(i[1], 5),
+            color: parsedWargearClass?.color,
+            label: parsedWargearClass?.description ?? i[0]
+        }
+    })
+}
+
 export function convertWargearClassificationData(input: Map<string, number>) {
-    return Array.from(input).map((i, index) => {
+    return Array.from(input).map((i) => {
         const parsedWargearClass = WargearClassification.parse(i[0]);
 
         return {

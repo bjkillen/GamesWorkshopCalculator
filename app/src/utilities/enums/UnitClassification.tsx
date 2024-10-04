@@ -47,6 +47,23 @@ class UnitClassification {
                 return 'Monster';
         }
     }
+
+    get color() {
+        switch (this.value) {
+            case UnitClassificationEnum.Infantry:
+                return '#FFA50099';
+            case UnitClassificationEnum.HeavyInfantry:
+                return '#FFA500D9';
+            case UnitClassificationEnum.LightVehicle:
+                return '#0000FF73';
+            case UnitClassificationEnum.MediumVehicle:
+                return '#0000FF99';
+            case UnitClassificationEnum.HeavyVehicle:
+                return '#0000FFD9';
+            case UnitClassificationEnum.Monster:
+                return '#A52A2AD9';
+        }
+    }
 }
 
 export default UnitClassification;

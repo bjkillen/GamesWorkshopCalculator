@@ -43,7 +43,7 @@ class WargearClassifier {
         }
 
         if (wargearClassifications.length == 0 &&
-            wargearAttacksVariableNumericalValue.numericalVal * listWargear.count>= 14) {
+            (wargearAttacksVariableNumericalValue.numericalVal * listWargear.count) >= 14) {
                 wargearClassifications.push(WargearClassification.WeightOfFire);
         }
 
