@@ -12,6 +12,7 @@ export class DefenderStatistics {
         public feelNoPain: boolean,
         public feelNoPainSkill: DiceSkillValue | undefined,
         public wounds: number,
+        public worsenAPChecked: boolean
     ) {}
 }
 
@@ -34,8 +35,12 @@ export class DefenderCalculatorResult {
 
 class DefenderCalculator {
     static calculate(input: DefenderCalculatorInput): DefenderCalculatorResult {
+        const modifiedArmorPenetration = input.defenderStatistics.worsenAPChecked ?
+            Math.max(input.defenderStatistics.armorPenetration - 1, 0) :
+            input.defenderStatistics.armorPenetration
+
         const modifiedArmorSave = (input.defenderStatistics.armorSaveSkill?.numericalValue ?? 7)
-            + input.defenderStatistics.armorPenetration;
+            + modifiedArmorPenetration;
 
         const modifiedArmorSaveSkill = DiceSkillValue.parseNumerical(modifiedArmorSave);
 

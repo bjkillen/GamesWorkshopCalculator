@@ -59,6 +59,7 @@ function MatchupCalculator() {
 
     const [stealthChecked, setStealthChecked] = useState(false);
     const [minusToWoundChecked, setMinusToWoundChecked] = useState(false);
+    const [worsenAPChecked, setWorsenAPChecked] = useState(false);
 
     const [rerollHitsModifier, setRerollHitsModifier] = useState(DiceRerollModifierValue.None);
     const [rerollWoundsModifier, setRerollWoundsModifier] = useState(DiceRerollModifierValue.None);
@@ -96,6 +97,7 @@ function MatchupCalculator() {
             feelNoPainChecked,
             feelNoPainSaveSkill,
             Math.max(wounds || 1, 1),
+            worsenAPChecked
         );
 
         const attackerDefenderCalculatorInput = new AttackerDefenderCalculatorInput(
@@ -154,6 +156,7 @@ function MatchupCalculator() {
         setFeelNoPainSaveSkill(DiceSkillValue.Two);
         setStealthChecked(false);
         setMinusToWoundChecked(false);
+        setWorsenAPChecked(false);
     }
 
     const clearButtonPressed = () => {
@@ -480,6 +483,13 @@ function MatchupCalculator() {
                                     label='-1 to Wound (S > T)'
                                     value={minusToWoundChecked}
                                     setValue={setMinusToWoundChecked}
+                                />
+                            </View>
+                            <View>
+                                <CustomCheckbox
+                                    label='Worsen AP'
+                                    value={worsenAPChecked}
+                                    setValue={setWorsenAPChecked}
                                 />
                             </View>
                         </Row>
