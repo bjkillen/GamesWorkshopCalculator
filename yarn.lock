@@ -4644,19 +4644,6 @@ expo-modules-autolinking@1.11.3:
     require-from-string "^2.0.2"
     resolve-from "^5.0.0"
 
-expo-modules-autolinking@^1.11.2:
-  version "1.11.2"
-  resolved "https://registry.npmjs.org/expo-modules-autolinking/-/expo-modules-autolinking-1.11.2.tgz"
-  integrity sha512-fdcaNO8ucHA3yLNY52ZUENBcAG7KEx8QyMmnVNavO1JVBGRMZG8JyVcbrhYQDtVtpxkbai5YzwvLutINvbDZDQ==
-  dependencies:
-    chalk "^4.1.0"
-    commander "^7.2.0"
-    fast-glob "^3.2.5"
-    find-up "^5.0.0"
-    fs-extra "^9.1.0"
-    require-from-string "^2.0.2"
-    resolve-from "^5.0.0"
-
 expo-modules-core@1.12.25:
   version "1.12.25"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.12.25.tgz#9ec8d8762da92d961ab1044817da033ae617c9f4"
