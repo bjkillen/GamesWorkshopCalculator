@@ -59,17 +59,17 @@ class DefenderCalculator {
             woundsFailed += unsavedWoundsRemaining;
         }
 
-        let totalDamage = woundsFailed * input.defenderStatistics.weaponDamage;
-
-        let totalSuccessfulDamage = totalDamage;
+        let remainingDiceToAllocate = woundsFailed;
+        let effectiveWeaponDamage = input.defenderStatistics.weaponDamage;
+        let damageSaved = 0;
 
         if (input.defenderStatistics.feelNoPain && input.defenderStatistics.feelNoPainSkill != null) {
-            totalSuccessfulDamage = totalDamage * input.defenderStatistics.feelNoPainSkill.failurePercentage;
+            effectiveWeaponDamage *= input.defenderStatistics.feelNoPainSkill.failurePercentage;
+            damageSaved = (input.defenderStatistics.weaponDamage - effectiveWeaponDamage) * woundsFailed;
         }
 
-        const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / input.defenderStatistics.weaponDamage);
+        const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / effectiveWeaponDamage);
 
-        let remainingDiceToAllocate = totalSuccessfulDamage / input.defenderStatistics.weaponDamage;
         let modelsDestroyed = 0;
         let damageDiceTotal = 0;
 
@@ -84,14 +84,14 @@ class DefenderCalculator {
 
         if (remainingWholeDiceLeft > 0)
         {
-            modelsDestroyed +=  (remainingWholeDiceLeft * input.defenderStatistics.weaponDamage) / input.defenderStatistics.wounds;
+            modelsDestroyed +=  (remainingWholeDiceLeft * effectiveWeaponDamage) / input.defenderStatistics.wounds;
         }
 
         return new DefenderCalculatorResult(
             input.attackerCalculatorResult.successfulWounds - (woundsFailed - input.attackerCalculatorResult.criticalWounds),
             (woundsFailed - input.attackerCalculatorResult.criticalWounds),
-            totalDamage - totalSuccessfulDamage,
-            damageDiceTotal * input.defenderStatistics.weaponDamage,
+            damageSaved,
+            damageDiceTotal * effectiveWeaponDamage,
             modelsDestroyed
         )
     }

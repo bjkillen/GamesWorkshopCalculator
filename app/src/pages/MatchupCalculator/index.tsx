@@ -128,6 +128,7 @@ function MatchupCalculator() {
     }
 
     const clearAttackingStats = () =>  {
+        setWeaponSkill(DiceSkillValue.Two);
         setModelCount(1);
         setAttackCountVariableNumericalValue(undefined);
         setStrength(undefined);
@@ -139,20 +140,20 @@ function MatchupCalculator() {
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setTorrentChecked(false);
-        setWeaponSkill(DiceSkillValue.Two);
+        setRerollHitsModifier(DiceRerollModifierValue.None);
+        setRerollWoundsModifier(DiceRerollModifierValue.None);
     }
 
     const clearDefendingStats = () => {
         setToughness(undefined);
         setWounds(undefined);
-        setRerollHitsModifier(DiceRerollModifierValue.None);
-        setRerollWoundsModifier(DiceRerollModifierValue.None);
         setArmorSaveSkill(DiceSkillValue.Two);
         setInvulnerableSaveChecked(false);
         setInvulnerableSaveSkill(DiceSkillValue.Two);
         setFeelNoPainChecked(false);
         setFeelNoPainSaveSkill(DiceSkillValue.Two);
         setStealthChecked(false);
+        setMinusToWoundChecked(false);
     }
 
     const clearButtonPressed = () => {
