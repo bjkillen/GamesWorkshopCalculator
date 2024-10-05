@@ -18,7 +18,8 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "./security/tabletopcalculator-serviceaccount.json"
+        "serviceAccountKeyPath": "./security/tabletopcalculator-serviceaccount.json",
+        "releaseStatus": "draft"
       }
     }
   }
