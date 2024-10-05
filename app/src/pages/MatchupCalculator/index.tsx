@@ -76,24 +76,26 @@ function MatchupCalculator() {
             sustainedHitsChecked,
             sustainedHitsCountVariableNumericalValue?.numericalVal ?? 0,
             lethalHitsChecked,
+            devastatingWoundsChecked,
             torrentChecked,
             rerollHitsModifier,
             rerollWoundsModifier,
             toughness ?? 0,
             stealthChecked,
             minusToWoundChecked,
+            defendingUnit?.keywords ?? [],
+            attackingUnitWargear
         );
 
         const defenseStatistics = new DefenderStatistics(
             damageVariableNumericalValue?.numericalVal ?? 0,
             armorPenetration ?? 0,
-            devastatingWoundsChecked,
             armorSaveSkill,
             invulnerableSaveChecked,
             invulnerableSaveSkill,
             feelNoPainChecked,
             feelNoPainSaveSkill,
-            wounds || 0,
+            Math.max(wounds || 1, 1),
         );
 
         const attackerDefenderCalculatorInput = new AttackerDefenderCalculatorInput(
@@ -495,16 +497,22 @@ function MatchupCalculator() {
                             Successful Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.successfulWounds ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
-                            Models Destroyed: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.modelsDestroyed ?? 0, 2)}
-                        </Text>
-                        <Text variant="labelLarge">
-                            Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
+                            Critical Wounds: {StringExtension.toFixedWithoutZeros(calculationResult?.attackerResult.criticalWounds ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
                             Wounds Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsSaved ?? 0, 2)}
                         </Text>
                         <Text variant="labelLarge">
-                            Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
+                            Wounds Failed: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.woundsFailed ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            FnP Damage Saved: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalDamageSaved ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Models Destroyed: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.modelsDestroyed ?? 0, 2)}
+                        </Text>
+                        <Text variant="labelLarge">
+                            Total Successful Damage: {StringExtension.toFixedWithoutZeros(calculationResult?.defenderResult.totalSuccessfulDamage ?? 0, 2)}
                         </Text>
                         <View style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center' }}>
                             <Button

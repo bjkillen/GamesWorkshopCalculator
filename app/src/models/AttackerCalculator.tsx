@@ -1,11 +1,13 @@
 import DiceRerollModifierValue, { DiceRerollModifierValueEnum } from "../utilities/enums/DiceRerollModifierValue";
-import { DiceSkillValue } from "gamesworkshopcalculator.common";
+import { DiceSkillValue, Keyword, Wargear } from "gamesworkshopcalculator.common";
+import WargearAbilities from "./WargearAbilities";
 
 export class AttackerCalculationResult {
     constructor(
         public successfulHits: number,
         public criticalHits: number,
         public successfulWounds: number,
+        public criticalWounds: number
     ) {}
 }
 
@@ -18,12 +20,15 @@ export class AttackerCalculatorInput {
         public sustainedHits: boolean,
         public sustainedHitsCount: number,
         public lethalHits: boolean,
+        public devastatingWounds: boolean,
         public torrent: boolean,
         public rerollHitsModifier: DiceRerollModifierValue,
         public rerollWoundsModifier: DiceRerollModifierValue,
         public toughness: number,
         public stealth: boolean,
-        public minusToWound: boolean
+        public minusToWound: boolean,
+        public defendingUnitKeywords: Keyword[],
+        public attackingUnitWargear: Wargear | undefined
     ) {}
 }
 
@@ -94,6 +99,24 @@ class AttackerCalculator {
             woundDiceSkill = DiceSkillValue.Five;
         }
 
+        let criticalWoundSkill = input.devastatingWounds ? DiceSkillValue.Six : undefined;
+
+        if (input.attackingUnitWargear != null) {
+            const wargearAbilitiesParsed = new WargearAbilities(input.attackingUnitWargear);
+
+            wargearAbilitiesParsed.anti?.forEach((anti) => {
+                if (input.defendingUnitKeywords.find((kw) => kw.name.toLocaleLowerCase().includes(anti[0].toLocaleLowerCase()))) {
+                    if (anti[1].numericalValue < (criticalWoundSkill?.numericalValue ?? 7 )) {
+                        criticalWoundSkill = anti[1];
+                    }
+
+                    if (anti[1].numericalValue < woundDiceSkill.numericalValue) {
+                        woundDiceSkill = anti[1];
+                    }
+                }
+            })
+        }
+
         const woundDiceToReroll = this.additionalDiceFromModifier(
             successfulHits,
             woundDiceSkill,
@@ -102,10 +125,18 @@ class AttackerCalculator {
 
         successfulWounds += (successfulHits * woundDiceSkill.successPercentage) + (woundDiceToReroll * woundDiceSkill.successPercentage);
 
+        let criticalWounds = 0;
+
+        if (criticalWoundSkill != null && input.devastatingWounds) {
+            criticalWounds = (successfulHits * criticalWoundSkill.successPercentage) + (woundDiceToReroll * criticalWoundSkill.successPercentage);
+            successfulWounds = Math.max(successfulWounds - criticalWounds, 0);
+        }
+
         return new  AttackerCalculationResult(
             successfulHits,
             criticalHits,
             successfulWounds,
+            criticalWounds
         );
     }
 

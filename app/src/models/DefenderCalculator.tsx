@@ -6,7 +6,6 @@ export class DefenderStatistics {
     constructor(
         public weaponDamage: number,
         public armorPenetration: number,
-        public devastatingWounds: boolean,
         public armorSaveSkill: DiceSkillValue | undefined,
         public invulnerableSave: boolean,
         public invulnerableSaveSkill: DiceSkillValue | undefined,
@@ -26,6 +25,7 @@ export class DefenderCalculatorInput {
 export class DefenderCalculatorResult {
     constructor(
         public woundsSaved: number,
+        public woundsFailed: number,
         public totalDamageSaved: number,
         public totalSuccessfulDamage: number,
         public modelsDestroyed: number,
@@ -40,14 +40,7 @@ class DefenderCalculator {
         const modifiedArmorSaveSkill = DiceSkillValue.parseNumerical(modifiedArmorSave);
 
         let unsavedWoundsRemaining = input.attackerCalculatorResult.successfulWounds;
-        let woundsFailed = 0;
-
-        if (input.defenderStatistics.devastatingWounds) {
-            const devWoundsSuccessful = input.attackerCalculatorResult.successfulWounds * DiceSkillValue.Six.successPercentage;
-
-            unsavedWoundsRemaining -= devWoundsSuccessful;
-            woundsFailed += devWoundsSuccessful;
-        }
+        let woundsFailed = input.attackerCalculatorResult.criticalWounds;
 
         if (modifiedArmorSaveSkill != null) {
             let finalChosenSaveSkill = modifiedArmorSaveSkill;
@@ -67,20 +60,39 @@ class DefenderCalculator {
         }
 
         let totalDamage = woundsFailed * input.defenderStatistics.weaponDamage;
+
         let totalSuccessfulDamage = totalDamage;
 
         if (input.defenderStatistics.feelNoPain && input.defenderStatistics.feelNoPainSkill != null) {
             totalSuccessfulDamage = totalDamage * input.defenderStatistics.feelNoPainSkill.failurePercentage;
         }
 
-        let totalSuccessfulWoundDice = totalSuccessfulDamage / input.defenderStatistics.weaponDamage;
         const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / input.defenderStatistics.weaponDamage);
 
+        let remainingDiceToAllocate = totalSuccessfulDamage / input.defenderStatistics.weaponDamage;
+        let modelsDestroyed = 0;
+        let damageDiceTotal = 0;
+
+        while (remainingDiceToAllocate > woundDicePerModel) {
+            modelsDestroyed += 1;
+            remainingDiceToAllocate -= woundDicePerModel;
+            damageDiceTotal += woundDicePerModel;
+        }
+
+        const remainingWholeDiceLeft = Math.floor(remainingDiceToAllocate);
+        damageDiceTotal += remainingWholeDiceLeft;
+
+        if (remainingWholeDiceLeft > 0)
+        {
+            modelsDestroyed +=  (remainingWholeDiceLeft * input.defenderStatistics.weaponDamage) / input.defenderStatistics.wounds;
+        }
+
         return new DefenderCalculatorResult(
-            input.attackerCalculatorResult.successfulWounds - woundsFailed,
+            input.attackerCalculatorResult.successfulWounds - (woundsFailed - input.attackerCalculatorResult.criticalWounds),
+            (woundsFailed - input.attackerCalculatorResult.criticalWounds),
             totalDamage - totalSuccessfulDamage,
-            totalSuccessfulDamage,
-            NumberExtension.flooredToNearest(totalSuccessfulWoundDice / woundDicePerModel, 1 / input.defenderStatistics.wounds)
+            damageDiceTotal * input.defenderStatistics.weaponDamage,
+            modelsDestroyed
         )
     }
 }

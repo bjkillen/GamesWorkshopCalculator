@@ -26,7 +26,7 @@ function ListAnalysisResults() {
 
     return (
         <SafeAreaView>
-            <ScrollView>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <Text variant="displayMedium" style={{ textAlign: 'center', marginTop: 10 }}>
                     Results
                 </Text>
