@@ -1,4 +1,4 @@
-import { Wargear } from "gamesworkshopcalculator.common";
+import { RegexExtension, Wargear } from "gamesworkshopcalculator.common";
 import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
 import VariableNumericalValueParser from "../factionDatasheets/VariableNumericalValueParser";
@@ -96,17 +96,17 @@ class ArmyListStatisticsCalculator {
                     );
                 }
 
-                const datasheetMovementMatch = md.modelDatasheet.movement.match(/\d+/);
+                const datasheetMovement = RegexExtension.matchNumber(md.modelDatasheet.movement);
 
-                if (datasheetMovementMatch != null) {
-                    const datasheetMovementParsed = Number(datasheetMovementMatch[0]);
+                if (datasheetMovement != null) {
                     results.datasheetMovementCounts.set(
-                        datasheetMovementParsed,
-                        (results.datasheetMovementCounts.get(datasheetMovementParsed) ?? 0) + md.count
+                        datasheetMovement,
+                        (results.datasheetMovementCounts.get(datasheetMovement) ?? 0) + md.count
                     )
                 }
 
                 const datasheetToughness = md.modelDatasheet.toughness;
+
                 results.datasheetToughnessCounts.set(
                     datasheetToughness,
                     (results.wargearStrengthCounts.get(datasheetToughness) ?? 0) + md.count
