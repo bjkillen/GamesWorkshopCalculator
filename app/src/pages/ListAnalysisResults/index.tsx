@@ -62,6 +62,16 @@ function ListAnalysisResults() {
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
+                        Wargear Range Counts
+                    </Text>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertNumberKeyData(armyListStatistics.wargearRangeCounts)}
+                        />
+                    </View>
+                </View>
+                <View style={{ marginTop: 10 }}>
+                    <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
                         Wargear Strength Counts
                     </Text>
                     <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
@@ -82,7 +92,17 @@ function ListAnalysisResults() {
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
-                        Unit toughness Counts
+                        Model Movement Counts
+                    </Text>
+                    <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
+                        <DataBarChart
+                            data={convertNumberKeyData(armyListStatistics.datasheetMovementCounts)}
+                        />
+                    </View>
+                </View>
+                <View style={{ marginTop: 10 }}>
+                    <Text variant="titleLarge" style={{ textAlign: 'center', marginTop: 10 }}>
+                        Unit Toughness Counts
                     </Text>
                     <View style={{ height: barChartHeight, marginHorizontal: 20 }}>
                         <DataBarChart

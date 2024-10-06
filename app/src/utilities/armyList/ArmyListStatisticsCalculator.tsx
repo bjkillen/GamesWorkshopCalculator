@@ -3,13 +3,13 @@ import UnitClassifier from "../../models/UnitClassifier";
 import WargearClassifier from "../../models/WargearClassifier";
 import VariableNumericalValueParser from "../factionDatasheets/VariableNumericalValueParser";
 import ArmyList from "./ArmyList";
-import UnitClassification from "../enums/UnitClassification";
-import WargearClassification from "../enums/WargearClassification";
 
 export class ArmyListStatistics {
     public unitClassPoints: Map<string, number>;
     public wargearClassPoints: Map<string, number>;
     public datasheetToughnessCounts: Map<number, number>;
+    public datasheetMovementCounts: Map<number, number>;
+    public wargearRangeCounts: Map<number, number>;
     public wargearStrengthCounts: Map<number, number>;
     public wargearArmorPenetrationCounts: Map<number, number>;
     public wargearTypeWeightings: Map<string, number>;
@@ -18,6 +18,8 @@ export class ArmyListStatistics {
         this.unitClassPoints = new Map<string, number>();
         this.wargearClassPoints = new Map<string, number>();
         this.datasheetToughnessCounts = new Map<number, number>();
+        this.datasheetMovementCounts = new Map<number, number>();
+        this.wargearRangeCounts = new Map<number, number>();
         this.wargearStrengthCounts = new Map<number, number>();
         this.wargearArmorPenetrationCounts = new Map<number, number>();
         this.wargearTypeWeightings = new Map<string, number>();
@@ -59,6 +61,13 @@ class ArmyListStatisticsCalculator {
                     (results.wargearTypeWeightings.get(wargear.type.value) ?? 0) + pointsScalarValue
                 )
 
+                if (wargear.range != null) {
+                    results.wargearRangeCounts.set(
+                        wargear.range,
+                        (results.wargearRangeCounts.get(wargear.range) ?? 0) + w.count
+                    )
+                }
+
                 const wargearStrength = wargear.strength;
                 results.wargearStrengthCounts.set(
                     wargearStrength,
@@ -85,6 +94,16 @@ class ArmyListStatisticsCalculator {
                         unitClass.value,
                         (results.unitClassPoints.get(unitClass.value) ?? 0) + ud.points
                     );
+                }
+
+                const datasheetMovementMatch = md.modelDatasheet.movement.match(/\d+/);
+
+                if (datasheetMovementMatch != null) {
+                    const datasheetMovementParsed = Number(datasheetMovementMatch[0]);
+                    results.datasheetMovementCounts.set(
+                        datasheetMovementParsed,
+                        (results.datasheetMovementCounts.get(datasheetMovementParsed) ?? 0) + md.count
+                    )
                 }
 
                 const datasheetToughness = md.modelDatasheet.toughness;
