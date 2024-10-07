@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
-import { Button, Modal, Portal, Text } from 'react-native-paper';
+import { Button, Icon, IconButton, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import { DiceSkillValue, Faction, UnitDatasheet, Wargear } from 'gamesworkshopcalculator.common';
@@ -67,6 +67,18 @@ function MatchupCalculator() {
     const [calculationResult, setCalculationResult] = useState<AttackerDefenderCalculatorResult | undefined>(undefined);
 
     const [resultsModalIsVisible, setResultsModalIsVisible] = useState(false);
+
+    const swapAttackingDefendingUnitPressed = () => {
+        const temporaryAttackingFaction = attackingFaction;
+        const temporaryAttackingUnit = attackingUnit;
+
+        setAttackingFaction(defendingFaction);
+        setAttackingUnit(defendingUnit);
+        setAttackingUnitWargear(undefined);
+
+        setDefendingFaction(temporaryAttackingFaction);
+        setDefendingUnit(temporaryAttackingUnit);
+    }
 
     const calculateButtonPressed = () => {
         const attackerInput = new AttackerCalculatorInput(
@@ -277,7 +289,10 @@ function MatchupCalculator() {
                             </View>
                         </View>
                     </View>
-                    <View style={{ marginTop: 15 }}>
+                    <View style={{ alignItems: "center", marginVertical: 5 }}>
+                        <IconButton icon="swap-vertical" onPress={swapAttackingDefendingUnitPressed} size={50} />
+                    </View>
+                    <View>
                         <Text variant="displaySmall">Defender</Text>
                         <View style={{ marginTop: 6, rowGap: 8 }}>
                             <View style={{ flex: 6 }}>
