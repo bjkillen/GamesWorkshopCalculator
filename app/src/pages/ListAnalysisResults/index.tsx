@@ -120,5 +120,5 @@ export default ListAnalysisResults;
 const styles = StyleSheet.create({
     safeView: {
         flex: 1
-    },
+    }
 });
