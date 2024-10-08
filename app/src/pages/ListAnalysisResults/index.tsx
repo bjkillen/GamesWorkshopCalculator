@@ -2,7 +2,7 @@ import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native"
 import { ListAnalyzerRootStackParamList } from "@/app/(tabs)/listAnalyzer";
 import { Text } from "react-native-paper";
-import DataPieChart, { convertData, convertUnitClassificationData, convertWargearClassificationData } from "../../components/chart/DataPieChart";
+import DataPieChart, { convertUnitClassificationData, convertWargearClassificationData } from "../../components/chart/DataPieChart";
 import { useEffect, useState } from "react";
 import ArmyListStatisticsCalculator, { ArmyListStatistics } from "../../utilities/armyList/ArmyListStatisticsCalculator";
 import DataBarChart, {convertStringKeyData, convertNumberKeyData} from "../../components/chart/DataBarChart";
