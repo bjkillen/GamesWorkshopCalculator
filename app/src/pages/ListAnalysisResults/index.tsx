@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native"
 import { ListAnalyzerRootStackParamList } from "@/app/(tabs)/listAnalyzer";
 import { Text } from "react-native-paper";
@@ -25,8 +25,8 @@ function ListAnalysisResults() {
     }, [])
 
     return (
-        <SafeAreaView>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <SafeAreaView style={styles.safeView}>
+            <ScrollView>
                 <Text variant="displayMedium" style={{ textAlign: 'center', marginTop: 10 }}>
                     Results
                 </Text>
@@ -116,3 +116,9 @@ function ListAnalysisResults() {
 }
 
 export default ListAnalysisResults;
+
+const styles = StyleSheet.create({
+    safeView: {
+        flex: 1
+    },
+});
