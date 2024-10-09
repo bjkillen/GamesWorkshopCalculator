@@ -98,8 +98,7 @@ class DefenderCalculator {
         const remainingWholeDiceLeft = Math.floor(remainingDiceToAllocate);
         damageDiceTotal += remainingWholeDiceLeft;
 
-        if (remainingWholeDiceLeft > 0)
-        {
+        if (remainingWholeDiceLeft > 0) {
             modelsDestroyed +=  (remainingWholeDiceLeft * effectiveWeaponDamage) / input.defenderStatistics.wounds;
         }
 
