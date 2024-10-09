@@ -1,10 +1,13 @@
 import NumberExtension from "../utilities/extensions/NumberExtension";
+import { VariableNumericalValue } from "../utilities/factionDatasheets/VariableNumericalValueParser";
 import { AttackerCalculationResult } from "./AttackerCalculator";
 import { DiceSkillValue } from "gamesworkshopcalculator.common";
 
 export class DefenderStatistics {
     constructor(
         public weaponDamage: number,
+        public melta: boolean,
+        public meltaDamage: number,
         public armorPenetration: number,
         public armorSaveSkill: DiceSkillValue | undefined,
         public invulnerableSave: boolean,
@@ -65,12 +68,20 @@ class DefenderCalculator {
         }
 
         let remainingDiceToAllocate = woundsFailed;
+
         let effectiveWeaponDamage = input.defenderStatistics.weaponDamage;
+        let totalWeaponDamage = input.defenderStatistics.weaponDamage;
+
+        if (input.defenderStatistics.melta && input.defenderStatistics.meltaDamage != null) {
+            effectiveWeaponDamage += input.defenderStatistics.meltaDamage;
+            totalWeaponDamage += input.defenderStatistics.meltaDamage;
+        }
+
         let damageSaved = 0;
 
         if (input.defenderStatistics.feelNoPain && input.defenderStatistics.feelNoPainSkill != null) {
             effectiveWeaponDamage *= input.defenderStatistics.feelNoPainSkill.failurePercentage;
-            damageSaved = (input.defenderStatistics.weaponDamage - effectiveWeaponDamage) * woundsFailed;
+            damageSaved = (totalWeaponDamage - effectiveWeaponDamage) * woundsFailed;
         }
 
         const woundDicePerModel = Math.ceil(input.defenderStatistics.wounds / effectiveWeaponDamage);

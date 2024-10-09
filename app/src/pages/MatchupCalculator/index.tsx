@@ -48,6 +48,8 @@ function MatchupCalculator() {
     const [lethalHitsChecked, setLethalHitsChecked] = useState(false);
     const [devastatingWoundsChecked, setDevastatingWoundsChecked] = useState(false);
     const [torrentChecked, setTorrentChecked] = useState(false);
+    const [meltaChecked, setMeltaChecked] = useState(false);
+    const [meltaVariableNumericalValue, setMeltaVariableNumericalValue] = useState<VariableNumericalValue | undefined>(undefined);
 
     const [toughness, setToughness] = useState<number | undefined>(undefined);
     const [wounds, setWounds] = useState<number | undefined>(undefined);
@@ -102,6 +104,8 @@ function MatchupCalculator() {
 
         const defenseStatistics = new DefenderStatistics(
             damageVariableNumericalValue?.numericalVal ?? 0,
+            meltaChecked,
+            meltaVariableNumericalValue?.numericalVal ?? 0,
             armorPenetration ?? 0,
             armorSaveSkill,
             invulnerableSaveChecked,
@@ -154,6 +158,8 @@ function MatchupCalculator() {
         setLethalHitsChecked(false);
         setDevastatingWoundsChecked(false);
         setTorrentChecked(false);
+        setMeltaChecked(false);
+        setMeltaVariableNumericalValue(undefined);
         setRerollHitsModifier(DiceRerollModifierValue.None);
         setRerollWoundsModifier(DiceRerollModifierValue.None);
     }
@@ -218,6 +224,14 @@ function MatchupCalculator() {
         setLethalHitsChecked(wargearAbilities.lethalHits);
         setDevastatingWoundsChecked(wargearAbilities.devastatingWounds);
         setTorrentChecked(wargearAbilities.torrent);
+
+        setMeltaChecked(wargearAbilities.melta != null);
+
+        if (wargearAbilities.melta != null) {
+            setMeltaVariableNumericalValue(wargearAbilities.melta);
+        } else {
+            setMeltaVariableNumericalValue(undefined);
+        }
     }, [attackingUnitWargear])
 
     useEffect(() => {
@@ -396,11 +410,28 @@ function MatchupCalculator() {
                                     setValue={setDevastatingWoundsChecked}
                                 />
                             </View>
+                        </Row>
+                        <Row style={{ marginTop: 15, justifyContent: 'space-between', alignItems: 'flex-end' }}>
                             <View>
                                 <CustomCheckbox
                                     label='Torrent'
                                     value={torrentChecked}
                                     setValue={setTorrentChecked}
+                                />
+                            </View>
+                            <View>
+                                <CustomCheckbox
+                                    label='Melta'
+                                    value={meltaChecked}
+                                    setValue={setMeltaChecked}
+                                />
+                            </View>
+                            <View style={{ minWidth: 80 }}>
+                                <VariableNumericalTextInput
+                                    label='Count'
+                                    disabled={!(meltaChecked)}
+                                    value={meltaVariableNumericalValue}
+                                    setValue={setMeltaVariableNumericalValue}
                                 />
                             </View>
                         </Row>
