@@ -1,25 +1,25 @@
 import sortByName from "@/app/src/hooks/SortByName";
 import UnitClassifier from "@/app/src/models/UnitClassifier";
-import { UnitDatasheet } from "gamesworkshopcalculator.common";
 import { useEffect, useState } from "react";
 import { List, Searchbar } from "react-native-paper";
+import { ArmyListUnitDatasheet } from "../utilities/armyList/ArmyList";
 
-export interface UnitDatasheetsListProps {
-    unitDatasheets: UnitDatasheet[];
-    setValue: (value: UnitDatasheet) => void;
+export interface ArmyListUnitDatasheetsListProps {
+    unitDatasheets: ArmyListUnitDatasheet[];
+    setValue: (value: ArmyListUnitDatasheet) => void;
 }
 
-function UnitDatasheetsList(props: UnitDatasheetsListProps) {
+function ArmyListUnitDatasheetsList(props: ArmyListUnitDatasheetsListProps) {
     const {
         unitDatasheets,
         setValue,
-    } = props as UnitDatasheetsListProps;
+    } = props;
 
-    const [datasheets, setDatasheets] = useState<UnitDatasheet[]>([]);
+    const [datasheets, setDatasheets] = useState<ArmyListUnitDatasheet[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        const sortedUnitDatasheets = Array.from(unitDatasheets.values()).sort((a, b) => sortByName(a.name, b.name));
+        const sortedUnitDatasheets = Array.from(unitDatasheets.values()).sort((a, b) => sortByName(a.datasheet.name, b.datasheet.name));
         setDatasheets(sortedUnitDatasheets);
     }, [unitDatasheets])
 
@@ -31,26 +31,25 @@ function UnitDatasheetsList(props: UnitDatasheetsListProps) {
                 value={searchQuery}
             />
             <List.Subheader>Select a unit</List.Subheader>
-            {datasheets.filter(((d) => d.name.includes(searchQuery))).map((d) => {
+            {datasheets.filter(((d) => d.datasheet.name.includes(searchQuery))).map((d) => {
                 let datasheetDescription = undefined;
 
-                if (d.modelDatasheets[0] != null) {
-                    const unitClass = UnitClassifier.Classify(d, d.modelDatasheets[0]);
+                if (d.modelDatasheets[0]?.modelDatasheet != null) {
+                    const unitClass = UnitClassifier.Classify(d.datasheet, d.modelDatasheets[0].modelDatasheet);
                     datasheetDescription = unitClass != null ? `${unitClass.description}` : undefined;
                 }
 
                 return (
                     <List.Item
-                        key={d.id}
-                        title={d.name}
+                        key={d.datasheet.id}
+                        title={d.datasheet.name}
                         description={datasheetDescription}
                         onPress={() => setValue(d)}
                     />
                 )
             })}
         </List.Section>
-        
     );
 }
 
-export default UnitDatasheetsList;
+export default ArmyListUnitDatasheetsList;

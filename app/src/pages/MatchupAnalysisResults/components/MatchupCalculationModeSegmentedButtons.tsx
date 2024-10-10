@@ -2,7 +2,6 @@ import MatchupCalculationMode from "@/app/src/utilities/enums/MatchupCalculation
 import React from "react";
 import { SegmentedButtons } from "react-native-paper";
 
-
 export interface DiceRerollModifierSegmentedButtonsProps {
     value: MatchupCalculationMode;
     setValue: (value: MatchupCalculationMode) => void;

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Modal, Portal } from "react-native-paper";
 
 import { UnitDatasheet } from "gamesworkshopcalculator.common";
-import UnitDatasheetsList from "./UnitDatasheetsList";
+import UnitDatasheetsList from "../../../../components/UnitDatasheetsList";
 
 export interface SelectUnitButtonAndPopupProps {
     disabled: boolean;
@@ -43,7 +43,10 @@ function SelectUnitButtonAndPopup(props: SelectUnitButtonAndPopupProps) {
                 <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modal}>
                     <ScrollView>
                         <View>
-                            <UnitDatasheetsList unitDatasheets={unitDatasheets} setValue={valueSet} />
+                            <UnitDatasheetsList
+                                unitDatasheets={unitDatasheets}
+                                setValue={valueSet}
+                            />
                         </View>
                     </ScrollView>
                 </Modal>
