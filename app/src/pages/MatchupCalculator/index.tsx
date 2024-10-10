@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import NumericalTextInput from '../../components/NumericalTextInput';
 import DiceWeaponSkillValueSegmentedButtons from './components/DiceWeaponSkillValueSegmentedButtons';
-import { Button, Icon, IconButton, Modal, Portal, Text } from 'react-native-paper';
+import { Button, IconButton, Modal, Portal, Text } from 'react-native-paper';
 import CustomCheckbox from '../../components/Checkbox';
 import Row from '../../components/Row';
 import { DiceSkillValue, Faction, UnitDatasheet, Wargear } from 'gamesworkshopcalculator.common';

@@ -9,12 +9,15 @@ import SelectFactionButtonAndPopup from "../../components/faction/SelectFactionB
 import MultineTextInput from "../../components/input/MultilineTextInput";
 import Row from "../../components/Row";
 import ArmyListParser from "../../utilities/armyList/ArmyListParser";
-import { useNavigation } from "@react-navigation/native";
-import { ListAnalyzerRootStackParamList } from "@/app/(tabs)/listAnalyzer";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { MatchupAnalyzerRootStackParamList } from "@/app/(tabs)/matchupAnalyzer";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-function ListAnalyzer() {
-    const navigation = useNavigation<StackNavigationProp<ListAnalyzerRootStackParamList>>();
+function EnterOpponentsList() {
+    const route = useRoute<RouteProp<MatchupAnalyzerRootStackParamList, "EnterOpponentsList">>();
+    const { myArmyList } = route.params;
+
+    const navigation = useNavigation<StackNavigationProp<MatchupAnalyzerRootStackParamList>>();
 
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
     const [factionsDatasheets, setFactionsDatasheets] = useState(new Map<string, Faction>())
@@ -22,13 +25,13 @@ function ListAnalyzer() {
     const [selectedFaction, setSelectedFaction] = useState<Faction | undefined>(undefined);
     const [listText, setListText] = useState<string | undefined>(undefined);
 
-    const analyzeListButtonPressed = () => {
+    const inputMyListButtonPressed = () => {
         if (listText == null || selectedFaction == null) {
             return;
         }
 
         const armyListResult = ArmyListParser.Parse(listText, selectedFaction.unitDatasheets);
-        navigation.navigate("ListAnalysisResults", { armyList: armyListResult });
+        navigation.navigate("MatchupAnalysisResults", { myArmyList: myArmyList, opponentsArmyList: armyListResult});
     }
 
     const clearButtonPressed = () => {
@@ -55,7 +58,7 @@ function ListAnalyzer() {
             <LoadingOverlay open={loadingOverlayOpen} />
             <ScrollView style={{ padding: 16 }}>
                 <Text variant="displaySmall" style={{ textAlign: 'center' }}>
-                    Lets analyze your list!
+                    Opponents List
                 </Text>
                 <View style={{ marginTop: 20 }}>
                     <View style={{ flex: 6 }}>
@@ -67,7 +70,7 @@ function ListAnalyzer() {
                     </View>
                 </View>
                 <View style={{ marginTop: 20 }}>
-                    <Text variant="labelLarge">Please copy your exported army list from the official 40k app here. We may not be able to correctly analyze your list if there are any unexpected characters or post export edits inserted.</Text>
+                    <Text variant="labelLarge">Please copy the exported army list from the official 40k app here. We may not be able to correctly analyze your list if there are any unexpected characters or post export edits inserted.</Text>
                     <View style={{ marginTop: 10 }}>
                         <MultineTextInput
                             label={selectedFaction != null ? "Copy list here" : "Please select a faction"}
@@ -82,8 +85,8 @@ function ListAnalyzer() {
                     <Button
                         style={{ flex: 3 }}
                         mode="contained"
-                        onPress={analyzeListButtonPressed}>
-                            Analyze!
+                        onPress={inputMyListButtonPressed}>
+                            Enter Opp. List!
                     </Button>
                     <Button
                         style={{ flex: 3 }}
@@ -98,4 +101,4 @@ function ListAnalyzer() {
     )
 }
 
-export default ListAnalyzer;
+export default EnterOpponentsList;

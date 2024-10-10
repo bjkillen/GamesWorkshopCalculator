@@ -10,11 +10,11 @@ import MultineTextInput from "../../components/input/MultilineTextInput";
 import Row from "../../components/Row";
 import ArmyListParser from "../../utilities/armyList/ArmyListParser";
 import { useNavigation } from "@react-navigation/native";
-import { ListAnalyzerRootStackParamList } from "@/app/(tabs)/listAnalyzer";
+import { MatchupAnalyzerRootStackParamList } from "@/app/(tabs)/matchupAnalyzer";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-function ListAnalyzer() {
-    const navigation = useNavigation<StackNavigationProp<ListAnalyzerRootStackParamList>>();
+function MatchupAnalyzer() {
+    const navigation = useNavigation<StackNavigationProp<MatchupAnalyzerRootStackParamList>>();
 
     const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
     const [factionsDatasheets, setFactionsDatasheets] = useState(new Map<string, Faction>())
@@ -22,13 +22,13 @@ function ListAnalyzer() {
     const [selectedFaction, setSelectedFaction] = useState<Faction | undefined>(undefined);
     const [listText, setListText] = useState<string | undefined>(undefined);
 
-    const analyzeListButtonPressed = () => {
+    const inputMyListButtonPressed = () => {
         if (listText == null || selectedFaction == null) {
             return;
         }
 
         const armyListResult = ArmyListParser.Parse(listText, selectedFaction.unitDatasheets);
-        navigation.navigate("ListAnalysisResults", { armyList: armyListResult });
+        navigation.navigate("EnterOpponentsList", { myArmyList: armyListResult });
     }
 
     const clearButtonPressed = () => {
@@ -55,7 +55,7 @@ function ListAnalyzer() {
             <LoadingOverlay open={loadingOverlayOpen} />
             <ScrollView style={{ padding: 16 }}>
                 <Text variant="displaySmall" style={{ textAlign: 'center' }}>
-                    Lets analyze your list!
+                    My List
                 </Text>
                 <View style={{ marginTop: 20 }}>
                     <View style={{ flex: 6 }}>
@@ -82,8 +82,8 @@ function ListAnalyzer() {
                     <Button
                         style={{ flex: 3 }}
                         mode="contained"
-                        onPress={analyzeListButtonPressed}>
-                            Analyze!
+                        onPress={inputMyListButtonPressed}>
+                            Enter My List!
                     </Button>
                     <Button
                         style={{ flex: 3 }}
@@ -98,4 +98,4 @@ function ListAnalyzer() {
     )
 }
 
-export default ListAnalyzer;
+export default MatchupAnalyzer;

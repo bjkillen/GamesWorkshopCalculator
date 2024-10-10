@@ -27,7 +27,7 @@ export default function TabLayout() {
           options={{
             title: 'Matchup Calculator',
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'dice' : 'dice-outline'} color={color} />
+              <TabBarIcon name={focused ? 'calculator' : 'calculator-outline'} color={color} />
             ),
           }}
         />
@@ -37,6 +37,15 @@ export default function TabLayout() {
             title: 'List Analyzer',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="matchupAnalyzer"
+          options={{
+            title: 'Matchup Analyzer',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'dice' : 'dice-outline'} color={color} />
             ),
           }}
         />
