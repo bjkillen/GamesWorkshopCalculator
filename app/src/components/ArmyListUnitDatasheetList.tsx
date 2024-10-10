@@ -1,8 +1,11 @@
 import sortByName from "@/app/src/hooks/SortByName";
 import UnitClassifier from "@/app/src/models/UnitClassifier";
 import { useEffect, useState } from "react";
-import { List, Searchbar } from "react-native-paper";
+import { List, Searchbar, Text } from "react-native-paper";
 import { ArmyListUnitDatasheet } from "../utilities/armyList/ArmyList";
+import ArrayExtension from "../utilities/extensions/ArrayExtension";
+import { WargearType } from "gamesworkshopcalculator.common";
+import { View } from "react-native";
 
 export interface ArmyListUnitDatasheetsListProps {
     unitDatasheets: ArmyListUnitDatasheet[];
@@ -31,7 +34,7 @@ function ArmyListUnitDatasheetsList(props: ArmyListUnitDatasheetsListProps) {
                 value={searchQuery}
             />
             <List.Subheader>Select a unit</List.Subheader>
-            {datasheets.filter(((d) => d.datasheet.name.includes(searchQuery))).map((d) => {
+            {datasheets.filter(((d) => d.datasheet.name.includes(searchQuery))).map((d, idx) => {
                 let datasheetDescription = undefined;
 
                 if (d.modelDatasheets[0]?.modelDatasheet != null) {
@@ -39,13 +42,37 @@ function ArmyListUnitDatasheetsList(props: ArmyListUnitDatasheetsListProps) {
                     datasheetDescription = unitClass != null ? `${unitClass.description}` : undefined;
                 }
 
+                const groupedWargear = ArrayExtension.groupBy(d.chosenWargear, w => w.wargear.type.value.toString());
+
                 return (
-                    <List.Item
-                        key={d.datasheet.id}
-                        title={d.datasheet.name}
-                        description={datasheetDescription}
-                        onPress={() => setValue(d)}
-                    />
+                    <List.Section key={`Section-${d.datasheet.id}-${idx}`}>
+                        <List.Item
+                            key={`${d.datasheet.id}-${idx}`}
+                            title={d.datasheet.name}
+                            description={datasheetDescription}
+                            onPress={() => setValue(d)}
+                        />
+                        <Text variant="labelMedium">{WargearType.Ranged.value}</Text>
+                        {   
+                            groupedWargear.get(WargearType.Ranged.value)?.map((w, wIdx) => {
+                                return (
+                                    <Text key={`${w.wargear.name}-${WargearType.Ranged.value}-${idx}-${wIdx}`} variant="labelSmall">
+                                        {w.count}x {w.wargear.name}
+                                    </Text>
+                                )
+                            })
+                        }
+                        <Text variant="labelMedium">{WargearType.Melee.value}</Text>
+                        {   
+                            groupedWargear.get(WargearType.Melee.value)?.map((w, wIdx) => {
+                                return (
+                                    <Text key={`${w.wargear.name}-${WargearType.Melee.value}-${idx}-${wIdx}`} variant="labelSmall">
+                                        {w.count}x {w.wargear.name}
+                                    </Text>
+                                )
+                            })
+                        }
+                    </List.Section>
                 )
             })}
         </List.Section>
